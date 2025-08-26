@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas>
+	<Texture>images/atlas</Texture>
+	<Regions>
+		<Region name="yoshi-standing-1" x="0" y="0" width="16" height="29" />
+		<Region name="yoshi-standing-2" x="0" y="29" width="16" height="29" />
+		<Region name="yoshi-standing-3" x="0" y="58" width="16" height="29" />
+		<Region name="yoshi-standing-4" x="0" y="87" width="16" height="29" />
+		<Region name="yoshi-standing-5" x="0" y="116" width="16" height="29" />
+		<!--<Region name="grass" x="0" y="0" width="16" height="16" />
+		<Region name="soil" x="0" y="0" width="16" height="16" />-->
+	</Regions>
+	<Animations>
+		<Animation name="yoshi-standing-animation" delay="150">
+			<Frame region="yoshi-standing-1"/>
+			<Frame region="yoshi-standing-2"/>
+			<Frame region="yoshi-standing-3"/>
+			<Frame region="yoshi-standing-2"/>
+			<Frame region="yoshi-standing-1"/>
+			<Frame region="yoshi-standing-4"/>
+			<Frame region="yoshi-standing-5"/>
+			<Frame region="yoshi-standing-4"/>
+		</Animation>
+	</Animations>
+</TextureAtlas>
