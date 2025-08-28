@@ -102,22 +102,11 @@ public class TextureAtlas
                 XDocument doc = XDocument.Load(reader);
                 XElement root = doc.Root;
 
-                // The <Texture> element contains the content path for the Texture2D to load.
-                // So we will retrieve that value then use the content manager to load the texture.
+                // 加载纹理
                 string texturePath = root.Element("Texture").Value;
                 atlas.Texture = content.Load<Texture2D>(texturePath);
 
-                // The <Regions> element contains individual <Region> elements, each one describing
-                // a different texture region within the atlas.  
-                //
-                // Example:
-                // <Regions>
-                //      <Region name="spriteOne" x="0" y="0" width="32" height="32" />
-                //      <Region name="spriteTwo" x="32" y="0" width="32" height="32" />
-                // </Regions>
-                //
-                // So we retrieve all of the <Region> elements then loop through each one
-                // and generate a new TextureRegion instance from it and add it to this atlas.
+                // 处理区域
                 var regions = root.Element("Regions")?.Elements("Region");
 
                 if (regions != null)
@@ -137,20 +126,8 @@ public class TextureAtlas
                     }
                 }
 
-                // The <Animations> element contains individual <Animation> elements, each one describing
-                // a different animation within the atlas.
-                //
-                // Example:
-                // <Animations>
-                //      <Animation name="animation" delay="100">
-                //          <Frame region="spriteOne" />
-                //          <Frame region="spriteTwo" />
-                //      </Animation>
-                // </Animations>
-                //
-                // So we retrieve all of the <Animation> elements then loop through each one
-                // and generate a new Animation instance from it and add it to this atlas.
-                var animationElements = root.Element("Animations").Elements("Animation");
+                // 处理动画
+                var animationElements = root.Element("Animations")?.Elements("Animation");
 
                 if (animationElements != null)
                 {
@@ -161,18 +138,7 @@ public class TextureAtlas
                         TimeSpan delay = TimeSpan.FromMilliseconds(delayInMilliseconds);
 
                         List<TextureRegion> frames = new List<TextureRegion>();
-
-                        var frameElements = animationElement.Elements("Frame");
-
-                        if (frameElements != null)
-                        {
-                            foreach (var frameElement in frameElements)
-                            {
-                                string regionName = frameElement.Attribute("region").Value;
-                                TextureRegion region = atlas.GetRegion(regionName);
-                                frames.Add(region);
-                            }
-                        }
+                        ProcessAnimationElements(animationElement.Elements(), atlas, frames);
 
                         Animation animation = new Animation(frames, delay);
                         atlas.AddAnimation(name, animation);
@@ -180,6 +146,53 @@ public class TextureAtlas
                 }
 
                 return atlas;
+            }
+        }
+    }
+
+    // 递归处理动画元素的辅助方法
+    private static void ProcessAnimationElements(IEnumerable<XElement> elements, TextureAtlas atlas, List<TextureRegion> frames)
+    {
+        foreach (var element in elements)
+        {
+            if (element.Name == "Frame")
+            {
+                string regionName = element.Attribute("region").Value;
+                TextureRegion region = atlas.GetRegion(regionName);
+
+                // 处理 RepeatTimes 属性
+                int repeatTimes = 1;
+                var repeatTimesAttr = element.Attribute("RepeatTimes");
+                if (repeatTimesAttr != null && int.TryParse(repeatTimesAttr.Value, out int rt))
+                {
+                    repeatTimes = rt;
+                }
+
+                // 添加重复的帧
+                for (int i = 0; i < repeatTimes; i++)
+                {
+                    frames.Add(region);
+                }
+            }
+            else if (element.Name == "Repeat")
+            {
+                // 处理 Repeat 元素
+                int times = 1;
+                var timesAttr = element.Attribute("Times");
+                if (timesAttr != null && int.TryParse(timesAttr.Value, out int t))
+                {
+                    times = t;
+                }
+
+                // 收集 Repeat 元素内的所有帧
+                List<TextureRegion> repeatFrames = new List<TextureRegion>();
+                ProcessAnimationElements(element.Elements(), atlas, repeatFrames);
+
+                // 重复添加这些帧
+                for (int i = 0; i < times; i++)
+                {
+                    frames.AddRange(repeatFrames);
+                }
             }
         }
     }

@@ -34,7 +34,7 @@ namespace Project6.Scenes
         {
             Core.GraphicsDevice.Clear(Color.CornflowerBlue);
             Core.SpriteBatch.Begin();
-            Core.SpriteBatch.DrawString(_font, "Project6", new Vector2(100, 100), Color.Red);
+            Core.SpriteBatch.DrawString(_font, "========Project6========", new Vector2(100, 100), Color.Red);
             Core.SpriteBatch.DrawString(_font, "Will start game in 2 sec.", new Vector2(200, 200), Color.Black);
             Core.SpriteBatch.DrawString(_font, _sec.ToString(), new Vector2(300, 300), Color.Black);
             Core.SpriteBatch.End();

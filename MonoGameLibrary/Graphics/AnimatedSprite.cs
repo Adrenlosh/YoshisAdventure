@@ -17,6 +17,11 @@ public class AnimatedSprite : Sprite
         get => _animation;
         set
         {
+            //var previous = _animation;
+            //if (previous == value)
+            //{
+            //    return;
+            //}
             _animation = value;
             Region = _animation.Frames[0];
         }

@@ -64,6 +64,18 @@ public static class GameController
         return s_keyboard.WasKeyJustPressed(Keys.L) ||
                s_gamePad.WasButtonJustPressed(Buttons.A);
     }
+    public static bool AReleased()
+    {
+        return s_keyboard.WasKeyJustReleased(Keys.L) ||
+               s_gamePad.WasButtonJustReleased(Buttons.A);
+    }
+
+
+    public static bool AHeld()
+    {
+        return s_keyboard.IsKeyDown(Keys.L) ||
+               s_gamePad.IsButtonDown(Buttons.A);
+    }
 
     public static bool BPressed()
     {
