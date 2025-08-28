@@ -9,6 +9,8 @@ public class AnimatedSprite : Sprite
     private TimeSpan _elapsed;
     private Animation _animation;
 
+    public int CurrentFrame => _currentFrame;
+
     /// <summary>
     /// Gets or Sets the animation for this animated sprite.
     /// </summary>
@@ -61,5 +63,10 @@ public class AnimatedSprite : Sprite
 
             Region = _animation.Frames[_currentFrame];
         }
+    }
+
+    public void ResetAnimation()
+    {
+        Region = _animation.Frames[0];
     }
 }

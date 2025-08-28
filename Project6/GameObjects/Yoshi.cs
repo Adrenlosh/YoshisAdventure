@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGameLibrary;
 using MonoGameLibrary.Graphics;
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
@@ -43,7 +42,7 @@ namespace Project6.GameObjects
         private float _floatTime = 0f;
         private bool _canJump = true;
         private bool _jumpInitiated = false; // 新增：标记跳跃是否已经初始化
-
+        private bool _isSquatting = false;
 
         private readonly Animation _jumpAnimation;
         private readonly Animation _fallingAnimation;
@@ -52,6 +51,7 @@ namespace Project6.GameObjects
         private readonly Animation _standingAnimation;
         private readonly Animation _turnAnimation;
         private readonly Animation _floatingAnimation;
+        private readonly Animation _squatAnimation;
 
         private const float WalkThreshold = 0.2f;
         private const float RunThreshold = 3.8f;
@@ -72,6 +72,7 @@ namespace Project6.GameObjects
             _runAnimation = atlas.CreateAnimatedSprite("yoshi-run-animation").Animation;
             _turnAnimation = atlas.CreateAnimatedSprite("yoshi-turn-animation").Animation;
             _floatingAnimation = atlas.CreateAnimatedSprite("yoshi-floating-animation").Animation;
+            _squatAnimation = atlas.CreateAnimatedSprite("yoshi-squat-animation").Animation;
             _tilemap = tilemap;
         }
 
@@ -112,8 +113,8 @@ namespace Project6.GameObjects
                 _lastInputDirection = currentInputDirection;
             }
 
-            bool isJumpButtonPressed = GameController.APressed();
-            bool isJumpButtonHeld = GameController.AHeld();
+            bool isJumpButtonPressed = GameController.JumpPressed();
+            bool isJumpButtonHeld = GameController.JumpHeld();
 
             // 只有在地面上才能开始新跳跃
             if (isJumpButtonPressed && _isOnGround && _canJump)
@@ -448,8 +449,7 @@ namespace Project6.GameObjects
 
         public void Draw()
         {
-            Vector2 drawPosition = new Vector2((int)Position.X, (int)Position.Y);
-            _sprite.Draw(Core.SpriteBatch, drawPosition);
+            _sprite.Draw(Core.SpriteBatch, Position);
         }
     }
 }

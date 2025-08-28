@@ -58,29 +58,28 @@ public static class GameController
                s_gamePad.IsButtonDown(Buttons.LeftThumbstickRight);
     }
 
-        
-    public static bool APressed()
+    public static bool JumpPressed()
     {
         return s_keyboard.WasKeyJustPressed(Keys.L) ||
                s_gamePad.WasButtonJustPressed(Buttons.A);
     }
-    public static bool AReleased()
-    {
-        return s_keyboard.WasKeyJustReleased(Keys.L) ||
-               s_gamePad.WasButtonJustReleased(Buttons.A);
-    }
 
-
-    public static bool AHeld()
+    public static bool JumpHeld()
     {
         return s_keyboard.IsKeyDown(Keys.L) ||
                s_gamePad.IsButtonDown(Buttons.A);
     }
 
-    public static bool BPressed()
+    public static bool ActionPressed()
     {
         return s_keyboard.WasKeyJustPressed(Keys.K) ||
                s_gamePad.WasButtonJustPressed(Buttons.B);
+    }
+
+    public static bool ActionHeld()
+    {
+        return s_keyboard.IsKeyDown(Keys.K) ||
+               s_gamePad.IsButtonDown(Buttons.B);
     }
 
 
@@ -91,15 +90,5 @@ public static class GameController
     {
         return s_keyboard.WasKeyJustPressed(Keys.Escape) ||
                s_gamePad.WasButtonJustPressed(Buttons.Start);
-    }
-
-    /// <summary>
-    /// Returns true if the player has triggered the "action" button,
-    /// typically used for menu confirmation.
-    /// </summary>
-    public static bool Action()
-    {
-        return s_keyboard.WasKeyJustPressed(Keys.Enter) ||
-               s_gamePad.WasButtonJustPressed(Buttons.A);
     }
 }
