@@ -26,12 +26,17 @@
 		<Region name="yoshi-floating-2" x="0" y="651" width="21" height="31" />
 		<Region name="yoshi-floating-3" x="0" y="682" width="21" height="31" />
 		<Region name="yoshi-squat" x="0" y="713" width="21" height="31" />
-		<Region name="yoshi-hondingEgg-1" x="0" y="744" width="24" height="31" />
-		<Region name="yoshi-hondingEgg-2" x="0" y="775" width="24" height="31" />
-		<Region name="yoshi-hondingEgg-3" x="0" y="806" width="24" height="31" />
-		<Region name="yoshi-throw" x="0" y="837" width="24" height="31" />
-		<Region name="yoshi-front" x="0" y="868" width="21" height="31" />
-		<Region name="yoshi-back" x="0" y="899" width="21" height="31" />
+		<Region name="yoshi-holdingegg-1" x="0" y="744" width="21" height="31" />
+		<Region name="yoshi-throw" x="0" y="775" width="24" height="31" />
+		<Region name="yoshi-plummet" x="0" y="806" width="24" height="31" />
+		<Region name="yoshi-front" x="0" y="837" width="21" height="31" />
+		<Region name="yoshi-back" x="0" y="868" width="21" height="31" />
+		<Region name="yoshi-lookup" x="0" y="899" width="21" height="31" />
+		<Region name="yoshi-holdingegg-2" x="0" y="930" width="21" height="31" />
+		
+		<Region name="throwsight-red" x="1008" y="0" width="16" height="16" />
+		<Region name="throwsight-yellow" x="1008" y="16" width="16" height="16" />
+		<Region name="egg" x="1008" y="32" width="16" height="16" />
 	</Regions>
 	<Animations>
 		<Animation name="yoshi-standing-animation" delay="150">
@@ -50,9 +55,7 @@
 			<Frame region="yoshi-standing-1" RepeatTimes="11"/>
 			<Frame region="yoshi-idle-1"/>
 			<Frame region="yoshi-idle-2"/>
-			<Frame region="yoshi-idle-3"/>
-			<Frame region="yoshi-idle-3"/>
-			<Frame region="yoshi-idle-3"/>
+			<Frame region="yoshi-idle-3" RepeatTimes="3"/>
 			<Frame region="yoshi-idle-2"/>
 			<Frame region="yoshi-idle-1"/>
 			<Frame region="yoshi-standing-1" RepeatTimes="7"/>
@@ -87,10 +90,27 @@
 		<Animation name="yoshi-squat-animation" delay="1">
 			<Frame region="yoshi-squat"/>
 		</Animation>
-		<Animation name="yoshi-floating-animation" delay="100">
+		<Animation name="yoshi-floating-animation" delay="10">
 			<Frame region="yoshi-floating-1"/>
 			<Frame region="yoshi-floating-2"/>
 			<Frame region="yoshi-floating-3"/>
+		</Animation>
+		<Animation name="yoshi-throw-animation" delay="1">
+			<Frame region="yoshi-throw"/>
+		</Animation>
+		<Animation name="throwsight-animation" delay="50">
+			<Frame region="throwsight-red"/>
+			<Frame region="throwsight-yellow"/>
+		</Animation>
+		<Animation name="yoshi-lookup-animation" delay="1">
+			<Frame region="yoshi-lookup"/>
+		</Animation>
+		<Animation name="yoshi-holdingegg-animation" delay="1">
+			<Frame region="yoshi-holdingegg-1"/>
+		</Animation>
+		<Animation name="yoshi-holdingegg-walking-animation" delay="90">
+			<Frame region="yoshi-holdingegg-1"/>
+			<Frame region="yoshi-holdingegg-2"/>
 		</Animation>
 	</Animations>
 </TextureAtlas>

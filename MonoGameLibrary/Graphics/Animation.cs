@@ -11,10 +11,12 @@ public class Animation
     /// </summary>
     public List<TextureRegion> Frames { get; set; }
 
+    public string Name { get; set; } = string.Empty;
     /// <summary>
     /// The amount of time to delay between each frame before moving to the next frame for this animation.
     /// </summary>
-    public TimeSpan Delay { get; set; }
+    public TimeSpan Delay { get; 
+        set; }
 
     /// <summary>
     /// Creates a new animation.
@@ -35,5 +37,4 @@ public class Animation
         Frames = frames;
         Delay = delay;
     }
-
 }

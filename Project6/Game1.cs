@@ -10,17 +10,16 @@ namespace Project6;
 
 public class Game1 : Core
 {
-    public readonly Point targetResolution = new Point(256, 224);
+    public readonly Point targetResolution = new Point(320, 240);
     private RenderTarget2D _renderTarget;
 
-    public Game1() : base("Project6", 256, 224, false)
+    public Game1() : base("Project6", 320, 240, false)
     {
     }
 
     protected override void Initialize()
     {
         base.Initialize();
-
         // 设置窗口可调整大小
         Window.AllowUserResizing = true;
         Window.ClientSizeChanged += OnWindowSizeChanged;

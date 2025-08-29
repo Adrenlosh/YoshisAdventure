@@ -20,6 +20,13 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/Roboto.spritefont
 
+#begin fonts/SMW2.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/SMW2.spritefont
+
 #begin images/atlas-definition.xml
 /copy:images/atlas-definition.xml
 

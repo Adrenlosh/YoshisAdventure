@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
 namespace MonoGameLibrary.Graphics;
@@ -19,13 +20,16 @@ public class AnimatedSprite : Sprite
         get => _animation;
         set
         {
-            //var previous = _animation;
-            //if (previous == value)
-            //{
-            //    return;
-            //}
-            _animation = value;
-            Region = _animation.Frames[0];
+            if(_animation != value)
+            {
+                _animation = value;
+                _currentFrame = 0;
+                _elapsed = TimeSpan.Zero;
+                if (_animation != null && _animation.Frames.Count > 0)
+                {
+                    Region = _animation.Frames[0];
+                }
+            }
         }
     }
 

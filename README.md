@@ -1,4 +1,4 @@
 # Project 6
-Mini game.
+All resources are not original.
 
 ![Screenshot](./Screenshot/Screenshot1.png)

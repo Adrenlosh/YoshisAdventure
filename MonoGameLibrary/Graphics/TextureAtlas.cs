@@ -141,6 +141,9 @@ public class TextureAtlas
                         ProcessAnimationElements(animationElement.Elements(), atlas, frames);
 
                         Animation animation = new Animation(frames, delay);
+
+                        animation.Name = name;
+
                         atlas.AddAnimation(name, animation);
                     }
                 }
