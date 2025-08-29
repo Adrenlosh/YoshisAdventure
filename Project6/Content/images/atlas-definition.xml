@@ -95,7 +95,7 @@
 			<Frame region="yoshi-floating-2"/>
 			<Frame region="yoshi-floating-3"/>
 		</Animation>
-		<Animation name="yoshi-throw-animation" delay="1">
+		<Animation name="yoshi-threwegg-animation" delay="1">
 			<Frame region="yoshi-throw"/>
 		</Animation>
 		<Animation name="throwsight-animation" delay="50">

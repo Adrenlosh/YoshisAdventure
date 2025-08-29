@@ -53,6 +53,7 @@ namespace Project6.GameObjects
         private readonly Animation _lookUpAnimation;
         private readonly Animation _holdingEggAnimation;
         private readonly Animation _holdingEggWalkingAnimation;
+        private readonly Animation _threwEggAnimation;
         private const float WalkThreshold = 0.2f;
         private const float RunThreshold = 3.8f;
         private readonly Tilemap _tilemap;
@@ -65,6 +66,8 @@ namespace Project6.GameObjects
         private float rotationSpeed = 2f; // 旋转速度（弧度/秒）
         private bool _lastCenterFacingRight = true;
         private Vector2 _throwDirection;
+        private bool _isThrewEgg = false;
+        private float _threwAnimationKeepTime = 0f;
 
         public Vector2 ThrowDirection => _throwDirection;
 
@@ -87,6 +90,8 @@ namespace Project6.GameObjects
             _lookUpAnimation = atlas.CreateAnimatedSprite("yoshi-lookup-animation").Animation;
             _holdingEggAnimation = atlas.CreateAnimatedSprite("yoshi-holdingegg-animation").Animation;
             _holdingEggWalkingAnimation = atlas.CreateAnimatedSprite("yoshi-holdingegg-walking-animation").Animation;
+            _threwEggAnimation = atlas.CreateAnimatedSprite("yoshi-threwegg-animation").Animation;
+            _threwEggAnimation = atlas.CreateAnimatedSprite("yoshi-threwegg-animation").Animation;
             _throwSightSprite = atlas.CreateAnimatedSprite("throwsight-animation");
             _tilemap = tilemap;
         }
@@ -149,6 +154,7 @@ namespace Project6.GameObjects
                 if (_isHoldingEgg)
                 {
                     _throwDirection = GetCurrentThrowDirection();
+                    _isThrewEgg = true;
                 }
                 _isHoldingEgg = !_isHoldingEgg;
             }
@@ -272,7 +278,7 @@ namespace Project6.GameObjects
                     {
                         // 第二阶段：向上浮动
                         _velocity.Y = FloatForce;
-                            _yoshiSprite.Animation = _floatingAnimation;
+                        _yoshiSprite.Animation = _floatingAnimation;
                     }
                     else
                     {
@@ -312,6 +318,17 @@ namespace Project6.GameObjects
         public void Update(GameTime gameTime)
         {
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (_isThrewEgg)
+            {
+                _threwAnimationKeepTime += elapsed;
+                _yoshiSprite.Animation = _threwEggAnimation;
+                if (_threwAnimationKeepTime >= 0.5f)
+                {
+                    _isThrewEgg = false;
+                    _threwAnimationKeepTime = 0f;
+                }
+            }
             // 更新转向计时器
             if (_isTurning)
             {
@@ -486,11 +503,11 @@ namespace Project6.GameObjects
                 {
                     _yoshiSprite.Animation = _lookUpAnimation;
                 }
-                else if (absVelocityX < WalkThreshold && _yoshiSprite.Animation != _standingAnimation && !_isTurning && !_isSquatting && !_isLookingUp)
+                else if (absVelocityX < WalkThreshold && _yoshiSprite.Animation != _standingAnimation && !_isTurning && !_isSquatting && !_isLookingUp && !_isThrewEgg)
                 {
                     _yoshiSprite.Animation = _standingAnimation;
                 }
-                else if (absVelocityX >= WalkThreshold && absVelocityX < RunThreshold && _yoshiSprite.Animation != _walkAnimation && !_isTurning)
+                else if (absVelocityX >= WalkThreshold && absVelocityX < RunThreshold && _yoshiSprite.Animation != _walkAnimation && !_isTurning && !_isThrewEgg)
                 {
                     _yoshiSprite.Animation = _walkAnimation;
                 }
@@ -540,7 +557,7 @@ namespace Project6.GameObjects
                 }
             }
 
-            if(_isHoldingEgg)
+            if (_isHoldingEgg)
             {
                 bool centerFacingRight = _lastInputDirection == 1;
 
@@ -600,7 +617,7 @@ namespace Project6.GameObjects
         public void Draw(GameTime gameTime)
         {
             _yoshiSprite.Draw(Core.SpriteBatch, Position);
-            if(_isHoldingEgg)
+            if (_isHoldingEgg)
             {
                 _throwSightSprite.Draw(Core.SpriteBatch, _rotatingSpritePosition);
             }

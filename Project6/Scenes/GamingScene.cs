@@ -15,6 +15,7 @@ namespace Project6.Scenes
     {
         private SpriteFont _font;
         private Yoshi _yoshi;
+        private Egg _egg;
         private Tilemap _tilemap;
         private OrthographicCamera _camera;
         private readonly Point _virtualResolution = new Point(320, 240);
@@ -27,10 +28,11 @@ namespace Project6.Scenes
 
         public override void LoadContent()
         {
+            _font = Content.Load<SpriteFont>("fonts/Roboto");
             TextureAtlas atlas = TextureAtlas.FromFile(Core.Content, "images/atlas-definition.xml");
             _tilemap = Tilemap.FromFile(Content, "images/tilemap-definition.xml");
             _yoshi = new Yoshi(atlas, _tilemap);
-            _font = Content.Load<SpriteFont>("fonts/SMW2");
+            _egg = new Egg(atlas, _tilemap);
         }
 
         private void HandleInput()
@@ -40,6 +42,8 @@ namespace Project6.Scenes
         public override void Update(GameTime gameTime)
         {
             HandleInput();
+            //_egg.Position = _yoshi.Position + new Vector2(0, -16);
+            //_egg.Update(gameTime);
             _yoshi.Update(gameTime);
             _camera.Position = GetCameraPosition();
         }
@@ -50,14 +54,7 @@ namespace Project6.Scenes
             Core.SpriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
             _tilemap.Draw(Core.SpriteBatch);
             _yoshi.Draw(gameTime);
-
-            Core.SpriteBatch.DrawString(_font, "Project6" + Environment.NewLine + $"Position: {_yoshi.Position}" + Environment.NewLine + $"Throw: {_yoshi.ThrowDirection}", _camera.ScreenToWorld(0,0), Color.Black);
-
-
-
-
-
-
+            _egg.Draw();
             Core.SpriteBatch.End();
             GumService.Default.Draw();
         }

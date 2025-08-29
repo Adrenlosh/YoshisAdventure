@@ -18,7 +18,7 @@ namespace Project6.Scenes
 
         public override void LoadContent()
         {
-            _font = Content.Load<SpriteFont>("fonts/SMW2");
+            _font = Content.Load<SpriteFont>("fonts/Roboto");
         }
 
         public override void Update(GameTime gameTime)

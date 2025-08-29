@@ -1,7 +1,7 @@
-﻿using MonoGameLibrary;
+﻿using Microsoft.Xna.Framework;
+using MonoGameLibrary;
 using MonoGameLibrary.Graphics;
 using System.Drawing;
-using System.Numerics;
 
 namespace Project6.GameObjects
 {
@@ -16,14 +16,14 @@ namespace Project6.GameObjects
             _sprite = atlas.CreateSprite("egg");
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
 
         }
 
         public void Draw()
         {
-            _sprite.Draw(Core.SpriteBatch, new Vector2(100, 100));
+            _sprite.Draw(Core.SpriteBatch, Position);
         }
     }
 }
