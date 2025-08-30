@@ -15,8 +15,12 @@ public class Animation
     /// <summary>
     /// The amount of time to delay between each frame before moving to the next frame for this animation.
     /// </summary>
-    public TimeSpan Delay { get; 
-        set; }
+    public TimeSpan Delay { get; set; }
+
+    /// <summary>
+    /// 动画是否只播放一次
+    /// </summary>
+    public bool PlayOnce { get; set; } = false;
 
     /// <summary>
     /// Creates a new animation.

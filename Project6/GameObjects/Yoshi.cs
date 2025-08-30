@@ -3,21 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGameLibrary;
 using MonoGameLibrary.Graphics;
 using System;
-using System.Diagnostics;
-using System.Drawing;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Project6.GameObjects
 {
     public class Yoshi
     {
-        private AnimatedSprite _yoshiSprite;
-        public Vector2 Position = new Vector2(0, 0);
-        public Size Size = new Size(0, 0);
-        private readonly Size CollisionBox = new Size(16, 32);
-        private readonly Size SquantCollisionBox = new Size(16, 32);
-        private Vector2 _velocity = Vector2.Zero;
-        private Vector2 _acceleration = Vector2.Zero;
         private const float Gravity = 0.5f;
         private const float BaseJumpForce = -7f;
         private const float MoveSpeed = 4f;
@@ -25,23 +15,20 @@ namespace Project6.GameObjects
         private const float Friction = 0.4f;
         private const float TurnFriction = 0.4f;
         private const float AirControlFactor = 0.8f;
-        private bool _isOnGround = false;
-        private bool _isTurning = false;
-        private float _turnTimer = 0f;
         private const float TurnAnimationDuration = 0.1f;
-        private bool _isJumping = false;
-        private bool _isFloating = false;
-        private float _jumpHoldTime = 0f;
         private const float MaxJumpHoldTime = 0.3f;
         private const float FloatActivationThreshold = 0.15f;
         private const float FloatForce = -0.2f;
         private const float MaxFloatTime = 1.2f;
-        private float _floatTime = 0f;
-        private bool _canJump = true;
-        private bool _jumpInitiated = false;
-        private bool _isSquatting = false;
-        private bool _isLookingUp = false;
-        private bool _isHoldingEgg = false;
+        private const float WalkThreshold = 0.2f;
+        private const float RunThreshold = 3.8f;
+
+        private float MaxAngleRadians = MathHelper.ToRadians(130);
+        private const float ThrowSightRadius = 60f;
+        private const float ThrewAnimationDuration = 0.5f;
+
+        private readonly AnimatedSprite _yoshiSprite;
+        private readonly AnimatedSprite _throwSightSprite;
         private readonly Animation _jumpAnimation;
         private readonly Animation _fallingAnimation;
         private readonly Animation _walkAnimation;
@@ -54,29 +41,66 @@ namespace Project6.GameObjects
         private readonly Animation _holdingEggAnimation;
         private readonly Animation _holdingEggWalkingAnimation;
         private readonly Animation _threwEggAnimation;
-        private const float WalkThreshold = 0.2f;
-        private const float RunThreshold = 3.8f;
+        private readonly Animation _plummetStage1Animation;
+        private readonly Animation _plummetStage2Animation;
+
         private readonly Tilemap _tilemap;
+        private readonly Point _normalCollisionBox = new Point(16, 32);
+        private readonly Point _squatCollisionBox = new Point(16, 32);
+
+        private Vector2 _velocity = Vector2.Zero;
+        private Vector2 _acceleration = Vector2.Zero;
+        private bool _isOnGround = false;
+        private bool _isTurning = false;
+        private float _turnTimer = 0f;
+        private bool _isJumping = false;
+        private bool _isFloating = false;
+        private float _jumpHoldTime = 0f;
+        private float _floatTime = 0f;
+        private bool _canJump = true;
+        private bool _jumpInitiated = false;
+        private bool _isSquatting = false;
+        private bool _isLookingUp = false;
+        private bool _isHoldingEgg = false;
         private int _lastInputDirection = 1;
 
-        private AnimatedSprite _throwSightSprite;
         private Vector2 _rotatingSpritePosition;
-        private float maxAngle = MathHelper.ToRadians(130); // 最大旋转角度（45度）
-        private float currentAngle = 0f; // 当前旋转角度
-        private float rotationSpeed = 2f; // 旋转速度（弧度/秒）
+        private float _currentAngle = 0f;
+        private float _rotationSpeed = 2f;
         private bool _lastCenterFacingRight = true;
         private Vector2 _throwDirection;
         private bool _isThrewEgg = false;
         private float _threwAnimationKeepTime = 0f;
 
-        public Vector2 ThrowDirection => _throwDirection;
+        public Vector2 Position { get; set; } = Vector2.Zero;
+
+        public Point Size { get; set; } = new Point(0, 0);
+
+        public bool CanThrowEgg { get; set; } = true;
+
+        public Vector2 Velocity => _velocity;
+
+        public bool IsOnGround => _isOnGround;
+
+        public bool IsJumping => _isJumping;
+
+        public bool IsFloating => _isFloating;
+
+        public bool IsSquatting => _isSquatting;
+
+        public bool IsLookingUp => _isLookingUp;
 
         public bool IsHoldingEgg => _isHoldingEgg;
 
+        public Vector2 ThrowDirection => _throwDirection;
+
+        public AnimatedSprite Sprite => _yoshiSprite;
+
+        public event Action<Vector2> OnThrowEgg = (_) => { };
 
         public Yoshi(TextureAtlas atlas, Tilemap tilemap)
         {
-            Size = CollisionBox;
+            Size = _normalCollisionBox;
             AnimatedSprite sprite = atlas.CreateAnimatedSprite("yoshi-standing-animation");
             _yoshiSprite = sprite;
             _standingAnimation = sprite.Animation;
@@ -92,6 +116,8 @@ namespace Project6.GameObjects
             _holdingEggWalkingAnimation = atlas.CreateAnimatedSprite("yoshi-holdingegg-walking-animation").Animation;
             _threwEggAnimation = atlas.CreateAnimatedSprite("yoshi-threwegg-animation").Animation;
             _threwEggAnimation = atlas.CreateAnimatedSprite("yoshi-threwegg-animation").Animation;
+            _plummetStage1Animation = atlas.CreateAnimatedSprite("yoshi-plummet-stage1-animation").Animation;
+            _plummetStage2Animation = atlas.CreateAnimatedSprite("yoshi-plummet-stage2-animation").Animation;
             _throwSightSprite = atlas.CreateAnimatedSprite("throwsight-animation");
             _tilemap = tilemap;
         }
@@ -123,16 +149,16 @@ namespace Project6.GameObjects
 
         private Rectangle GetCollisionBox(Vector2 position)
         {
-            int centerX = (int)(position.X + _yoshiSprite.Width / 2 - Size.Width / 2);
-            int centerY = (int)(position.Y + _yoshiSprite.Height / 2 - Size.Height / 2);
-            return new Rectangle(centerX, centerY, Size.Width, Size.Height);
+            int centerX = (int)(position.X + _yoshiSprite.Width / 2 - Size.X / 2);
+            int centerY = (int)(position.Y + _yoshiSprite.Height / 2 - Size.Y / 2);
+            return new Rectangle(centerX, centerY, Size.X, Size.Y);
         }
 
         private Vector2 GetCurrentThrowDirection()
         {
             Vector2 direction = new Vector2(
-                (float)Math.Sin(currentAngle),
-                -(float)Math.Cos(currentAngle)
+                (float)Math.Sin(_currentAngle),
+                -(float)Math.Cos(_currentAngle)
             );
 
             // 确保方向向量是单位向量
@@ -149,12 +175,13 @@ namespace Project6.GameObjects
             int currentInputDirection = 0;
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (GameController.ActionPressed() && !_isFloating && _isOnGround)
+            if (GameController.ActionPressed() && !_isFloating && _isOnGround && CanThrowEgg)
             {
                 if (_isHoldingEgg)
                 {
                     _throwDirection = GetCurrentThrowDirection();
                     _isThrewEgg = true;
+                    OnThrowEgg?.Invoke(_throwDirection);
                 }
                 _isHoldingEgg = !_isHoldingEgg;
             }
@@ -162,12 +189,17 @@ namespace Project6.GameObjects
             if (GameController.MoveDown() && !_isLookingUp)
             {
                 _isSquatting = true;
-                Size = SquantCollisionBox;
+                Size = _squatCollisionBox;
             }
             else
             {
                 _isSquatting = false;
-                Size = CollisionBox;
+                Size = _normalCollisionBox;
+            }
+            
+            if(GameController.MoveDown() && !_isOnGround)
+            {
+
             }
 
             if (GameController.MoveUp() && !_isSquatting)
@@ -318,7 +350,6 @@ namespace Project6.GameObjects
         public void Update(GameTime gameTime)
         {
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             if (_isThrewEgg)
             {
                 _threwAnimationKeepTime += elapsed;
@@ -398,7 +429,6 @@ namespace Project6.GameObjects
             {
                 Vector2 verticalMove = new Vector2(0, _velocity.Y);
                 Vector2 testPosition = newPosition + verticalMove;
-                // 检查是否超出地图上界
                 if (testPosition.Y < 0)
                 {
                     newPosition.Y = 0;
@@ -468,7 +498,6 @@ namespace Project6.GameObjects
                     }
                     else if (!_isJumping && !_isFloating && _isHoldingEgg)
                     {
-                        // 持有蛋时下落使用持有蛋动画
                         _yoshiSprite.Animation = _holdingEggAnimation;
                     }
                 }
@@ -478,14 +507,24 @@ namespace Project6.GameObjects
                 }
             }
 
-            // 根据状态更新动画
+            if (!_isHoldingEgg)
+            {
+                if (_velocity.X > 0.1f || _lastInputDirection == 1)
+                {
+                    _yoshiSprite.Effects = SpriteEffects.None;
+                }
+                else if (_velocity.X < -0.1f || _lastInputDirection == -1)
+                {
+                    _yoshiSprite.Effects = SpriteEffects.FlipHorizontally;
+                }
+            }
+
             if (_isOnGround)
             {
                 float absVelocityX = Math.Abs(_velocity.X);
 
                 if (_isHoldingEgg)
                 {
-                    // 持有蛋时的动画逻辑
                     if (absVelocityX < WalkThreshold)
                     {
                         _yoshiSprite.Animation = _holdingEggAnimation;
@@ -525,12 +564,10 @@ namespace Project6.GameObjects
             }
             else if (_isFloating)
             {
-                // 浮动阶段的动画
                 if (_floatTime >= 0.3f && _floatTime < 1.0f && _yoshiSprite.Animation != _floatingAnimation && !_isHoldingEgg)
                 {
                     _yoshiSprite.Animation = _floatingAnimation;
                 }
-                // 浮动第三阶段使用下落动画
                 else if (_floatTime >= 1.0f && _yoshiSprite.Animation != _fallingAnimation && !_isHoldingEgg)
                 {
                     _yoshiSprite.Animation = _fallingAnimation;
@@ -544,68 +581,41 @@ namespace Project6.GameObjects
                     _yoshiSprite.Animation = _holdingEggWalkingAnimation;
             }
 
-            // 设置精灵朝向 - 持有蛋时不允许转向
-            if (!_isHoldingEgg)
-            {
-                if (_velocity.X > 0.1f)
-                {
-                    _yoshiSprite.Effects = SpriteEffects.None;
-                }
-                else if (_velocity.X < -0.1f)
-                {
-                    _yoshiSprite.Effects = SpriteEffects.FlipHorizontally;
-                }
-            }
-
             if (_isHoldingEgg)
             {
                 bool centerFacingRight = _lastInputDirection == 1;
-
-                // 当朝向改变时，重置旋转状态
                 if (centerFacingRight != _lastCenterFacingRight)
                 {
-                    // 调整角度范围，确保从正确的一侧开始旋转
                     if (centerFacingRight)
                     {
-                        currentAngle = MathHelper.Clamp(currentAngle, 0, maxAngle);
+                        _currentAngle = MathHelper.Clamp(_currentAngle, 0, MaxAngleRadians);
                     }
                     else
                     {
-                        currentAngle = MathHelper.Clamp(currentAngle, -maxAngle, 0);
+                        _currentAngle = MathHelper.Clamp(_currentAngle, -MaxAngleRadians, 0);
                     }
-
-                    // 确保旋转方向正确
-                    rotationSpeed = Math.Abs(rotationSpeed) * (centerFacingRight ? 1 : -1);
-
+                    _rotationSpeed = Math.Abs(_rotationSpeed) * (centerFacingRight ? 1 : -1);
                     _lastCenterFacingRight = centerFacingRight;
                 }
-
-                // 更新角度
-                currentAngle += rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                // 限制角度范围
+                _currentAngle += _rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (centerFacingRight)
                 {
-                    if (currentAngle > maxAngle || currentAngle < 0)
+                    if (_currentAngle > MaxAngleRadians || _currentAngle < 0)
                     {
-                        rotationSpeed = -rotationSpeed;
-                        currentAngle = MathHelper.Clamp(currentAngle, 0, maxAngle);
+                        _rotationSpeed = -_rotationSpeed;
+                        _currentAngle = MathHelper.Clamp(_currentAngle, 0, MaxAngleRadians);
                     }
                 }
                 else
                 {
-                    if (currentAngle < -maxAngle || currentAngle > 0)
+                    if (_currentAngle < -MaxAngleRadians || _currentAngle > 0)
                     {
-                        rotationSpeed = -rotationSpeed;
-                        currentAngle = MathHelper.Clamp(currentAngle, -maxAngle, 0);
+                        _rotationSpeed = -_rotationSpeed;
+                        _currentAngle = MathHelper.Clamp(_currentAngle, -MaxAngleRadians, 0);
                     }
                 }
-
-                // 计算旋转位置
-                float radius = 100f;
-                _rotatingSpritePosition = Position + new Vector2(
-                    (float)Math.Sin(currentAngle) * radius,
-                    -(float)Math.Cos(currentAngle) * radius);
+                float radius = 60f;
+                _rotatingSpritePosition = Position + new Vector2((float)Math.Sin(_currentAngle) * radius, -(float)Math.Cos(_currentAngle) * radius);
             }
 
             Position = newPosition;

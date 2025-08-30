@@ -134,6 +134,7 @@ public class TextureAtlas
                     foreach (var animationElement in animationElements)
                     {
                         string name = animationElement.Attribute("name")?.Value;
+                        bool playOnce = bool.Parse(animationElement.Attribute("playonce")?.Value ?? "false");
                         float delayInMilliseconds = float.Parse(animationElement.Attribute("delay")?.Value ?? "0");
                         TimeSpan delay = TimeSpan.FromMilliseconds(delayInMilliseconds);
 
@@ -142,6 +143,7 @@ public class TextureAtlas
 
                         Animation animation = new Animation(frames, delay);
 
+                        animation.PlayOnce = playOnce;
                         animation.Name = name;
 
                         atlas.AddAnimation(name, animation);

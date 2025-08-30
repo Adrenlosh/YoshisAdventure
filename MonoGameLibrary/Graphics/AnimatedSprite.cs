@@ -54,17 +54,24 @@ public class AnimatedSprite : Sprite
     public void Update(GameTime gameTime)
     {
         _elapsed += gameTime.ElapsedGameTime;
-
         if (_elapsed >= _animation.Delay)
         {
             _elapsed -= _animation.Delay;
-            _currentFrame++;
-
+            if (!_animation.PlayOnce || _currentFrame < _animation.Frames.Count - 1)
+            {
+                _currentFrame++;
+            }
             if (_currentFrame >= _animation.Frames.Count)
             {
-                _currentFrame = 0;
+                if (_animation.PlayOnce)
+                {
+                    _currentFrame = _animation.Frames.Count - 1;
+                }
+                else
+                {
+                    _currentFrame = 0;
+                }
             }
-
             Region = _animation.Frames[_currentFrame];
         }
     }
