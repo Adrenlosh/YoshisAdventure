@@ -1,6 +1,8 @@
 ﻿using Gum.Forms.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoGameGum;
 using MonoGameLibrary;
 using Project6.Scenes;
@@ -12,6 +14,7 @@ public class Game1 : Core
 {
     public readonly Point targetResolution = new Point(320, 240);
     private RenderTarget2D _renderTarget;
+    private Song _backgroundMusic;
 
     public Game1() : base("Project6", 640, 480, false)
     {
@@ -25,6 +28,7 @@ public class Game1 : Core
         _renderTarget = new RenderTarget2D(GraphicsDevice, targetResolution.X, targetResolution.Y, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
         InitializeGum();
         UpdateViewport();
+        Audio.PlaySong(_backgroundMusic, true);
         ChangeScene(new TitleScene());
     }
 
@@ -39,10 +43,8 @@ public class Game1 : Core
         GumService.Default.ContentLoader.XnaContentManager = Core.Content;
         FrameworkElement.KeyboardsForUiControl.Add(GumService.Default.Keyboard);
         FrameworkElement.GamePadsForUiControl.AddRange(GumService.Default.Gamepads);
-        FrameworkElement.TabReverseKeyCombos.Add(
-           new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Up });
-        FrameworkElement.TabKeyCombos.Add(
-           new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Down });
+        FrameworkElement.TabReverseKeyCombos.Add(new KeyCombo() { PushedKey = Keys.Up });
+        FrameworkElement.TabKeyCombos.Add(new KeyCombo() { PushedKey = Keys.Down });
     }
 
     private Rectangle CalculateDestinationRectangle()
@@ -87,4 +89,10 @@ public class Game1 : Core
 
         GumService.Default.Draw();
     }
+    protected override void LoadContent()
+    {
+        // Load the background theme music.
+        _backgroundMusic = Content.Load<Song>("audio/song/title");
+    }
+
 }

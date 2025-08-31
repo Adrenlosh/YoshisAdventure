@@ -13,6 +13,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin audio/sfx/plummet.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:audio/sfx/plummet.wav
+
+#begin audio/song/title.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:audio/song/title.mp3
+
 #begin fonts/Roboto.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
 using MonoGameGum;
@@ -18,8 +19,9 @@ namespace Project6.Scenes
         private Egg _egg = null;
         private Tilemap _tilemap;
         private OrthographicCamera _camera;
+        private TextureAtlas _atlas;
+        private float _cameraShakeTimer = -1f;
         private readonly Point _virtualResolution = new Point(320, 240);
-        private TextureAtlas atlas;
 
         public override void Initialize()
         {
@@ -30,17 +32,23 @@ namespace Project6.Scenes
         public override void LoadContent()
         {
             _font = Content.Load<SpriteFont>("fonts/Roboto");
-            atlas = TextureAtlas.FromFile(Core.Content, "images/atlas-definition.xml");
+            _atlas = TextureAtlas.FromFile(Core.Content, "images/atlas-definition.xml");
             _tilemap = Tilemap.FromFile(Content, "images/tilemap-definition.xml");
-            _yoshi = new Yoshi(atlas, _tilemap);
+            _yoshi = new Yoshi(_atlas, _tilemap);
             _yoshi.OnThrowEgg += _yoshi_OnThrowEgg;
+            _yoshi.OnPlummeted += _yoshi_OnPlummeted;
+        }
+
+        private void _yoshi_OnPlummeted(Vector2 _)
+        {
+            _cameraShakeTimer = 0f;
         }
 
         private void _yoshi_OnThrowEgg(Vector2 ThrowDirection)
         {
             if (_egg != null && _egg.IsActive)
                 return;
-            _egg = new Egg(atlas, _tilemap);
+            _egg = new Egg(_atlas, _tilemap);
             _egg.Position = _yoshi.Position;
             _egg.ScreenBounds = GetScreenBounds();
             _egg.Throw(ThrowDirection);
@@ -61,12 +69,27 @@ namespace Project6.Scenes
                 }
             }
             _camera.Position = GetCameraPosition();
+            if(_cameraShakeTimer >=0f)
+            {
+                _cameraShakeTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                float shakeAmount = 2f;
+                if (_cameraShakeTimer <= 0.5f)
+                {
+                    float offsetX = (float)(new Random().NextDouble() * 2 - 1) * shakeAmount;
+                    float offsetY = (float)(new Random().NextDouble() * 2 - 1) * shakeAmount;
+                    _camera.Position += new Vector2(offsetX, offsetY);
+                }
+                else
+                {
+                    _cameraShakeTimer = -1f;
+                }
+            }
             GumService.Default.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            Core.GraphicsDevice.Clear(Color.IndianRed);
+            Core.GraphicsDevice.Clear(Color.CornflowerBlue);
             Core.SpriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
             _tilemap.Draw(Core.SpriteBatch);
             _egg?.Draw();
