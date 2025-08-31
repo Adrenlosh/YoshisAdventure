@@ -7,15 +7,11 @@ using MonoGameGum;
 using MonoGameLibrary;
 using Project6.Scenes;
 using System;
-using System.Diagnostics;
 
 namespace Project6;
 
 public class GameMain : Core
 {
-    //private Song _backgroundMusic;
-
-
     public ViewportAdapter ViewportAdapter { get; private set; }
 
     public GameMain() : base("Project6", 320, 240, false)
