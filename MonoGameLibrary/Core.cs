@@ -84,7 +84,7 @@ public class Core : Game
         Graphics.PreferredBackBufferWidth = width;
         Graphics.PreferredBackBufferHeight = height;
         Graphics.IsFullScreen = fullScreen;
-
+        Graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
         // Apply the graphic presentation changes.
         Graphics.ApplyChanges();
 
@@ -107,7 +107,7 @@ public class Core : Game
 
     protected override void Initialize()
     {
-        base.Initialize();
+        
 
         // Set the core's graphics device to a reference of the base Game's
         // graphics device.
@@ -121,6 +121,8 @@ public class Core : Game
 
         // Create a new audio controller.
         Audio = new AudioController();
+
+        base.Initialize();
     }
 
     protected override void UnloadContent()

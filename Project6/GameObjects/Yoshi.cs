@@ -4,14 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGameLibrary;
 using MonoGameLibrary.Graphics;
 using System;
-using System.Net.Mime;
 
 namespace Project6.GameObjects
 {
     public class Yoshi
     {
         private const float Gravity = 0.5f;
-        private const float PlummetGravity = 2f;
+        private const float PlummetGravity = 3f;
         private const float BaseJumpForce = -7f;
         private const float MoveSpeed = 4f;
         private const float AccelerationRate = 0.05f;
@@ -387,8 +386,8 @@ namespace Project6.GameObjects
                 if(_plummetStage == 1)
                 {
                     _velocity.Y += PlummetGravity;
-                    if (_velocity.Y > 12f)
-                        _velocity.Y = 12f;
+                    if (_velocity.Y > 18f)
+                        _velocity.Y = 18f;
 
                     // 垂直移动 - 使用碰撞箱而不是精灵尺寸
                     if (_velocity.Y != 0)

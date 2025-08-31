@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
 using MonoGameGum;
@@ -26,7 +25,7 @@ namespace Project6.Scenes
         public override void Initialize()
         {
             base.Initialize();
-            _camera = new OrthographicCamera(new BoxingViewportAdapter(Game1.Instance.Window, Core.GraphicsDevice, _virtualResolution.X, _virtualResolution.Y));
+            _camera = new OrthographicCamera(new BoxingViewportAdapter(GameMain.Instance.Window, Core.GraphicsDevice, _virtualResolution.X, _virtualResolution.Y));
         }
 
         public override void LoadContent()
@@ -72,11 +71,11 @@ namespace Project6.Scenes
             if(_cameraShakeTimer >=0f)
             {
                 _cameraShakeTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                float shakeAmount = 2f;
+                float shakeAmount = 3f;
                 if (_cameraShakeTimer <= 0.5f)
                 {
-                    float offsetX = (float)(new Random().NextDouble() * 2 - 1) * shakeAmount;
-                    float offsetY = (float)(new Random().NextDouble() * 2 - 1) * shakeAmount;
+                    float offsetX = (float)(new Random().NextDouble() * 1 - 1) * shakeAmount;
+                    float offsetY = (float)(new Random().NextDouble() * 1 - 1) * shakeAmount;
                     _camera.Position += new Vector2(offsetX, offsetY);
                 }
                 else
