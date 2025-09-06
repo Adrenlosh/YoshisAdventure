@@ -27,13 +27,13 @@
 		<Region name="yoshi-floating-3" x="0" y="682" width="21" height="31" />
 		<Region name="yoshi-squat" x="0" y="713" width="21" height="31" />
 		<Region name="yoshi-holdingegg-1" x="0" y="744" width="21" height="31" />
-		<Region name="yoshi-throw" x="0" y="775" width="24" height="31" />
-		<Region name="yoshi-plummet-1" x="0" y="806" width="24" height="31" />
+		<Region name="yoshi-throw" x="0" y="775" width="21" height="31" />
+		<Region name="yoshi-plummet-1" x="0" y="806" width="21" height="31" />
 		<Region name="yoshi-front" x="0" y="837" width="21" height="31" />
 		<Region name="yoshi-back" x="0" y="868" width="21" height="31" />
 		<Region name="yoshi-lookup" x="0" y="899" width="21" height="31" />
 		<Region name="yoshi-holdingegg-2" x="0" y="930" width="21" height="31" />
-		<Region name="yoshi-plummet-2" x="0" y="961" width="24" height="31" />
+		<Region name="yoshi-plummet-2" x="0" y="961" width="21" height="31" />
 		
 		<Region name="throwsight-red" x="1008" y="0" width="16" height="16" />
 		<Region name="throwsight-yellow" x="1008" y="16" width="16" height="16" />

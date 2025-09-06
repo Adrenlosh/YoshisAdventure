@@ -1,12 +1,13 @@
-﻿using Gum.Forms.Controls;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.ViewportAdapters;
 using MonoGameGum;
+using MonoGameGum.Forms;
+using MonoGameGum.Forms.Controls;
 using MonoGameLibrary;
 using Project6.Scenes;
-using System;
+using RenderingLibrary;
 
 namespace Project6;
 
@@ -22,24 +23,15 @@ public class GameMain : Core
     {
         base.Initialize();
         Window.AllowUserResizing = true;
-        Window.ClientSizeChanged += OnWindowSizeChanged;
-        InitializeGum();
-        //Audio.PlaySong(_backgroundMusic, true);
-        ChangeScene(new TitleScene());
-    }
 
-    private void OnWindowSizeChanged(object sender, EventArgs e)
-    {
+        InitializeGum();
+        ChangeScene(new TitleScene());
     }
 
     private void InitializeGum()
     {
         GumService.Default.Initialize(this);
         GumService.Default.ContentLoader.XnaContentManager = Core.Content;
-        FrameworkElement.KeyboardsForUiControl.Add(GumService.Default.Keyboard);
-        FrameworkElement.GamePadsForUiControl.AddRange(GumService.Default.Gamepads);
-        FrameworkElement.TabReverseKeyCombos.Add(new KeyCombo() { PushedKey = Keys.Up });
-        FrameworkElement.TabKeyCombos.Add(new KeyCombo() { PushedKey = Keys.Down });
     }
 
     protected override void Draw(GameTime gameTime)
@@ -48,11 +40,9 @@ public class GameMain : Core
         base.Draw(gameTime);
         GumService.Default.Draw();
     }
+
     protected override void LoadContent()
     {
-        // Load the background theme music.
-        //_backgroundMusic = Content.Load<Song>("audio/song/title");
-        ViewportAdapter = new BoxingViewportAdapter(Window, Core.GraphicsDevice, 320,240);
+        ViewportAdapter = new BoxingViewportAdapter(Window, Core.GraphicsDevice, 320, 240);
     }
-
 }

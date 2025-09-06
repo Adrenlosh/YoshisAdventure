@@ -1,16 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGameLibrary;
 using MonoGameLibrary.Graphics;
 using System;
+using System.Diagnostics;
 
 namespace Project6.GameObjects
 {
     public class Yoshi
     {
         private const float Gravity = 0.5f;
-        private const float PlummetGravity = 3f;
+        private const float PlummetGravity = 2f;
         private const float BaseJumpForce = -7f;
         private const float MoveSpeed = 4f;
         private const float AccelerationRate = 0.05f;
@@ -50,7 +52,7 @@ namespace Project6.GameObjects
 
         private readonly Tilemap _tilemap;
         private readonly Point _normalCollisionBox = new Point(16, 32);
-        private readonly Point _squatCollisionBox = new Point(16, 32);
+        private readonly Point _squatCollisionBox = new Point(16, 16);
 
         private Vector2 _velocity = Vector2.Zero;
         private Vector2 _acceleration = Vector2.Zero;
@@ -81,6 +83,16 @@ namespace Project6.GameObjects
 
         public Vector2 Position { get; set; } = Vector2.Zero;
 
+        public Vector2 CenterBottomPosition
+        {
+            get => new Vector2(Position.X + _yoshiSprite.Width / 2, Position.Y + _yoshiSprite.Height);
+        }
+
+        public Vector2 CenterPosition
+        {
+            get => new Vector2(Position.X + _yoshiSprite.Width / 2, Position.Y + _yoshiSprite.Height / 2);
+        }
+
         public Point Size { get; set; } = new Point(0, 0);
 
         public bool CanThrowEgg { get; set; } = true;
@@ -98,6 +110,10 @@ namespace Project6.GameObjects
         public bool IsLookingUp => _isLookingUp;
 
         public bool IsHoldingEgg => _isHoldingEgg;
+
+        public bool IsPlummenting => _isPlummeting;
+
+        public int PlummentStage => _plummetStage;
 
         public Vector2 ThrowDirection => _throwDirection;
 
@@ -159,9 +175,9 @@ namespace Project6.GameObjects
 
         private Rectangle GetCollisionBox(Vector2 position)
         {
-            int centerX = (int)(position.X + _yoshiSprite.Width / 2 - Size.X / 2);
-            int centerY = (int)(position.Y + _yoshiSprite.Height / 2 - Size.Y / 2);
-            return new Rectangle(centerX, centerY, Size.X, Size.Y);
+            int X = (int)(position.X + _yoshiSprite.Width / 2 - Size.X / 2);
+            int Y = (int)(position.Y + _yoshiSprite.Height - Size.Y);
+            return new Rectangle(X, Y, Size.X, Size.Y);
         }
 
         private Vector2 GetCurrentThrowDirection()
@@ -170,13 +186,10 @@ namespace Project6.GameObjects
                 (float)Math.Sin(_currentAngle),
                 -(float)Math.Cos(_currentAngle)
             );
-
-            // 确保方向向量是单位向量
             if (direction.LengthSquared() > 0)
             {
                 direction.Normalize();
             }
-
             return direction;
         }
 
@@ -210,7 +223,6 @@ namespace Project6.GameObjects
             if(GameController.MoveDown() && !_isOnGround && !_isHoldingEgg && !_isThrewEgg)
             {
                 _isPlummeting = true;
-
             }
 
             if (GameController.MoveUp() && !_isSquatting)
@@ -386,8 +398,8 @@ namespace Project6.GameObjects
                 if(_plummetStage == 1)
                 {
                     _velocity.Y += PlummetGravity;
-                    if (_velocity.Y > 18f)
-                        _velocity.Y = 18f;
+                    if (_velocity.Y > 8f)
+                        _velocity.Y = 8f;
 
                     // 垂直移动 - 使用碰撞箱而不是精灵尺寸
                     if (_velocity.Y != 0)
@@ -528,7 +540,7 @@ namespace Project6.GameObjects
 
                         if (IsCollidingWithTile(testRect, out Rectangle tileRect))
                         {
-                            if (_velocity.Y > 0)
+                            if (_velocity.Y > 0.5)
                             {
                                 // 修复落地位置计算 - 确保没有1px间隙
                                 float spriteBottom = newPosition.Y + _yoshiSprite.Height;
