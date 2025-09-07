@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGameLibrary;
-using MonoGameLibrary.Graphics;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Tiled;
 using System;
 
 namespace Project6.GameObjects
@@ -10,7 +11,8 @@ namespace Project6.GameObjects
         private const int MaxCollisionCount = 10;
 
         private readonly Sprite _sprite;
-        private readonly Tilemap _tilemap;
+        private readonly TiledMap _tilemap;
+
 
         private Vector2 _throwDirection;
         private Vector2 _previousPosition;
@@ -30,16 +32,17 @@ namespace Project6.GameObjects
 
         public int CollisionCount => _collisionCount;
 
-        public Egg(TextureAtlas atlas, Tilemap tilemap)
+        public Egg(Texture2D texture, TiledMap tilemap)
         {
-            _sprite = atlas.CreateSprite("egg");
+            _sprite = new Sprite(texture);
             _tilemap = tilemap;
         }
 
         // 修改碰撞检测方法，返回更详细的碰撞信息
         private bool IsCollidingWithTile(Rectangle eggRect, out Rectangle tileRect, out Vector2 normal, out float penetrationDepth)
         {
-            int tileSize = (int)_tilemap.TileWidth;
+            TiledMapTileLayer tileLayer = _tilemap.GetLayer<TiledMapTileLayer>("Ground");
+            int tileSize = _tilemap.TileWidth;
             int left = eggRect.Left / tileSize;
             int right = eggRect.Right / tileSize;
             int top = eggRect.Top / tileSize;
@@ -51,15 +54,17 @@ namespace Project6.GameObjects
             {
                 for (int y = top; y <= bottom; y++)
                 {
-                    var tile = _tilemap.GetTile(x, y);
-                    if (tile != null && tile.IsBlocking)
+                    if (tileLayer.TryGetTile((ushort)x, (ushort)y, out TiledMapTile? tile))
                     {
-                        tileRect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
-                        if (eggRect.Intersects(tileRect))
+                        if (tile.HasValue && !tile.Value.IsBlank)
                         {
-                            // 计算更精确的碰撞信息
-                            CalculateCollisionDetails(eggRect, tileRect, out normal, out penetrationDepth);
-                            return true;
+                            tileRect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
+                            if (eggRect.Intersects(tileRect))
+                            {
+                                // 计算更精确的碰撞信息
+                                CalculateCollisionDetails(eggRect, tileRect, out normal, out penetrationDepth);
+                                return true;
+                            }
                         }
                     }
                 }
@@ -96,8 +101,8 @@ namespace Project6.GameObjects
 
         private Rectangle GetCollisionBox(Vector2 position)
         {
-            int centerX = (int)(position.X + _sprite.Width / 2 - Size.X / 2);
-            int centerY = (int)(position.Y + _sprite.Height / 2 - Size.Y / 2);
+            int centerX = (int)(position.X + _sprite.Size.X / 2 - Size.X / 2);
+            int centerY = (int)(position.Y + _sprite.Size.Y / 2 - Size.Y / 2);
             return new Rectangle(centerX, centerY, Size.X, Size.Y);
         }
 
@@ -180,11 +185,11 @@ namespace Project6.GameObjects
             return !ScreenBounds.Intersects(eggBounds);
         }
 
-        public void Draw()
+        public void Draw(SpriteBatch spriteBatch)
         {
             if (_isActive)
             {
-                _sprite.Draw(Core.SpriteBatch, Position);
+                _sprite.Draw(spriteBatch, Position, 0, Vector2.One);
             }
         }
     }

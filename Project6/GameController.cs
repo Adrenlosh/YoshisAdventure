@@ -1,7 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GameLibrary.Input;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGameLibrary;
-using MonoGameLibrary.Input;
 
 namespace Project6;
 
@@ -11,8 +10,8 @@ namespace Project6;
 /// </summary>
 public static class GameController
 {
-    private static KeyboardInfo s_keyboard => Core.Input.Keyboard;
-    private static GamePadInfo s_gamePad => Core.Input.GamePads[(int)PlayerIndex.One];
+    private static KeyboardInfo s_keyboard => GameMain.Input.Keyboard;
+    private static GamePadInfo s_gamePad => GameMain.Input.GamePads[(int)PlayerIndex.One];
 
     /// <summary>
     /// Returns true if the player has triggered the "move up" action.

@@ -31,7 +31,7 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonoGameLibrary\MonoGameLibrary.csproj" />
+    <ProjectReference Include="..\GameLibrary\GameLibrary.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Content\fonts\ZFull-GB.fnt">

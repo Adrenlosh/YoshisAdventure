@@ -1,48 +1,64 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GameLibrary.Input;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
+using MonoGame.Extended.Screens;
 using MonoGame.Extended.ViewportAdapters;
 using MonoGameGum;
-using MonoGameGum.Forms;
-using MonoGameGum.Forms.Controls;
-using MonoGameLibrary;
 using Project6.Scenes;
-using RenderingLibrary;
+using Project6.Status;
 
 namespace Project6;
 
-public class GameMain : Core
+public class GameMain : Game
 {
+    private readonly GraphicsDeviceManager _graphics;
+    private readonly ScreenManager _screenManager;
+
     public ViewportAdapter ViewportAdapter { get; private set; }
 
-    public GameMain() : base("Project6", 320, 240, false)
-    {
-    }
+    public static PlayerStatus playerStatus { get; set; } = new PlayerStatus();
 
-    protected override void Initialize()
+    public static InputManager Input { get; private set; } = new InputManager();
+
+    public GameMain()
     {
-        base.Initialize();
+        _graphics = new GraphicsDeviceManager(this)
+        {
+            PreferredBackBufferWidth = GlobalConfig.VirtualResolution_Width,
+            PreferredBackBufferHeight = GlobalConfig.VirtualResolution_Height,
+            SynchronizeWithVerticalRetrace = false
+        };
+        Content.RootDirectory = "Content";
+        IsFixedTimeStep = true;
         Window.AllowUserResizing = true;
-
-        InitializeGum();
-        ChangeScene(new TitleScene());
+        IsMouseVisible = true;
+        _screenManager = Components.Add<ScreenManager>();
     }
 
     private void InitializeGum()
     {
         GumService.Default.Initialize(this);
-        GumService.Default.ContentLoader.XnaContentManager = Core.Content;
+        GumService.Default.ContentLoader.XnaContentManager = Content;
     }
 
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.Black);
-        base.Draw(gameTime);
         GumService.Default.Draw();
+        base.Draw(gameTime);
+    }
+
+    protected override void Update(GameTime gameTime)
+    {
+        Input.Update(gameTime);
+        base.Update(gameTime);
     }
 
     protected override void LoadContent()
     {
-        ViewportAdapter = new BoxingViewportAdapter(Window, Core.GraphicsDevice, 320, 240);
+        InitializeGum();
+        ViewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, GlobalConfig.VirtualResolution_Width, GlobalConfig.VirtualResolution_Height);
+        _screenManager.LoadScreen(new TitleScreen(this));
     }
 }

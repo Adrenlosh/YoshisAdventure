@@ -1,11 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
-using MonoGameLibrary;
-using MonoGameLibrary.Graphics;
+using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Tiled;
 using System;
-using System.Diagnostics;
 
 namespace Project6.GameObjects
 {
@@ -33,24 +30,8 @@ namespace Project6.GameObjects
 
         private readonly AnimatedSprite _yoshiSprite;
         private readonly AnimatedSprite _throwSightSprite;
-        private readonly Animation _jumpAnimation;
-        private readonly Animation _fallingAnimation;
-        private readonly Animation _walkAnimation;
-        private readonly Animation _runAnimation;
-        private readonly Animation _standingAnimation;
-        private readonly Animation _turnAnimation;
-        private readonly Animation _floatingAnimation;
-        private readonly Animation _squatAnimation;
-        private readonly Animation _lookUpAnimation;
-        private readonly Animation _holdingEggAnimation;
-        private readonly Animation _holdingEggWalkingAnimation;
-        private readonly Animation _threwEggAnimation;
-        private readonly Animation _plummetStage1Animation;
-        private readonly Animation _plummetStage2Animation;
 
-        private readonly SoundEffect _plummetSFX;
-
-        private readonly Tilemap _tilemap;
+        private readonly TiledMap _tileMap;
         private readonly Point _normalCollisionBox = new Point(16, 32);
         private readonly Point _squatCollisionBox = new Point(16, 16);
 
@@ -71,7 +52,7 @@ namespace Project6.GameObjects
         private bool _isPlummeting = false;
         private int _lastInputDirection = 1;
         private float _plummetTimer = 0;
-        private int _plummetStage = -1; 
+        private int _plummetStage = -1;
 
         private Vector2 _rotatingSpritePosition;
         private float _currentAngle = 0f;
@@ -85,12 +66,12 @@ namespace Project6.GameObjects
 
         public Vector2 CenterBottomPosition
         {
-            get => new Vector2(Position.X + _yoshiSprite.Width / 2, Position.Y + _yoshiSprite.Height);
+            get => new Vector2(Position.X + _yoshiSprite.Size.X / 2, Position.Y + _yoshiSprite.Size.Y);
         }
 
         public Vector2 CenterPosition
         {
-            get => new Vector2(Position.X + _yoshiSprite.Width / 2, Position.Y + _yoshiSprite.Height / 2);
+            get => new Vector2(Position.X + _yoshiSprite.Size.X / 2, Position.Y + _yoshiSprite.Size.Y / 2);
         }
 
         public Point Size { get; set; } = new Point(0, 0);
@@ -122,35 +103,20 @@ namespace Project6.GameObjects
         public event Action<Vector2> OnThrowEgg;
         public event Action<Vector2> OnPlummeted;
 
-        public Yoshi(TextureAtlas atlas, Tilemap tilemap)
+        public Yoshi(SpriteSheet yoshiSpriteSheet, SpriteSheet throwSightSpriteSheet, TiledMap tiledmap)
         {
+            _yoshiSprite = new AnimatedSprite(yoshiSpriteSheet);
+            _yoshiSprite.SetAnimation("Stand");
+            _throwSightSprite = new AnimatedSprite(throwSightSpriteSheet);
+            _throwSightSprite.SetAnimation("Shine");
             Size = _normalCollisionBox;
-            AnimatedSprite sprite = atlas.CreateAnimatedSprite("yoshi-standing-animation");
-            _yoshiSprite = sprite;
-            _standingAnimation = sprite.Animation;
-            _walkAnimation = atlas.CreateAnimatedSprite("yoshi-walk-animation").Animation;
-            _jumpAnimation = atlas.CreateAnimatedSprite("yoshi-jump-animation").Animation;
-            _fallingAnimation = atlas.CreateAnimatedSprite("yoshi-falling-animation").Animation;
-            _runAnimation = atlas.CreateAnimatedSprite("yoshi-run-animation").Animation;
-            _turnAnimation = atlas.CreateAnimatedSprite("yoshi-turn-animation").Animation;
-            _floatingAnimation = atlas.CreateAnimatedSprite("yoshi-floating-animation").Animation;
-            _squatAnimation = atlas.CreateAnimatedSprite("yoshi-squat-animation").Animation;
-            _lookUpAnimation = atlas.CreateAnimatedSprite("yoshi-lookup-animation").Animation;
-            _holdingEggAnimation = atlas.CreateAnimatedSprite("yoshi-holdingegg-animation").Animation;
-            _holdingEggWalkingAnimation = atlas.CreateAnimatedSprite("yoshi-holdingegg-walking-animation").Animation;
-            _threwEggAnimation = atlas.CreateAnimatedSprite("yoshi-threwegg-animation").Animation;
-            _threwEggAnimation = atlas.CreateAnimatedSprite("yoshi-threwegg-animation").Animation;
-            _plummetStage1Animation = atlas.CreateAnimatedSprite("yoshi-plummet-stage1-animation").Animation;
-            _plummetStage2Animation = atlas.CreateAnimatedSprite("yoshi-plummet-stage2-animation").Animation;
-            _throwSightSprite = atlas.CreateAnimatedSprite("throwsight-animation");
-            _tilemap = tilemap;
-
-            _plummetSFX = Core.Content.Load<SoundEffect>("audio/sfx/plummet");
+            _tileMap = tiledmap;
         }
 
         private bool IsCollidingWithTile(Rectangle playerRect, out Rectangle tileRect)
         {
-            int tileSize = (int)_tilemap.TileWidth;
+            TiledMapTileLayer tileLayer = _tileMap.GetLayer<TiledMapTileLayer>("Ground");
+            int tileSize = _tileMap.TileWidth;
             int left = playerRect.Left / tileSize;
             int right = playerRect.Right / tileSize;
             int top = playerRect.Top / tileSize;
@@ -160,12 +126,14 @@ namespace Project6.GameObjects
             {
                 for (int y = top; y <= bottom; y++)
                 {
-                    var tile = _tilemap.GetTile(x, y);
-                    if (tile != null && tile.IsBlocking)
+                    if (tileLayer.TryGetTile((ushort)x, (ushort)y, out TiledMapTile? tile))
                     {
-                        tileRect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
-                        if (playerRect.Intersects(tileRect))
-                            return true;
+                        if (tile.HasValue && !tile.Value.IsBlank)
+                        {
+                            tileRect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
+                            if (playerRect.Intersects(tileRect))
+                                return true;
+                        }
                     }
                 }
             }
@@ -175,8 +143,8 @@ namespace Project6.GameObjects
 
         private Rectangle GetCollisionBox(Vector2 position)
         {
-            int X = (int)(position.X + _yoshiSprite.Width / 2 - Size.X / 2);
-            int Y = (int)(position.Y + _yoshiSprite.Height - Size.Y);
+            int X = (int)(position.X + _yoshiSprite.Size.X / 2 - Size.X / 2);
+            int Y = (int)(position.Y + _yoshiSprite.Size.Y - Size.Y);
             return new Rectangle(X, Y, Size.X, Size.Y);
         }
 
@@ -219,8 +187,8 @@ namespace Project6.GameObjects
                 _isSquatting = false;
                 Size = _normalCollisionBox;
             }
-            
-            if(GameController.MoveDown() && !_isOnGround && !_isHoldingEgg && !_isThrewEgg)
+
+            if (GameController.MoveDown() && !_isOnGround && !_isHoldingEgg && !_isThrewEgg)
             {
                 _isPlummeting = true;
             }
@@ -255,23 +223,20 @@ namespace Project6.GameObjects
                 _acceleration.X = 0;
             }
 
-            // 检查是否转向 - 持有蛋时不允许转向
             if (!_isHoldingEgg && currentInputDirection != 0 && _lastInputDirection != 0 &&
                 currentInputDirection != _lastInputDirection && Math.Abs(_velocity.X) > 0.5f && _isOnGround)
             {
                 _isTurning = true;
                 _turnTimer = TurnAnimationDuration;
-                _yoshiSprite.Animation = _turnAnimation;
+                _yoshiSprite.SetAnimation("Turn");
             }
 
             if (currentInputDirection != 0 && !_isHoldingEgg)
             {
                 _lastInputDirection = currentInputDirection;
             }
-
             bool isJumpButtonPressed = GameController.JumpPressed();
             bool isJumpButtonHeld = GameController.JumpHeld();
-
             if (isJumpButtonPressed && _isOnGround && _canJump)
             {
                 _isJumping = true;
@@ -279,12 +244,10 @@ namespace Project6.GameObjects
                 _jumpHoldTime = 0f;
                 _velocity.Y = BaseJumpForce;
                 _isOnGround = false;
-
-                // 跳跃时根据是否持有蛋选择动画
                 if (!_isHoldingEgg)
-                    _yoshiSprite.Animation = _jumpAnimation;
+                    _yoshiSprite.SetAnimation("Jump");
                 else
-                    _yoshiSprite.Animation = _holdingEggWalkingAnimation;
+                    _yoshiSprite.SetAnimation("HoldEgg");
 
                 _canJump = false;
             }
@@ -311,7 +274,7 @@ namespace Project6.GameObjects
             {
                 _isFloating = true;
                 _floatTime = 0f;
-                _yoshiSprite.Animation = _fallingAnimation;
+                _yoshiSprite.SetAnimation("Fall");
             }
 
             // 浮动状态处理
@@ -327,19 +290,22 @@ namespace Project6.GameObjects
                         // 第一阶段：平滑过渡到下落
                         float targetVelocity = 1.5f;
                         _velocity.Y = MathHelper.Lerp(_velocity.Y, targetVelocity, 0.1f);
-                        _yoshiSprite.Animation = _fallingAnimation;
+                        if (_yoshiSprite.CurrentAnimation != "Fall")
+                            _yoshiSprite.SetAnimation("Fall");
                     }
                     else if (_floatTime < 1.0f)
                     {
                         // 第二阶段：向上浮动
                         _velocity.Y = FloatForce;
-                        _yoshiSprite.Animation = _floatingAnimation;
+                        if (_yoshiSprite.CurrentAnimation != "Float")
+                            _yoshiSprite.SetAnimation("Float");
                     }
                     else
                     {
                         // 第三阶段：缓慢下落
                         _velocity.Y = Math.Min(_velocity.Y + Gravity * 0.3f, 1.2f);
-                        _yoshiSprite.Animation = _fallingAnimation;
+                        if (_yoshiSprite.CurrentAnimation != "Fall")
+                            _yoshiSprite.SetAnimation("Fall");
                     }
                 }
                 else
@@ -374,7 +340,7 @@ namespace Project6.GameObjects
         {
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Vector2 newPosition = Position;
-            if(_isOnGround && _isPlummeting)
+            if (_isOnGround && _isPlummeting)
             {
                 _isPlummeting = false;
                 _plummetTimer = 0;
@@ -384,18 +350,20 @@ namespace Project6.GameObjects
             {
                 _plummetTimer += elapsed;
 
-                if(_plummetTimer > 0 && _plummetTimer < 0.5f) //stage1
+                if (_plummetTimer > 0 && _plummetTimer < 0.5f) //stage1
                 {
                     _plummetStage = 0;
-                    _yoshiSprite.Animation = _plummetStage1Animation;
+                    if (_yoshiSprite.CurrentAnimation != "Plummet1")
+                        _yoshiSprite.SetAnimation("Plummet1");
                 }
                 else //stage2
                 {
                     _plummetStage = 1;
-                    _yoshiSprite.Animation = _plummetStage2Animation;
+                    if (_yoshiSprite.CurrentAnimation != "Plummet2")
+                        _yoshiSprite.SetAnimation("Plummet2");
                 }
 
-                if(_plummetStage == 1)
+                if (_plummetStage == 1)
                 {
                     _velocity.Y += PlummetGravity;
                     if (_velocity.Y > 8f)
@@ -414,7 +382,7 @@ namespace Project6.GameObjects
                             _plummetTimer = 0;
                             _plummetStage = -1;
                             OnPlummeted?.Invoke(newPosition);
-                            Core.Audio.PlaySoundEffect(_plummetSFX);
+                            //Core.Audio.PlaySoundEffect(_plummetSFX);
                         }
                         else
                         {
@@ -425,17 +393,17 @@ namespace Project6.GameObjects
                                 if (_velocity.Y > 0)
                                 {
                                     // 修复落地位置计算 - 确保没有1px间隙
-                                    float spriteBottom = newPosition.Y + _yoshiSprite.Height;
+                                    float spriteBottom = newPosition.Y + _yoshiSprite.Size.X;
                                     float tileTop = tileRect.Top;
                                     // 直接使用精灵底部与瓦片顶部对齐
-                                    newPosition.Y = tileTop - _yoshiSprite.Height;
+                                    newPosition.Y = tileTop - _yoshiSprite.Size.Y;
                                     _velocity.Y = 0;
                                     _isOnGround = true;
                                     _isPlummeting = false;
                                     _plummetTimer = 0;
                                     _plummetStage = -1;
                                     OnPlummeted?.Invoke(newPosition);
-                                    Core.Audio.PlaySoundEffect(_plummetSFX);
+                                    //Core.Audio.PlaySoundEffect(_plummetSFX);
                                 }
                             }
                             else
@@ -452,7 +420,7 @@ namespace Project6.GameObjects
                 if (_isThrewEgg)
                 {
                     _threwAnimationTimer += elapsed;
-                    _yoshiSprite.Animation = _threwEggAnimation;
+                    _yoshiSprite.SetAnimation("Throw");
                     if (_threwAnimationTimer >= 0.5f)
                     {
                         _isThrewEgg = false;
@@ -543,10 +511,10 @@ namespace Project6.GameObjects
                             if (_velocity.Y > 0.5)
                             {
                                 // 修复落地位置计算 - 确保没有1px间隙
-                                float spriteBottom = newPosition.Y + _yoshiSprite.Height;
+                                float spriteBottom = newPosition.Y + _yoshiSprite.Size.X;
                                 float tileTop = tileRect.Top;
                                 // 直接使用精灵底部与瓦片顶部对齐
-                                newPosition.Y = tileTop - _yoshiSprite.Height;
+                                newPosition.Y = tileTop - _yoshiSprite.Size.Y;
                                 _velocity.Y = 0;
                                 _isOnGround = true;
                                 _isJumping = false;
@@ -554,9 +522,9 @@ namespace Project6.GameObjects
                                 _jumpInitiated = false;
                                 // 落地时根据是否持有蛋选择动画
                                 if (!_isHoldingEgg)
-                                    _yoshiSprite.Animation = _standingAnimation;
+                                    _yoshiSprite.SetAnimation("Stand");
                                 else
-                                    _yoshiSprite.Animation = _holdingEggAnimation;
+                                    _yoshiSprite.SetAnimation("HoldEgg");
                             }
                             else if (_velocity.Y < 0)
                             {
@@ -583,13 +551,13 @@ namespace Project6.GameObjects
                     if (!IsCollidingWithTile(groundCheckRect, out _))
                     {
                         _isOnGround = false;
-                        if (!_isJumping && !_isFloating && _yoshiSprite.Animation != _fallingAnimation && !_isHoldingEgg)
+                        if (!_isJumping && !_isFloating && _yoshiSprite.CurrentAnimation != "Fall" && !_isHoldingEgg)
                         {
-                            _yoshiSprite.Animation = _fallingAnimation;
+                            _yoshiSprite.SetAnimation("Fall");
                         }
                         else if (!_isJumping && !_isFloating && _isHoldingEgg)
                         {
-                            _yoshiSprite.Animation = _holdingEggAnimation;
+                            _yoshiSprite.SetAnimation("HoldEgg");
                         }
                     }
                     else
@@ -602,11 +570,11 @@ namespace Project6.GameObjects
                 {
                     if (_velocity.X > 0.1f || _lastInputDirection == 1)
                     {
-                        _yoshiSprite.Effects = SpriteEffects.None;
+                        _yoshiSprite.Effect = SpriteEffects.None;
                     }
                     else if (_velocity.X < -0.1f || _lastInputDirection == -1)
                     {
-                        _yoshiSprite.Effects = SpriteEffects.FlipHorizontally;
+                        _yoshiSprite.Effect = SpriteEffects.FlipHorizontally;
                     }
                 }
 
@@ -618,58 +586,60 @@ namespace Project6.GameObjects
                     {
                         if (absVelocityX < WalkThreshold)
                         {
-                            _yoshiSprite.Animation = _holdingEggAnimation;
+                            _yoshiSprite.SetAnimation("HoldEgg");
                         }
                         else
                         {
-                            _yoshiSprite.Animation = _holdingEggWalkingAnimation;
+                            if (_yoshiSprite.CurrentAnimation != "HoldEggWalk")
+                                _yoshiSprite.SetAnimation("HoldEggWalk");
                         }
                     }
-                    else if (_isSquatting && _yoshiSprite.Animation != _squatAnimation && !_isTurning)
+                    else if (_isSquatting && _yoshiSprite.CurrentAnimation != "Squant" && !_isTurning)
                     {
-                        _yoshiSprite.Animation = _squatAnimation;
+                        _yoshiSprite.SetAnimation("Squant");
                     }
-                    else if (_isLookingUp && _yoshiSprite.Animation != _lookUpAnimation && !_isTurning)
+                    else if (_isLookingUp && _yoshiSprite.CurrentAnimation != "LookUp" && !_isTurning)
                     {
-                        _yoshiSprite.Animation = _lookUpAnimation;
+                        _yoshiSprite.SetAnimation("LookUp");
                     }
-                    else if (absVelocityX < WalkThreshold && _yoshiSprite.Animation != _standingAnimation && !_isTurning && !_isSquatting && !_isLookingUp && !_isThrewEgg)
+                    else if (absVelocityX < WalkThreshold && _yoshiSprite.CurrentAnimation != "Stand" && !_isTurning && !_isSquatting && !_isLookingUp && !_isThrewEgg)
                     {
-                        _yoshiSprite.Animation = _standingAnimation;
+                        _yoshiSprite.SetAnimation("Stand");
                     }
-                    else if (absVelocityX >= WalkThreshold && absVelocityX < RunThreshold && _yoshiSprite.Animation != _walkAnimation && !_isTurning && !_isThrewEgg)
+                    else if (absVelocityX >= WalkThreshold && absVelocityX < RunThreshold && _yoshiSprite.CurrentAnimation != "Walk" && !_isTurning && !_isThrewEgg)
                     {
-                        _yoshiSprite.Animation = _walkAnimation;
+                        _yoshiSprite.SetAnimation("Walk");
                     }
-                    else if (absVelocityX >= RunThreshold && _yoshiSprite.Animation != _runAnimation && !_isTurning)
+                    else if (absVelocityX >= RunThreshold && _yoshiSprite.CurrentAnimation != "Run" && !_isTurning)
                     {
-                        _yoshiSprite.Animation = _runAnimation;
+                        _yoshiSprite.SetAnimation("Run");
                     }
                 }
-                else if (!_isFloating && _velocity.Y > 0 && _yoshiSprite.Animation != _fallingAnimation)
+                else if (!_isFloating && _velocity.Y > 0 && _yoshiSprite.CurrentAnimation != "Fall")
                 {
                     if (!_isHoldingEgg)
-                        _yoshiSprite.Animation = _fallingAnimation;
+                        _yoshiSprite.SetAnimation("Fall");
                     else
-                        _yoshiSprite.Animation = _holdingEggWalkingAnimation;
+                        _yoshiSprite.SetAnimation("HoldEgg");
                 }
                 else if (_isFloating)
                 {
-                    if (_floatTime >= 0.3f && _floatTime < 1.0f && _yoshiSprite.Animation != _floatingAnimation && !_isHoldingEgg)
+                    if (_floatTime >= 0.3f && _floatTime < 1.0f && _yoshiSprite.CurrentAnimation != "Float" && !_isHoldingEgg)
                     {
-                        _yoshiSprite.Animation = _floatingAnimation;
+                        _yoshiSprite.SetAnimation("Float");
                     }
-                    else if (_floatTime >= 1.0f && _yoshiSprite.Animation != _fallingAnimation && !_isHoldingEgg)
+                    else if (_floatTime >= 1.0f && _yoshiSprite.CurrentAnimation != "Fall" && !_isHoldingEgg)
                     {
-                        _yoshiSprite.Animation = _fallingAnimation;
+                        _yoshiSprite.SetAnimation("Fall");
                     }
                 }
-                else if (!_isOnGround && _velocity.Y < 0 && _yoshiSprite.Animation != _jumpAnimation)
+                else if (!_isOnGround && _velocity.Y < 0 && _yoshiSprite.CurrentAnimation != "Jump")
                 {
                     if (!_isHoldingEgg)
-                        _yoshiSprite.Animation = _jumpAnimation;
+                        _yoshiSprite.SetAnimation("Jump");
                     else
-                        _yoshiSprite.Animation = _holdingEggWalkingAnimation;
+                        if (_yoshiSprite.CurrentAnimation != "HoldEggWalk")
+                        _yoshiSprite.SetAnimation("HoldEggWalk");
                 }
                 if (_isHoldingEgg)
                 {
@@ -711,16 +681,15 @@ namespace Project6.GameObjects
 
             Position = newPosition;
             _yoshiSprite.Update(gameTime);
-
             _throwSightSprite.Update(gameTime);
         }
 
-        public void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            _yoshiSprite.Draw(Core.SpriteBatch, Position);
+            _yoshiSprite.Draw(spriteBatch, Position, 0, Vector2.One);
             if (_isHoldingEgg)
             {
-                _throwSightSprite.Draw(Core.SpriteBatch, _rotatingSpritePosition);
+                _throwSightSprite.Draw(spriteBatch, _rotatingSpritePosition, 0, Vector2.One);
             }
         }
     }
