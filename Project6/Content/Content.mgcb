@@ -26,6 +26,18 @@
 /processorParam:TextureFormat=Color
 /build:Atlas/egg.png
 
+#begin Atlas/test.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Atlas/test.png
+
 #begin Atlas/throwsight.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -38,6 +50,18 @@
 /processorParam:TextureFormat=Color
 /build:Atlas/throwsight.png
 
+#begin Atlas/tongue.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Atlas/tongue.png
+
 #begin Atlas/yoshi.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -49,18 +73,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Atlas/yoshi.png
-
-#begin Audio/Sfx/plummet.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Audio/Sfx/plummet.wav;Audio/Sfx/plummet
-
-#begin Audio/Song/title.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Audio/Song/title.mp3;Audio/Song/title
 
 #begin Fonts/ZFull-GB_0.png
 /importer:TextureImporter
@@ -199,10 +211,22 @@
 /processorParam:TextureFormat=Color
 /build:Images/background-pattern.png
 
-#begin TileMaps/map1.tmx
+#begin TileMaps/background.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TileMaps/background.png
+
+#begin TileMaps/map0.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:TileMaps/map1.tmx
+/build:TileMaps/map0.tmx
 
 #begin TileMaps/tileset.png
 /importer:TextureImporter
@@ -216,8 +240,8 @@
 /processorParam:TextureFormat=Color
 /build:TileMaps/tileset.png
 
-#begin TileMaps/tileset.tsx
+#begin TileMaps/Tileset.tsx
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
-/build:TileMaps/tileset.tsx
+/build:TileMaps/Tileset.tsx
 

@@ -81,6 +81,12 @@ public static class GameController
                s_gamePad.IsButtonDown(Buttons.B);
     }
 
+    public static bool AttackPressed()
+    {
+        return s_keyboard.IsKeyDown(Keys.O) ||
+            s_gamePad.IsButtonDown(Buttons.X);
+    }
+
 
     /// <summary>
     /// Returns true if the player has triggered the "pause" action.

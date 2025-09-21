@@ -3,10 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
 using System;
+using System.Diagnostics;
 
 namespace Project6.GameObjects
 {
-    public class Yoshi
+    public class Yoshi : GameObject
     {
         private const float Gravity = 0.5f;
         private const float PlummetGravity = 2f;
@@ -25,13 +26,11 @@ namespace Project6.GameObjects
         private const float RunThreshold = 3.8f;
 
         private float MaxAngleRadians = MathHelper.ToRadians(130);
-        private const float ThrowSightRadius = 60f;
-        private const float ThrewAnimationDuration = 0.5f;
 
         private readonly AnimatedSprite _yoshiSprite;
         private readonly AnimatedSprite _throwSightSprite;
+        private readonly Sprite _tongueSprite;
 
-        private readonly TiledMap _tileMap;
         private readonly Point _normalCollisionBox = new Point(16, 32);
         private readonly Point _squatCollisionBox = new Point(16, 16);
 
@@ -50,6 +49,13 @@ namespace Project6.GameObjects
         private bool _isLookingUp = false;
         private bool _isHoldingEgg = false;
         private bool _isPlummeting = false;
+        private bool _isMounting = false;
+
+        private float _tongueLength = 0f;
+        private GameObject _capturedObject = null;
+        private Vector2 _tongueDirection = Vector2.Zero;
+        private int _tongueState = 0;
+
         private int _lastInputDirection = 1;
         private float _plummetTimer = 0;
         private int _plummetStage = -1;
@@ -62,8 +68,6 @@ namespace Project6.GameObjects
         private bool _isThrewEgg = false;
         private float _threwAnimationTimer = 0f;
 
-        public Vector2 Position { get; set; } = Vector2.Zero;
-
         public Vector2 CenterBottomPosition
         {
             get => new Vector2(Position.X + _yoshiSprite.Size.X / 2, Position.Y + _yoshiSprite.Size.Y);
@@ -74,11 +78,22 @@ namespace Project6.GameObjects
             get => new Vector2(Position.X + _yoshiSprite.Size.X / 2, Position.Y + _yoshiSprite.Size.Y / 2);
         }
 
-        public Point Size { get; set; } = new Point(0, 0);
+        public Vector2 EggHoldingPosition
+        {
+            get
+            {
+                if (_yoshiSprite.Effect == SpriteEffects.FlipHorizontally)
+                {
+                    return Position + new Vector2(8, 8);
+                }
+                else
+                {
+                    return Position + new Vector2(0, 8);
+                }
+            }
+        }
 
         public bool CanThrowEgg { get; set; } = true;
-
-        public Vector2 Velocity => _velocity;
 
         public bool IsOnGround => _isOnGround;
 
@@ -92,56 +107,41 @@ namespace Project6.GameObjects
 
         public bool IsHoldingEgg => _isHoldingEgg;
 
-        public bool IsPlummenting => _isPlummeting;
+        public bool IsMounting => _isMounting;
 
-        public int PlummentStage => _plummetStage;
+        public bool IsPlummeting => _isPlummeting;
+
+        public int PlummetStage => _plummetStage;
 
         public Vector2 ThrowDirection => _throwDirection;
 
         public AnimatedSprite Sprite => _yoshiSprite;
 
         public event Action<Vector2> OnThrowEgg;
+        public event Action<Vector2> OnReadyThrowEgg;
         public event Action<Vector2> OnPlummeted;
 
-        public Yoshi(SpriteSheet yoshiSpriteSheet, SpriteSheet throwSightSpriteSheet, TiledMap tiledmap)
+        public Yoshi(SpriteSheet yoshiSpriteSheet, SpriteSheet throwSightSpriteSheet, Texture2D tongueTexture, TiledMap tilemap) : base(tilemap)
         {
             _yoshiSprite = new AnimatedSprite(yoshiSpriteSheet);
-            _yoshiSprite.SetAnimation("Stand");
+            SetYoshiAnimation("Stand");
             _throwSightSprite = new AnimatedSprite(throwSightSpriteSheet);
             _throwSightSprite.SetAnimation("Shine");
+            _tongueSprite = new Sprite(tongueTexture);
             Size = _normalCollisionBox;
-            _tileMap = tiledmap;
         }
 
-        private bool IsCollidingWithTile(Rectangle playerRect, out Rectangle tileRect)
+        private void SetYoshiAnimation(string name)
         {
-            TiledMapTileLayer tileLayer = _tileMap.GetLayer<TiledMapTileLayer>("Ground");
-            int tileSize = _tileMap.TileWidth;
-            int left = playerRect.Left / tileSize;
-            int right = playerRect.Right / tileSize;
-            int top = playerRect.Top / tileSize;
-            int bottom = playerRect.Bottom / tileSize;
-
-            for (int x = left; x <= right; x++)
-            {
-                for (int y = top; y <= bottom; y++)
-                {
-                    if (tileLayer.TryGetTile((ushort)x, (ushort)y, out TiledMapTile? tile))
-                    {
-                        if (tile.HasValue && !tile.Value.IsBlank)
-                        {
-                            tileRect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
-                            if (playerRect.Intersects(tileRect))
-                                return true;
-                        }
-                    }
-                }
-            }
-            tileRect = Rectangle.Empty;
-            return false;
+            _yoshiSprite.SetAnimation(name + (_isMounting ? "_Mounting" : string.Empty));
         }
 
-        private Rectangle GetCollisionBox(Vector2 position)
+        private bool IsYoshiAnimationEqual(string name)
+        {
+            return _yoshiSprite.CurrentAnimation == name + (_isMounting ? "_Mounting" : string.Empty);
+        }
+
+        protected override Rectangle GetCollisionBox(Vector2 position)
         {
             int X = (int)(position.X + _yoshiSprite.Size.X / 2 - Size.X / 2);
             int Y = (int)(position.Y + _yoshiSprite.Size.Y - Size.Y);
@@ -174,10 +174,29 @@ namespace Project6.GameObjects
                     _isThrewEgg = true;
                     OnThrowEgg?.Invoke(_throwDirection);
                 }
+                else
+                {
+                    OnReadyThrowEgg?.Invoke(Position);
+                }
                 _isHoldingEgg = !_isHoldingEgg;
             }
 
-            if (GameController.MoveDown() && !_isLookingUp)
+            if (GameController.AttackPressed() && _tongueState == 0 && !_isHoldingEgg && !_isSquatting && !_isFloating)
+            {
+                _tongueLength = 0f;
+                _capturedObject = null;
+                _tongueState = 1;
+                if (_isLookingUp)
+                {
+                    _tongueDirection = new Vector2(0, -1);
+                }
+                else
+                {
+                    _tongueDirection = new Vector2(_lastInputDirection, 0);
+                }
+            }
+
+            if (GameController.MoveDown() && !_isLookingUp && _tongueState == 0)
             {
                 _isSquatting = true;
                 Size = _squatCollisionBox;
@@ -223,15 +242,15 @@ namespace Project6.GameObjects
                 _acceleration.X = 0;
             }
 
-            if (!_isHoldingEgg && currentInputDirection != 0 && _lastInputDirection != 0 &&
+            if (!_isHoldingEgg && _tongueState == 0 && currentInputDirection != 0 && _lastInputDirection != 0 &&
                 currentInputDirection != _lastInputDirection && Math.Abs(_velocity.X) > 0.5f && _isOnGround)
             {
                 _isTurning = true;
                 _turnTimer = TurnAnimationDuration;
-                _yoshiSprite.SetAnimation("Turn");
+                SetYoshiAnimation("Turn");
             }
 
-            if (currentInputDirection != 0 && !_isHoldingEgg)
+            if (currentInputDirection != 0 && !_isHoldingEgg && _tongueState == 0)
             {
                 _lastInputDirection = currentInputDirection;
             }
@@ -245,9 +264,9 @@ namespace Project6.GameObjects
                 _velocity.Y = BaseJumpForce;
                 _isOnGround = false;
                 if (!_isHoldingEgg)
-                    _yoshiSprite.SetAnimation("Jump");
+                    SetYoshiAnimation("Jump");
                 else
-                    _yoshiSprite.SetAnimation("HoldEgg");
+                    SetYoshiAnimation("HoldEgg");
 
                 _canJump = false;
             }
@@ -274,7 +293,7 @@ namespace Project6.GameObjects
             {
                 _isFloating = true;
                 _floatTime = 0f;
-                _yoshiSprite.SetAnimation("Fall");
+                SetYoshiAnimation("Fall");
             }
 
             // 浮动状态处理
@@ -290,22 +309,22 @@ namespace Project6.GameObjects
                         // 第一阶段：平滑过渡到下落
                         float targetVelocity = 1.5f;
                         _velocity.Y = MathHelper.Lerp(_velocity.Y, targetVelocity, 0.1f);
-                        if (_yoshiSprite.CurrentAnimation != "Fall")
-                            _yoshiSprite.SetAnimation("Fall");
+                        if (!IsYoshiAnimationEqual("Fall"))
+                            SetYoshiAnimation("Fall");
                     }
                     else if (_floatTime < 1.0f)
                     {
                         // 第二阶段：向上浮动
                         _velocity.Y = FloatForce;
-                        if (_yoshiSprite.CurrentAnimation != "Float")
-                            _yoshiSprite.SetAnimation("Float");
+                        if (!IsYoshiAnimationEqual("Float"))
+                            SetYoshiAnimation("Float");
                     }
                     else
                     {
                         // 第三阶段：缓慢下落
                         _velocity.Y = Math.Min(_velocity.Y + Gravity * 0.3f, 1.2f);
-                        if (_yoshiSprite.CurrentAnimation != "Fall")
-                            _yoshiSprite.SetAnimation("Fall");
+                        if (!IsYoshiAnimationEqual("Fall"))
+                            SetYoshiAnimation("Fall");
                     }
                 }
                 else
@@ -336,10 +355,60 @@ namespace Project6.GameObjects
             }
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Vector2 newPosition = Position;
+            if (_tongueState != 0)
+            {
+                if (_tongueState == 1)
+                {
+                    _tongueLength += 300 * elapsed;
+                    if (_tongueLength >= 50)
+                    {
+                        _tongueState = 2;
+                    }
+                    else
+                    {
+                        Vector2 tongueEnd = CenterPosition + _tongueDirection * _tongueLength;
+                        Rectangle tongueRect = new Rectangle((int)(tongueEnd.X - 5), (int)(tongueEnd.Y - 5), 10, 10);
+                        if (IsCollidingWithTile(tongueRect, out _))
+                        {
+                            _tongueState = 2;
+                        }
+                        else if (_capturedObject == null)
+                        {
+                            //GameObject hitObject = CheckObjectCollision(tongueRect);
+                            //if (hitObject != null)
+                            //{
+                            //    _capturedObject = hitObject;
+                            //    _tongueState = TongueState.Retracting;
+                            //}
+                        }
+                    }
+                }
+                else if (_tongueState == 2)
+                {
+                    _tongueLength -= 300 * elapsed;
+                    if (_capturedObject != null)
+                    {
+                        _capturedObject.Position = CenterPosition + _tongueDirection * _tongueLength;
+                    }
+
+                    if (_tongueLength <= 0f)
+                    {
+                        _tongueState = 0;
+                        if (_capturedObject != null)
+                        {
+                            //OnObjectCaptured?.Invoke(_capturedObject);
+                            _capturedObject = null;
+                        }
+                    }
+
+                }
+            }
+
+
             if (_isOnGround && _isPlummeting)
             {
                 _isPlummeting = false;
@@ -353,14 +422,14 @@ namespace Project6.GameObjects
                 if (_plummetTimer > 0 && _plummetTimer < 0.5f) //stage1
                 {
                     _plummetStage = 0;
-                    if (_yoshiSprite.CurrentAnimation != "Plummet1")
-                        _yoshiSprite.SetAnimation("Plummet1");
+                    if (!IsYoshiAnimationEqual("Plummet1"))
+                        SetYoshiAnimation("Plummet1");
                 }
                 else //stage2
                 {
                     _plummetStage = 1;
-                    if (_yoshiSprite.CurrentAnimation != "Plummet2")
-                        _yoshiSprite.SetAnimation("Plummet2");
+                    if (!IsYoshiAnimationEqual("Plummet2"))
+                        SetYoshiAnimation("Plummet2");
                 }
 
                 if (_plummetStage == 1)
@@ -369,7 +438,6 @@ namespace Project6.GameObjects
                     if (_velocity.Y > 8f)
                         _velocity.Y = 8f;
 
-                    // 垂直移动 - 使用碰撞箱而不是精灵尺寸
                     if (_velocity.Y != 0)
                     {
                         Vector2 verticalMove = new Vector2(0, _velocity.Y);
@@ -417,10 +485,11 @@ namespace Project6.GameObjects
             }
             else
             {
+
                 if (_isThrewEgg)
                 {
                     _threwAnimationTimer += elapsed;
-                    _yoshiSprite.SetAnimation("Throw");
+                    SetYoshiAnimation("Throw");
                     if (_threwAnimationTimer >= 0.5f)
                     {
                         _isThrewEgg = false;
@@ -522,9 +591,9 @@ namespace Project6.GameObjects
                                 _jumpInitiated = false;
                                 // 落地时根据是否持有蛋选择动画
                                 if (!_isHoldingEgg)
-                                    _yoshiSprite.SetAnimation("Stand");
+                                    SetYoshiAnimation("Stand");
                                 else
-                                    _yoshiSprite.SetAnimation("HoldEgg");
+                                    SetYoshiAnimation("HoldEgg");
                             }
                             else if (_velocity.Y < 0)
                             {
@@ -551,13 +620,22 @@ namespace Project6.GameObjects
                     if (!IsCollidingWithTile(groundCheckRect, out _))
                     {
                         _isOnGround = false;
-                        if (!_isJumping && !_isFloating && _yoshiSprite.CurrentAnimation != "Fall" && !_isHoldingEgg)
+                        if (!_isJumping && !_isFloating && !_isHoldingEgg)
                         {
-                            _yoshiSprite.SetAnimation("Fall");
+                            if (_tongueState != 0)
+                            {
+                                if (!IsYoshiAnimationEqual("TongueOutJump"))
+                                    SetYoshiAnimation("TongueOutJump");
+                            }
+                            else
+                            {
+                                if (!IsYoshiAnimationEqual("Fall"))
+                                    SetYoshiAnimation("Fall");
+                            }
                         }
                         else if (!_isJumping && !_isFloating && _isHoldingEgg)
                         {
-                            _yoshiSprite.SetAnimation("HoldEgg");
+                            SetYoshiAnimation("HoldEgg");
                         }
                     }
                     else
@@ -581,65 +659,126 @@ namespace Project6.GameObjects
                 if (_isOnGround)
                 {
                     float absVelocityX = Math.Abs(_velocity.X);
-
                     if (_isHoldingEgg)
                     {
                         if (absVelocityX < WalkThreshold)
                         {
-                            _yoshiSprite.SetAnimation("HoldEgg");
+                            SetYoshiAnimation("HoldEgg");
                         }
                         else
                         {
-                            if (_yoshiSprite.CurrentAnimation != "HoldEggWalk")
-                                _yoshiSprite.SetAnimation("HoldEggWalk");
+                            if (!IsYoshiAnimationEqual("HoldEggWalk"))
+                                SetYoshiAnimation("HoldEggWalk");
                         }
                     }
-                    else if (_isSquatting && _yoshiSprite.CurrentAnimation != "Squant" && !_isTurning)
+                    else if (_isSquatting && !IsYoshiAnimationEqual("Squat") && !_isTurning)
                     {
-                        _yoshiSprite.SetAnimation("Squant");
+                        SetYoshiAnimation("Squat");
                     }
-                    else if (_isLookingUp && _yoshiSprite.CurrentAnimation != "LookUp" && !_isTurning)
+                    else if (_isLookingUp && !_isTurning)
                     {
-                        _yoshiSprite.SetAnimation("LookUp");
+                        if (_tongueState != 0)
+                        {
+
+                            SetYoshiAnimation("TongueOutUp");
+                        }
+                        else
+                        {
+                            SetYoshiAnimation("LookUp");
+                        }
                     }
-                    else if (absVelocityX < WalkThreshold && _yoshiSprite.CurrentAnimation != "Stand" && !_isTurning && !_isSquatting && !_isLookingUp && !_isThrewEgg)
+                    else if (absVelocityX < WalkThreshold && !_isTurning && !_isSquatting && !_isLookingUp && !_isThrewEgg)
                     {
-                        _yoshiSprite.SetAnimation("Stand");
+                        if (_tongueState != 0)
+                        {
+                            if (!IsYoshiAnimationEqual("TongueOut"))
+                                SetYoshiAnimation("TongueOut");
+                        }
+                        else
+                        {
+                            if (!IsYoshiAnimationEqual("Stand"))
+                                SetYoshiAnimation("Stand");
+                        }
                     }
-                    else if (absVelocityX >= WalkThreshold && absVelocityX < RunThreshold && _yoshiSprite.CurrentAnimation != "Walk" && !_isTurning && !_isThrewEgg)
+                    else if (absVelocityX >= WalkThreshold && absVelocityX < RunThreshold && !_isTurning && !_isThrewEgg)
                     {
-                        _yoshiSprite.SetAnimation("Walk");
+                        if (_tongueState != 0)
+                        {
+                            if (!IsYoshiAnimationEqual("TongueOutWalk"))
+                                SetYoshiAnimation("TongueOutWalk");
+                        }
+                        else
+                        {
+                            if (!IsYoshiAnimationEqual("Walk"))
+                                SetYoshiAnimation("Walk");
+                        }
                     }
-                    else if (absVelocityX >= RunThreshold && _yoshiSprite.CurrentAnimation != "Run" && !_isTurning)
+                    else if (absVelocityX >= RunThreshold && !_isTurning)
                     {
-                        _yoshiSprite.SetAnimation("Run");
+                        if (_tongueState != 0)
+                        {
+                            if (!IsYoshiAnimationEqual("TongueOutRun"))
+                                SetYoshiAnimation("TongueOutRun");
+                        }
+                        else
+                        {
+                            if (!IsYoshiAnimationEqual("Run"))
+                                SetYoshiAnimation("Run");
+                        }
                     }
                 }
-                else if (!_isFloating && _velocity.Y > 0 && _yoshiSprite.CurrentAnimation != "Fall")
+                else if (!_isFloating && _velocity.Y > 0)
                 {
                     if (!_isHoldingEgg)
-                        _yoshiSprite.SetAnimation("Fall");
+                    {
+                        if (_tongueState != 0)
+                        {
+                            if (!IsYoshiAnimationEqual("TongueOutJump"))
+                                SetYoshiAnimation("TongueOutJump");
+                        }
+                        else
+                        {
+                            if (!IsYoshiAnimationEqual("Fall"))
+                                SetYoshiAnimation("Fall");
+                        }
+                    }
                     else
-                        _yoshiSprite.SetAnimation("HoldEgg");
+                    {
+                        if (!IsYoshiAnimationEqual("HoldEgg"))
+                            SetYoshiAnimation("HoldEgg");
+                    }
                 }
                 else if (_isFloating)
                 {
-                    if (_floatTime >= 0.3f && _floatTime < 1.0f && _yoshiSprite.CurrentAnimation != "Float" && !_isHoldingEgg)
+                    if (_floatTime >= 0.3f && _floatTime < 1.0f && !IsYoshiAnimationEqual("Float") && !_isHoldingEgg)
                     {
-                        _yoshiSprite.SetAnimation("Float");
+                        SetYoshiAnimation("Float");
                     }
-                    else if (_floatTime >= 1.0f && _yoshiSprite.CurrentAnimation != "Fall" && !_isHoldingEgg)
+                    else if (_floatTime >= 1.0f && !IsYoshiAnimationEqual("Fall") && !_isHoldingEgg)
                     {
-                        _yoshiSprite.SetAnimation("Fall");
+                        SetYoshiAnimation("Fall");
                     }
                 }
-                else if (!_isOnGround && _velocity.Y < 0 && _yoshiSprite.CurrentAnimation != "Jump")
+                else if (!_isOnGround && _velocity.Y < 0)
                 {
                     if (!_isHoldingEgg)
-                        _yoshiSprite.SetAnimation("Jump");
+                    {
+                        if (_tongueState != 0)
+                        {
+                            if (!IsYoshiAnimationEqual("TongueOutJump"))
+                                SetYoshiAnimation("TongueOutJump");
+                        }
+                        else
+                        {
+                            if (!IsYoshiAnimationEqual("Jump"))
+                                SetYoshiAnimation("Jump");
+                        }
+                    }
                     else
-                        if (_yoshiSprite.CurrentAnimation != "HoldEggWalk")
-                        _yoshiSprite.SetAnimation("HoldEggWalk");
+                    {
+                        if (!IsYoshiAnimationEqual("HoldEggWalk"))
+                            SetYoshiAnimation("HoldEggWalk");
+                    }
                 }
                 if (_isHoldingEgg)
                 {
@@ -684,12 +823,77 @@ namespace Project6.GameObjects
             _throwSightSprite.Update(gameTime);
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             _yoshiSprite.Draw(spriteBatch, Position, 0, Vector2.One);
             if (_isHoldingEgg)
             {
                 _throwSightSprite.Draw(spriteBatch, _rotatingSpritePosition, 0, Vector2.One);
+            }
+            if (_tongueState != 0)
+            {
+                Vector2 tongueStart;
+                Vector2 tongueEnd;
+                if (_lastInputDirection == 1)
+                {
+                    if (_isLookingUp)
+                    {
+                        tongueStart = CenterPosition + new Vector2(1, -1);
+                        tongueEnd = tongueStart + _tongueDirection * _tongueLength;
+                    }
+                    else
+                    {
+                        tongueStart = CenterPosition + new Vector2(2, -2);
+                        tongueEnd = tongueStart + _tongueDirection * _tongueLength;
+                    }
+                }
+                else
+                {
+                    if (_isLookingUp)
+                    {
+                        tongueStart = CenterPosition + new Vector2(-6, -1);
+                        tongueEnd = tongueStart + _tongueDirection * _tongueLength;
+                    }
+                    else
+                    {
+                        tongueStart = CenterPosition + new Vector2(-2, 4);
+                        tongueEnd = tongueStart + _tongueDirection * _tongueLength;
+                    }
+                }
+
+                float rotation = (float)Math.Atan2(_tongueDirection.Y, _tongueDirection.X);
+                float baseLength = _tongueLength;
+                if (baseLength > 0)
+                {
+                    Rectangle baseSource = new Rectangle(0, 0, 1, _tongueSprite.TextureRegion.Height);
+                    Vector2 baseScale = new Vector2(baseLength / 1, 1f);
+                    spriteBatch.Draw(
+                        _tongueSprite.TextureRegion.Texture,
+                        tongueStart,
+                        baseSource,
+                        Color.White,
+                        rotation,
+                        Vector2.Zero,
+                        baseScale,
+                        SpriteEffects.None,
+                        0f);
+                }
+
+                if (_tongueLength > 3)
+                {
+                    Rectangle tipSource = new Rectangle(1, 0, 6, _tongueSprite.TextureRegion.Height);
+                    Vector2 tipPosition = tongueStart + _tongueDirection * _tongueLength;
+                    spriteBatch.Draw(
+                        _tongueSprite.TextureRegion.Texture,
+                        tipPosition,
+                        tipSource,
+                        Color.White,
+                        rotation,
+                        Vector2.Zero,
+                        Vector2.One,
+                        SpriteEffects.None,
+                        0f);
+                }
             }
         }
     }
