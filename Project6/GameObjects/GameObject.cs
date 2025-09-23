@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
 using Project6.Interfaces;
+using Project6.Structures;
 
 namespace Project6.GameObjects
 {
@@ -19,6 +20,8 @@ namespace Project6.GameObjects
 
         public bool IsActive { get; set; } = true;
 
+        public bool IsBeingCapturedByYoshi { get; set; } = false;
+
         public string Name { get; set; } = string.Empty;
 
         public abstract Rectangle CollisionRectangle { get; }
@@ -28,9 +31,7 @@ namespace Project6.GameObjects
             _tilemap = tilemap;
         }
 
-        public virtual void OnCollision(GameObject other)
-        {
-        }
+        public virtual void OnCollision(GameObject other, CollisionResult collision) { }
 
         protected bool IsCollidingWithTile(Rectangle objectRect, out Rectangle tileRect)
         {

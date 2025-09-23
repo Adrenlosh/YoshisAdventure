@@ -1,15 +1,31 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
+using Project6.Structures;
+using Project6.Systems;
 using System;
-using System.Diagnostics;
 
 namespace Project6.GameObjects
 {
+    public enum TongueState
+    {
+        None,
+        Extending,
+        Retracting
+    }
+
+    public enum PlummetState
+    {
+        None,
+        TurnAround,
+        FastFall
+    }
     public class Yoshi : GameObject, IDamageable
     {
         private const float Gravity = 0.5f;
+        private const float MaxGravity = 8f;
         private const float PlummetGravity = 2f;
         private const float BaseJumpForce = -7f;
         private const float MoveSpeed = 4f;
@@ -67,11 +83,11 @@ namespace Project6.GameObjects
         private float _tongueLength = 0f;
         private GameObject _capturedObject = null;
         private Vector2 _tongueDirection = Vector2.Zero;
-        private int _tongueState = 0;
+        private TongueState _tongueState = TongueState.None;
 
         private int _lastInputDirection = 1;
         private float _plummetTimer = 0;
-        private int _plummetStage = -1;
+        private PlummetState _plummetStage = PlummetState.None;
 
         private Vector2 _rotatingSpritePosition;
         private float _currentAngle = 0f;
@@ -126,7 +142,11 @@ namespace Project6.GameObjects
 
         public bool IsSpitting => _isSpitting;
 
-        public int PlummetStage => _plummetStage;
+        public PlummetState PlummetStage => _plummetStage;
+
+        public GameObject CapturedObject => _capturedObject;
+
+        public new Vector2 Velocity { get => _velocity; set => _velocity = value; }
 
         public Vector2 ThrowDirection => _throwDirection;
 
@@ -148,6 +168,14 @@ namespace Project6.GameObjects
             _crosshairSprite.SetAnimation("Shine");
             _tongueSprite = new Sprite(tongueTexture);
             Size = _normalCollisionBox;
+        }
+
+        public override void OnCollision(GameObject other, CollisionResult collision)
+        {
+            if (other == _capturedObject)
+                return;
+
+            base.OnCollision(other, collision);
         }
 
         private void SetYoshiAnimation(string name, bool forceSet = false, bool ignoreMouthingStatus = false)
@@ -210,7 +238,6 @@ namespace Project6.GameObjects
 
         public void HandleInput(GameTime gameTime)
         {
-            Debug.WriteLine(_isLookingUp);
             int currentInputDirection = 0;
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -235,7 +262,7 @@ namespace Project6.GameObjects
                 {
                     _tongueLength = 0f;
                     _capturedObject = null;
-                    _tongueState = 1;
+                    _tongueState = TongueState.Extending;
                     if (_isLookingUp)
                     {
                         _tongueDirection = new Vector2(0, -1);
@@ -439,14 +466,14 @@ namespace Project6.GameObjects
                     _isSpitting = false;
                 }
             }
-            if (_tongueState != 0)
+            if (_tongueState != TongueState.None)
             {
-                if (_tongueState == 1)
+                if (_tongueState == TongueState.Extending)
                 {
                     _tongueLength += TongueSpeed * elapsed;
                     if (_tongueLength >= MaxTongueLength)
                     {
-                        _tongueState = 2;
+                        _tongueState = TongueState.Retracting;
                     }
                     else
                     {
@@ -454,20 +481,20 @@ namespace Project6.GameObjects
                         Rectangle tongueRect = new Rectangle((int)(tongueEnd.X - 5), (int)(tongueEnd.Y - 5), 10, 10);
                         if (IsCollidingWithTile(tongueRect, out _))
                         {
-                            _tongueState = 2;
+                            _tongueState = TongueState.Retracting;
                         }
                         else if (_capturedObject == null)
                         {
-                            GameObject hitObject = GameObjectsManager.CheckObjectCollision(tongueRect);
+                            GameObject hitObject = GameObjectsSystem.CheckObjectCollision(tongueRect).CollidedObject;
                             if (hitObject != null && hitObject != this)
                             {
                                 _capturedObject = hitObject;
-                                _tongueState = 2;
+                                _tongueState = TongueState.Retracting;
                             }
                         }
                     }
                 }
-                else if (_tongueState == 2)
+                else if (_tongueState == TongueState.Retracting)
                 {
                     _tongueLength -= TongueSpeed * elapsed;
                     if (_capturedObject != null)
@@ -477,7 +504,7 @@ namespace Project6.GameObjects
 
                     if (_tongueLength <= 0f)
                     {
-                        _tongueState = 0;
+                        _tongueState = TongueState.None;
                         if (_capturedObject != null)
                         {
                             _capturedObject.IsActive = false;
@@ -496,25 +523,25 @@ namespace Project6.GameObjects
             {
                 _isPlummeting = false;
                 _plummetTimer = 0;
-                _plummetStage = -1;
+                _plummetStage = PlummetState.None;
             }
 
             if (_isPlummeting && !_isOnGround)
             {
                 _plummetTimer += elapsed;
 
-                if (_plummetTimer > 0 && _plummetTimer < PlummetStage1Duration) //stage1
+                if (_plummetTimer > 0 && _plummetTimer < PlummetStage1Duration) //阶段1
                 {
-                    _plummetStage = 0;
+                    _plummetStage = PlummetState.TurnAround;
                     SetYoshiAnimation("Plummet1");
                 }
-                else //stage2
+                else //阶段2
                 {
-                    _plummetStage = 1;
+                    _plummetStage = PlummetState.FastFall;
                     SetYoshiAnimation("Plummet2");
                 }
 
-                if (_plummetStage == 1)
+                if (_plummetStage == PlummetState.FastFall)
                 {
                     _velocity.Y += PlummetGravity;
                     if (_velocity.Y > MaxPlummetVelocity)
@@ -530,7 +557,7 @@ namespace Project6.GameObjects
                             _velocity.Y = 0;
                             _isPlummeting = false;
                             _plummetTimer = 0;
-                            _plummetStage = -1;
+                            _plummetStage = PlummetState.None;
                             OnPlummeted?.Invoke(newPosition);
                             //Core.Audio.PlaySoundEffect(_plummetSFX);
                         }
@@ -549,7 +576,7 @@ namespace Project6.GameObjects
                                     _isOnGround = true;
                                     _isPlummeting = false;
                                     _plummetTimer = 0;
-                                    _plummetStage = -1;
+                                    _plummetStage = PlummetState.None;
                                     OnPlummeted?.Invoke(newPosition);
                                     //Core.Audio.PlaySoundEffect(_plummetSFX);
                                 }
@@ -609,10 +636,10 @@ namespace Project6.GameObjects
                 if (!_isOnGround && !_isFloating)
                 {
                     _velocity.Y += Gravity;
-                    if (_velocity.Y > 8f)
-                        _velocity.Y = 8f;
+                    if (_velocity.Y > MaxGravity)
+                        _velocity.Y = MaxGravity;
                 }
-                if (_velocity.X != 0)
+                if (_velocity.X != 0) //水平碰撞检测
                 {
                     Vector2 horizontalMove = new Vector2(_velocity.X, 0);
                     Vector2 testPosition = newPosition + horizontalMove;
@@ -628,7 +655,7 @@ namespace Project6.GameObjects
                     }
                 }
 
-                if (_velocity.Y != 0)
+                if (_velocity.Y != 0) //垂直碰撞检测
                 {
                     Vector2 verticalMove = new Vector2(0, _velocity.Y);
                     Vector2 testPosition = newPosition + verticalMove;
@@ -643,12 +670,10 @@ namespace Project6.GameObjects
                     else
                     {
                         Rectangle testRect = GetCollisionBox(testPosition);
-
                         if (IsCollidingWithTile(testRect, out Rectangle tileRect))
                         {
                             if (_velocity.Y > 0.5)
                             {
-                                float spriteBottom = newPosition.Y + _yoshiSprite.Size.X;
                                 float tileTop = tileRect.Top;
                                 newPosition.Y = tileTop - _yoshiSprite.Size.Y;
                                 _velocity.Y = 0;
@@ -680,8 +705,7 @@ namespace Project6.GameObjects
                 else
                 {
                     Rectangle collisionBox = GetCollisionBox(newPosition);
-                    Rectangle groundCheckRect = new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 3);
-                    if (!IsCollidingWithTile(groundCheckRect, out _))
+                    if (!IsCollidingWithTile(new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 3), out _))
                     {
                         _isOnGround = false;
                         if (!_isJumping && !_isFloating && !_isHoldingEgg)
@@ -801,11 +825,11 @@ namespace Project6.GameObjects
                     else if (_isPlummeting)
                     {
                         // 坠落状态
-                        if (_plummetStage == 0)
+                        if (_plummetStage == PlummetState.TurnAround)
                         {
                             SetYoshiAnimation("Plummet1");
                         }
-                        else if (_plummetStage == 1)
+                        else if (_plummetStage == PlummetState.FastFall)
                         {
                             SetYoshiAnimation("Plummet2");
                         }
@@ -869,7 +893,6 @@ namespace Project6.GameObjects
                     }
                 }
 
-                // 特殊状态动画（覆盖其他状态）
                 if (_isSpitting)
                 {
                     if (!_isLookingUp)
@@ -983,6 +1006,13 @@ namespace Project6.GameObjects
                     spriteBatch.Draw(_tongueSprite.TextureRegion.Texture, tipPosition, tipSource, Color.White, rotation, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
                 }
             }
+
+            Rectangle collisionBox = GetCollisionBox(Position);
+        }
+
+        public void Bounce()
+        { 
+            _velocity = new Vector2(_velocity.X, BaseJumpForce * 1.6f);
         }
     }
 }

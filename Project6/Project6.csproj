@@ -71,7 +71,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Audio\SFX\" />
-    <Folder Include="Content\Audio\Song\" />
     <Folder Include="Content\Stages\" />
     <Folder Include="Content\Tilemaps\" />
   </ItemGroup>

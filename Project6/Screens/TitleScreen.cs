@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
@@ -17,6 +18,8 @@ namespace Project6.Scenes
         private Vector2 _backgroundOffset = Vector2.Zero;
         private ViewportAdapter _viewportAdapter;
         private SpriteBatch _spriteBatch;
+
+        private Song _song;
 
         private TitleScreenUI _ui;
 
@@ -37,10 +40,15 @@ namespace Project6.Scenes
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _font = Content.Load<BitmapFont>("Fonts/ZFull-GB");
             _backgroundPattern = Content.Load<Texture2D>("Images/background-pattern");
+
+            _song = Content.Load<Song>("Audio/Song/Title");
+
+            GameMain.Audio.PlaySong(_song);
         }
 
         public override void Update(GameTime gameTime)
         {
+            
             float offset = 35f * (float)gameTime.ElapsedGameTime.TotalSeconds;
             _backgroundOffset.X += offset;
             _backgroundOffset.Y -= offset;

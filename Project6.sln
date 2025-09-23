@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project6.WindowsDX", "Proje
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project6.Android", "Project6.Android\Project6.Android.csproj", "{0F1C1504-F9D7-40A3-88DB-0F8CF6C4FB8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project6.DesktopGL", "DesktopGL\Project6.DesktopGL.csproj", "{B111E281-83BC-448D-A80D-C1BC5636D149}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project6.DesktopGL", "Project6.DesktopGL\Project6.DesktopGL.csproj", "{B6AFB5CC-A26D-F16C-0802-BB90BABEA7CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +37,10 @@ Global
 		{0F1C1504-F9D7-40A3-88DB-0F8CF6C4FB8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F1C1504-F9D7-40A3-88DB-0F8CF6C4FB8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F1C1504-F9D7-40A3-88DB-0F8CF6C4FB8B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B111E281-83BC-448D-A80D-C1BC5636D149}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B111E281-83BC-448D-A80D-C1BC5636D149}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B111E281-83BC-448D-A80D-C1BC5636D149}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B111E281-83BC-448D-A80D-C1BC5636D149}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6AFB5CC-A26D-F16C-0802-BB90BABEA7CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6AFB5CC-A26D-F16C-0802-BB90BABEA7CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6AFB5CC-A26D-F16C-0802-BB90BABEA7CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6AFB5CC-A26D-F16C-0802-BB90BABEA7CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,7 +48,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3183DD1D-AA70-4008-B2B6-6C4189A554C1} = {32681F41-1AAC-4656-AF43-D1C015C99498}
 		{0F1C1504-F9D7-40A3-88DB-0F8CF6C4FB8B} = {32681F41-1AAC-4656-AF43-D1C015C99498}
-		{B111E281-83BC-448D-A80D-C1BC5636D149} = {32681F41-1AAC-4656-AF43-D1C015C99498}
+		{B6AFB5CC-A26D-F16C-0802-BB90BABEA7CE} = {32681F41-1AAC-4656-AF43-D1C015C99498}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DED730F7-DDF2-4EAF-ADEF-78211B1F3734}

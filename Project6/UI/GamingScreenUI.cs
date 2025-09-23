@@ -27,7 +27,7 @@ namespace Project6.UI
             Dock(Gum.Wireframe.Dock.Fill);
             this.AddToRoot();
 
-            
+
             HPText.Anchor(Gum.Wireframe.Anchor.TopLeft);
             HPText.Text = PLAYER_TEXT;
             HPText.Color = Color.DarkGreen;
@@ -35,7 +35,7 @@ namespace Project6.UI
             HPText.CustomFontFile = "Fonts/ZFull-GB.fnt";
             HPText.BindingContext = GameMain.playerStatus;
 
-            
+
             EggText.Text = EGG_TEXT;
             EggText.Color = Color.White;
             EggText.UseCustomFont = true;
@@ -43,7 +43,7 @@ namespace Project6.UI
             EggText.Anchor(Gum.Wireframe.Anchor.Top);
             EggText.BindingContext = GameMain.playerStatus;
 
-            
+
             ScoreText.Text = SCORE_TEXT;
             ScoreText.Color = Color.White;
             ScoreText.UseCustomFont = true;

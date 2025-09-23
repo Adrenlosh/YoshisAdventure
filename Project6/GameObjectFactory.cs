@@ -44,7 +44,7 @@ namespace Project6
 
             AddAnimationCycle(yoshiSpriteSheet, "Stand_Mouthing", [43, 43, 43, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 51, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 48, 49, 50, 50, 50, 49, 48, 43, 43, 43, 43, 43, 43, 43, 52, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 43, 43, 43, 43, 43, 43, 43, 43, 43]);
             AddAnimationCycle(yoshiSpriteSheet, "Walk_Mouthing", [36, 43, 37]);
-            AddAnimationCycle(yoshiSpriteSheet, "Run_Mouthing", [40 ,41 ,42 ,41], true, 0.05f);
+            AddAnimationCycle(yoshiSpriteSheet, "Run_Mouthing", [40, 41, 42, 41], true, 0.05f);
             AddAnimationCycle(yoshiSpriteSheet, "Jump_Mouthing", [38], false);
             AddAnimationCycle(yoshiSpriteSheet, "Fall_Mouthing", [39], false);
             AddAnimationCycle(yoshiSpriteSheet, "Float_Mouthing", [55, 56, 57, 56], true, 0.03f);
@@ -78,15 +78,30 @@ namespace Project6
         }
 
         public Spring CreateSpring(Vector2 position, TiledMap tiledMap)
-        {   
+        {
             Texture2D texture = _contentManager.Load<Texture2D>("Atlas/spring");
             Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas//spring", texture, 16, 16);
             SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet//spring", atlas);
-            AddAnimationCycle(spriteSheet, "Compress", [1, 2, 3, 0], true, 0.1f);
+            AddAnimationCycle(spriteSheet, "Compress", [0, 1, 2], false, 0.09f);
+            AddAnimationCycle(spriteSheet, "Expand", [2, 3, 0], false, 0.09f);
             AddAnimationCycle(spriteSheet, "Normal", [0], false);
             Spring spring = new Spring(spriteSheet, tiledMap);
             spring.Position = position;
             return spring;
+        }
+
+        public Goal CreateGoal(Vector2 position, TiledMap tiledMap)
+        {
+            Texture2D texture = _contentManager.Load<Texture2D>("Atlas/goal");
+            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas//goal", texture, 28, 134);
+            SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet//goal", atlas);
+            AddAnimationCycle(spriteSheet, "NormalGreenStar", [0, 1, 2, 3 , 2, 1], true, 0.15f);
+            AddAnimationCycle(spriteSheet, "NormalWhite", [20, 21, 22, 23, 22 ,21], true, 0.15f);
+            AddAnimationCycle(spriteSheet, "FlagLowering", [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39], false, 0.2f);
+            AddAnimationCycle(spriteSheet, "FlagRaising", [19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3], false, 0.2f);
+            Goal goal = new Goal(spriteSheet, tiledMap);
+            goal.Position = position;
+            return goal;
         }
 
         public TestObject CreateTestObject(Vector2 position, TiledMap tiledMap)

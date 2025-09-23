@@ -7,7 +7,6 @@ using MonoGame.Extended.ViewportAdapters;
 using Project6.GameObjects;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Project6.Rendering
 {
@@ -74,24 +73,15 @@ namespace Project6.Rendering
 
         public void Draw(GameTime gameTime, IEnumerable<GameObject> gameObjects)
         {
-            // 设置渲染状态
-            _graphicsDevice.BlendState = BlendState.AlphaBlend;
-            _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-            _graphicsDevice.DepthStencilState = DepthStencilState.Default;
-
             // 计算视图和投影矩阵
             Matrix viewMatrix = _camera.GetViewMatrix();
-            Matrix projectionMatrix = Matrix.CreateOrthographicOffCenter(
-                0, _graphicsDevice.Viewport.Width,
-                _graphicsDevice.Viewport.Height, 0, 0f, -1f);
+            Matrix projectionMatrix = Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, 0f, -1f);
 
             // 渲染地图
             _mapRenderer.Draw(ref viewMatrix, ref projectionMatrix);
 
-            // 渲染游戏对象 - 现在从参数获取
-            _spriteBatch.Begin(
-                samplerState: SamplerState.PointClamp,
-                transformMatrix: viewMatrix);
+            // 渲染游戏对象
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: viewMatrix);
 
             foreach (var gameObject in gameObjects)
             {
@@ -124,7 +114,7 @@ namespace Project6.Rendering
             Vector2 cameraPos = new Vector2();
             Rectangle worldBounds = new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
             Rectangle screenBounds = GetScreenBounds();
-            cameraPos.X = Math.Max(position.X, worldBounds.Left + screenBounds.Width / 2);
+            cameraPos.X = (int)Math.Max(position.X, worldBounds.Left + screenBounds.Width / 2);
             cameraPos.X = Math.Min(cameraPos.X, worldBounds.Right - screenBounds.Width / 2);
             cameraPos.Y = Math.Max(position.Y, worldBounds.Top + screenBounds.Height / 2);
             cameraPos.Y = Math.Min(cameraPos.Y, worldBounds.Bottom - screenBounds.Height / 2);

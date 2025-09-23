@@ -1,4 +1,5 @@
-﻿using GameLibrary.Input;
+﻿using GameLibrary.Audio;
+using GameLibrary.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -20,6 +21,8 @@ public class GameMain : Game
     public static PlayerStatus playerStatus { get; set; } = new PlayerStatus();
 
     public static InputManager Input { get; private set; } = new InputManager();
+
+    public static AudioController Audio { get; private set; } = new AudioController();
 
     public GameMain()
     {

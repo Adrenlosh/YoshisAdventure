@@ -2,13 +2,14 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
 using Project6.GameObjects;
+using Project6.Structures;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
-namespace Project6
+namespace Project6.Systems
 {
-    public static class GameObjectsManager
+    public static class GameObjectsSystem
     {
         private static List<GameObject> _gameObjects = new List<GameObject>();
         private static List<GameObject> _objectsToAdd = new List<GameObject>();
@@ -128,9 +129,37 @@ namespace Project6
             _objectsToAdd.AddRange(gameObjects);
         }
 
-        public static GameObject CheckObjectCollision(Rectangle area)
+        public static CollisionResult CheckObjectCollision(Rectangle area)
         {
-            return _gameObjects.FirstOrDefault(obj => obj.IsActive && area.Intersects(obj.CollisionRectangle));
+            foreach (var obj in _gameObjects)
+            {
+                if (obj.IsActive && area.Intersects(obj.CollisionRectangle))
+                {
+                    var intersection = Rectangle.Intersect(area, obj.CollisionRectangle);
+                    return new CollisionResult(obj, intersection, obj.CollisionRectangle, area);
+                }
+            }
+            return new CollisionResult();
+        }
+
+        public static CollisionResult CheckObjectCollision(GameObject obj)
+        {
+            var result = CheckObjectCollision(obj.CollisionRectangle);
+            if(result.CollidedObject != obj) // 如果碰撞的对象不是自身
+                return result;
+            return new CollisionResult();
+        }
+
+        public static CollisionResult? CheckCollisionBetween(GameObject objA, GameObject objB)
+        {
+            if (objA == null || objB == null || !objA.IsActive || !objB.IsActive)
+                return null;
+            Rectangle rectA = objA.CollisionRectangle;
+            Rectangle rectB = objB.CollisionRectangle;
+            if (!rectA.Intersects(rectB))
+                return null;
+            Rectangle intersection = Rectangle.Intersect(rectA, rectB);
+            return new CollisionResult(objB, intersection, rectA, rectB);
         }
     }
 }
