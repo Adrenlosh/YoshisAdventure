@@ -18,7 +18,7 @@ namespace Project6.GameObjects
         public Spring(SpriteSheet spriteSheet, TiledMap tilemap) : base(tilemap)
         {
             _sprite = new AnimatedSprite(spriteSheet);
-            _sprite.SetAnimation("Normal");
+            _sprite.SetAnimation("Compress");
             Size = new Point(16, 16);
         }
 
@@ -32,7 +32,7 @@ namespace Project6.GameObjects
 
         public override void Update(GameTime gameTime)
         {
-            //throw new NotImplementedException();
+            _sprite.Update(gameTime);
         }
     }
 }

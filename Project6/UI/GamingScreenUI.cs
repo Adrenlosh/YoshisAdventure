@@ -32,14 +32,14 @@ namespace Project6.UI
             HPText.Text = PLAYER_TEXT;
             HPText.Color = Color.DarkGreen;
             HPText.UseCustomFont = true;
-            HPText.CustomFontFile = "fonts/ZFull-GB.fnt";
+            HPText.CustomFontFile = "Fonts/ZFull-GB.fnt";
             HPText.BindingContext = GameMain.playerStatus;
 
             
             EggText.Text = EGG_TEXT;
             EggText.Color = Color.White;
             EggText.UseCustomFont = true;
-            EggText.CustomFontFile = "fonts/ZFull-GB.fnt";
+            EggText.CustomFontFile = "Fonts/ZFull-GB.fnt";
             EggText.Anchor(Gum.Wireframe.Anchor.Top);
             EggText.BindingContext = GameMain.playerStatus;
 
@@ -47,7 +47,7 @@ namespace Project6.UI
             ScoreText.Text = SCORE_TEXT;
             ScoreText.Color = Color.White;
             ScoreText.UseCustomFont = true;
-            ScoreText.CustomFontFile = "fonts/ZFull-GB.fnt";
+            ScoreText.CustomFontFile = "Fonts/ZFull-GB.fnt";
             ScoreText.Anchor(Gum.Wireframe.Anchor.TopRight);
 
             _titlePanel = new Panel();

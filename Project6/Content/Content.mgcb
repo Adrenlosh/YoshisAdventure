@@ -223,7 +223,7 @@
 /processorParam:TextureFormat=Color
 /build:Images/background-pattern.png
 
-#begin TileMaps/background.png
+#begin Tilemaps/background.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -233,14 +233,14 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:TileMaps/background.png
+/build:Tilemaps/background.png
 
-#begin TileMaps/map0.tmx
+#begin Tilemaps/map0.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:TileMaps/map0.tmx
+/build:Tilemaps/map0.tmx
 
-#begin TileMaps/tileset.png
+#begin Tilemaps/tileset.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -250,10 +250,10 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:TileMaps/tileset.png
+/build:Tilemaps/tileset.png
 
-#begin TileMaps/Tileset.tsx
+#begin Tilemaps/Tileset.tsx
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
-/build:TileMaps/Tileset.tsx
+/build:Tilemaps/Tileset.tsx
 

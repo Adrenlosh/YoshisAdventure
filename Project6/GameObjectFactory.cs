@@ -82,7 +82,7 @@ namespace Project6
             Texture2D texture = _contentManager.Load<Texture2D>("Atlas/spring");
             Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas//spring", texture, 16, 16);
             SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet//spring", atlas);
-            AddAnimationCycle(spriteSheet, "Compress", [1, 2, 3, 4, 0], false, 0.05f);
+            AddAnimationCycle(spriteSheet, "Compress", [1, 2, 3, 0], true, 0.1f);
             AddAnimationCycle(spriteSheet, "Normal", [0], false);
             Spring spring = new Spring(spriteSheet, tiledMap);
             spring.Position = position;

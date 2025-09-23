@@ -245,8 +245,8 @@ namespace Project6.GameObjects
                         _tongueDirection = new Vector2(_lastInputDirection, 0);
                     }
                 }
-                else 
-                { 
+                else
+                {
                     //吐出物体
                     if (_capturedObject != null)
                     {
@@ -255,7 +255,7 @@ namespace Project6.GameObjects
                         _capturedObject = null;
                         _isMouthing = false;
                         _isSpitting = true;
-                        if(!_isLookingUp)
+                        if (!_isLookingUp)
                             SetYoshiAnimation("TongueOut", true, true);
                         else
                             SetYoshiAnimation("TongueOutUp", true, true);
@@ -430,10 +430,10 @@ namespace Project6.GameObjects
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             HandleInput(gameTime);
             Vector2 newPosition = Position;
-            if(_isSpitting)
+            if (_isSpitting)
             {
                 _spitTimer += elapsed;
-                if(_spitTimer >= SpitAnimationDuration)
+                if (_spitTimer >= SpitAnimationDuration)
                 {
                     _spitTimer = 0f;
                     _isSpitting = false;
@@ -482,7 +482,7 @@ namespace Project6.GameObjects
                         {
                             _capturedObject.IsActive = false;
                             _isMouthing = true;
-                            
+
                             //OnObjectCaptured?.Invoke(_capturedObject);
                             //_capturedObject = null;
                         }
@@ -720,6 +720,7 @@ namespace Project6.GameObjects
 
                 if (_isOnGround)
                 {
+                    // 地面状态动画
                     float absVelocityX = Math.Abs(_velocity.X);
                     if (_isHoldingEgg)
                     {
@@ -744,7 +745,7 @@ namespace Project6.GameObjects
                         }
                         else
                         {
-                            if(!_isSpitting)
+                            if (!_isSpitting)
                                 SetYoshiAnimation("LookUp");
                         }
                     }
@@ -782,68 +783,94 @@ namespace Project6.GameObjects
                         }
                     }
                 }
-                else if (!_isOnGround && _velocity.Y < 0)
+                else
                 {
-                    if (!_isHoldingEgg)
+                    // 空中状态动画 - 按优先级排序
+                    if (_isFloating)
                     {
-                        if (_tongueState != 0)
+                        // 浮动状态优先级最高
+                        if (_floatTime >= 0.3f && _floatTime < 1.0f && !_isHoldingEgg)
                         {
-                            if (_isLookingUp)
+                            SetYoshiAnimation("Float");
+                        }
+                        else if (!_isHoldingEgg)
+                        {
+                            SetYoshiAnimation("Fall");
+                        }
+                    }
+                    else if (_isPlummeting)
+                    {
+                        // 坠落状态
+                        if (_plummetStage == 0)
+                        {
+                            SetYoshiAnimation("Plummet1");
+                        }
+                        else if (_plummetStage == 1)
+                        {
+                            SetYoshiAnimation("Plummet2");
+                        }
+                    }
+                    else if (_hasThrownEgg)
+                    {
+                        // 投掷蛋动画
+                        SetYoshiAnimation("Throw");
+                    }
+                    else if (_velocity.Y < 0)
+                    {
+                        // 上升状态
+                        if (!_isHoldingEgg)
+                        {
+                            if (_tongueState != 0)
                             {
-                                SetYoshiAnimation("TongueOutUp");
+                                if (_isLookingUp)
+                                {
+                                    SetYoshiAnimation("TongueOutUp");
+                                }
+                                else
+                                {
+                                    SetYoshiAnimation("TongueOutJump");
+                                }
                             }
                             else
                             {
-                                SetYoshiAnimation("TongueOutJump");
+                                SetYoshiAnimation("Jump");
                             }
                         }
                         else
                         {
-                            SetYoshiAnimation("Jump");
+                            SetYoshiAnimation("HoldEggWalk");
                         }
                     }
                     else
                     {
-                        SetYoshiAnimation("HoldEggWalk");
-                    }
-                }
-                else if (_isFloating)
-                {
-                    if (_floatTime >= 0.3f && _floatTime < 1.0f && !IsYoshiAnimationEqual("Float") && !_isHoldingEgg)
-                    {
-                        SetYoshiAnimation("Float");
-                    }
-                    else if (_floatTime >= 1.0f && !IsYoshiAnimationEqual("Fall") && !_isHoldingEgg)
-                    {
-                        SetYoshiAnimation("Fall");
-                    }
-                }
-                else if (!_isOnGround && _velocity.Y < 0)
-                {
-                    if (!_isHoldingEgg)
-                    {
-                        if (_tongueState != 0)
+                        // 下降状态（非浮动）
+                        if (!_isHoldingEgg)
                         {
-                            if (_isLookingUp)
+                            if (_tongueState != 0)
                             {
-                                SetYoshiAnimation("TongueOutUp");
+                                if (_isLookingUp)
+                                {
+                                    SetYoshiAnimation("TongueOutUp");
+                                }
+                                else
+                                {
+                                    SetYoshiAnimation("TongueOutJump");
+                                }
                             }
                             else
                             {
-                                SetYoshiAnimation("TongueOutJump");
+                                SetYoshiAnimation("Fall");
                             }
                         }
                         else
                         {
-                            SetYoshiAnimation("Jump");
+                            SetYoshiAnimation("HoldEggWalk");
                         }
                     }
-                    else
-                    {
-                        SetYoshiAnimation("HoldEggWalk");
-                    }
                 }
-                else if(_isSpitting)
+
+                // 特殊状态动画（覆盖其他状态）
+                if (_isSpitting)
                 {
                     if (!_isLookingUp)
                     {
@@ -854,6 +881,12 @@ namespace Project6.GameObjects
                         SetYoshiAnimation("TongueOutUp", true, true);
                     }
                 }
+
+                if (_isTurning)
+                {
+                    SetYoshiAnimation("Turn");
+                }
+
                 if (_isHoldingEgg)
                 {
                     bool centerFacingRight = _lastInputDirection == 1;

@@ -1,16 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <!--<OutputType>WinExe</OutputType>-->
     <TargetFramework>net9.0</TargetFramework>
     <RollForward>Major</RollForward>
-    <PublishReadyToRun>false</PublishReadyToRun>
-    <TieredCompilation>false</TieredCompilation>
-	  <MonoGameExtendedPipelineReferencePath>$(MSBuildThisFileDirectory)pipeline-references</MonoGameExtendedPipelineReferencePath>
+	<MonoGameExtendedPipelineReferencePath>$(MSBuildThisFileDirectory)pipeline-references</MonoGameExtendedPipelineReferencePath>
+	<OutputType>Library</OutputType>
   </PropertyGroup>
-  <PropertyGroup>
+  <!--<PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
-  </PropertyGroup>
+  </PropertyGroup>-->
   <ItemGroup>
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
@@ -27,7 +26,9 @@
     <PackageReference Include="Gum.MonoGame" Version="2025.9.21.1" />
     <PackageReference Include="MonoGame.Extended" Version="5.1.0" />
     <PackageReference Include="MonoGame.Extended.Content.Pipeline" Version="5.1.0" />
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*" />
+	<PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*">
+	     <PrivateAssets>All</PrivateAssets>
+	</PackageReference>
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
   </ItemGroup>
   <ItemGroup>
@@ -72,7 +73,7 @@
     <Folder Include="Content\Audio\SFX\" />
     <Folder Include="Content\Audio\Song\" />
     <Folder Include="Content\Stages\" />
-    <Folder Include="Content\TileMaps\" />
+    <Folder Include="Content\Tilemaps\" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="CollectPackageReferences">
     <Message Text="Restoring dotnet tools (this might take a while depending on your internet speed and should only happen upon building your project for the first time, or after upgrading MonoGame, or clearing your nuget cache)" Importance="High" />

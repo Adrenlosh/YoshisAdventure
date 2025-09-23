@@ -26,7 +26,7 @@ namespace Project6.UI
             titleText.Text = TITLE_TEXT;
             titleText.Color = Color.Yellow;
             titleText.UseCustomFont = true;
-            titleText.CustomFontFile = "fonts/ZFull-GB.fnt";
+            titleText.CustomFontFile = "Fonts/ZFull-GB.fnt";
             titleText.FontScale = 3f;
 
             Button startButton = new Button();

@@ -35,7 +35,7 @@ namespace Project6.Scenes
         public override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _font = Content.Load<BitmapFont>("fonts/ZFull-GB");
+            _font = Content.Load<BitmapFont>("Fonts/ZFull-GB");
             _backgroundPattern = Content.Load<Texture2D>("Images/background-pattern");
         }
 
