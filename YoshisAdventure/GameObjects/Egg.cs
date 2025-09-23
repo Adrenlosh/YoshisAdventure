@@ -2,10 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
-using Project6.Interfaces;
+using YoshisAdventure.Interfaces;
 using System;
 
-namespace Project6.GameObjects
+namespace YoshisAdventure.GameObjects
 {
     public class Egg : GameObject, IProjectile
     {

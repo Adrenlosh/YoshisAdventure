@@ -1,13 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
-using Project6.Structures;
-using Project6.Systems;
+using YoshisAdventure.Structures;
+using YoshisAdventure.Systems;
 using System;
 
-namespace Project6.GameObjects
+namespace YoshisAdventure.GameObjects
 {
     public enum TongueState
     {
@@ -22,6 +21,7 @@ namespace Project6.GameObjects
         TurnAround,
         FastFall
     }
+
     public class Yoshi : GameObject, IDamageable
     {
         private const float Gravity = 0.5f;

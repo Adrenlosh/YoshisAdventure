@@ -1,6 +1,6 @@
-﻿using Project6.GameObjects;
+﻿using YoshisAdventure.GameObjects;
 
-namespace Project6.Interfaces
+namespace YoshisAdventure.Interfaces
 {
     public interface IProjectile
     {

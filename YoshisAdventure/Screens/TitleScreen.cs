@@ -6,9 +6,9 @@ using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.ViewportAdapters;
 using MonoGameGum;
-using Project6.UI;
+using YoshisAdventure.UI;
 
-namespace Project6.Scenes
+namespace YoshisAdventure.Scenes
 {
     public class TitleScreen : GameScreen
     {

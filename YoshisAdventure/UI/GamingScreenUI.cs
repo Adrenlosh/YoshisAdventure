@@ -4,7 +4,7 @@ using MonoGameGum;
 using MonoGameGum.GueDeriving;
 using System;
 
-namespace Project6.UI
+namespace YoshisAdventure.UI
 {
     public class GamingScreenUI : ContainerRuntime
     {

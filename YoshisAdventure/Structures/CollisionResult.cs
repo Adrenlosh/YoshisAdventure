@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Project6.Enums;
-using Project6.GameObjects;
+
+using YoshisAdventure.GameObjects;
+using YoshisAdventure.Systems;
 using System;
 
-namespace Project6.Structures
+namespace YoshisAdventure.Structures
 {
     public struct CollisionResult
     {

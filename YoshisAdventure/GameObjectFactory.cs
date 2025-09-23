@@ -3,10 +3,10 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
-using Project6.GameObjects;
+using YoshisAdventure.GameObjects;
 using System;
 
-namespace Project6
+namespace YoshisAdventure
 {
     public class GameObjectFactory
     {

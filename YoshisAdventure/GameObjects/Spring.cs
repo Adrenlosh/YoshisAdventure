@@ -1,12 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
-using Project6.Enums;
-using Project6.Structures;
+using YoshisAdventure.Structures;
+using YoshisAdventure.Systems;
 
-namespace Project6.GameObjects
+namespace YoshisAdventure.GameObjects
 {
     public enum SpringStatus
     {

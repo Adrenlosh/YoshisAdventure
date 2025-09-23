@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project6.GameObjects
+namespace YoshisAdventure.GameObjects
 {
     public class Goal : GameObject
     {

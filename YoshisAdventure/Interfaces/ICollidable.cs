@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Project6.GameObjects;
-using Project6.Structures;
+using YoshisAdventure.GameObjects;
+using YoshisAdventure.Structures;
 
-namespace Project6.Interfaces
+namespace YoshisAdventure.Interfaces
 {
     public interface ICollidable
     {

@@ -6,10 +6,10 @@ using MonoGame.Extended;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.ViewportAdapters;
 using MonoGameGum;
-using Project6.Scenes;
-using Project6.Status;
+using YoshisAdventure.Scenes;
+using YoshisAdventure.Status;
 
-namespace Project6;
+namespace YoshisAdventure;
 
 public class GameMain : Game
 {

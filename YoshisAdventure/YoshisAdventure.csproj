@@ -1,16 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!--<OutputType>WinExe</OutputType>-->
     <TargetFramework>net9.0</TargetFramework>
     <RollForward>Major</RollForward>
     <MonoGameExtendedPipelineReferencePath>$(MSBuildThisFileDirectory)pipeline-references</MonoGameExtendedPipelineReferencePath>
     <OutputType>Library</OutputType>
   </PropertyGroup>
-  <!--<PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
-  </PropertyGroup>-->
   <ItemGroup>
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />

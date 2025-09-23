@@ -1,4 +1,4 @@
-﻿namespace Project6
+﻿namespace YoshisAdventure
 {
     public static class GlobalConfig
     {

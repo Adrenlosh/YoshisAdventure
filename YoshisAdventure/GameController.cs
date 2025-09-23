@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Project6;
+namespace YoshisAdventure;
 
 /// <summary>
 /// Provides a game-specific input abstraction that maps physical inputs

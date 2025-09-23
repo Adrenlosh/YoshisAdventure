@@ -4,13 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Tiled;
 using MonoGameGum;
-using Project6.GameObjects;
-using Project6.Rendering;
-using Project6.Systems;
-using Project6.UI;
+using YoshisAdventure.GameObjects;
+using YoshisAdventure.Rendering;
+using YoshisAdventure.Systems;
+using YoshisAdventure.UI;
 using System.Linq;
 
-namespace Project6.Scenes
+namespace YoshisAdventure.Scenes
 {
     public class GamingScreen : GameScreen
     {

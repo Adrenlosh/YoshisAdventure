@@ -1,14 +1,23 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
-using Project6.GameObjects;
-using Project6.Structures;
+using YoshisAdventure.GameObjects;
+using YoshisAdventure.Structures;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace Project6.Systems
+namespace YoshisAdventure.Systems
 {
+    public enum CollisionDirection
+    {
+        None,
+        Top,
+        Bottom,
+        Left,
+        Right
+    }
+
     public static class GameObjectsSystem
     {
         private static List<GameObject> _gameObjects = new List<GameObject>();

@@ -4,11 +4,11 @@ using MonoGame.Extended;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using MonoGame.Extended.ViewportAdapters;
-using Project6.GameObjects;
+using YoshisAdventure.GameObjects;
 using System;
 using System.Collections.Generic;
 
-namespace Project6.Rendering
+namespace YoshisAdventure.Rendering
 {
     public class GameSceneRenderer
     {

@@ -1,4 +1,4 @@
-﻿using Project6.GameObjects;
+﻿using YoshisAdventure.GameObjects;
 
 public interface IDamageable
 {

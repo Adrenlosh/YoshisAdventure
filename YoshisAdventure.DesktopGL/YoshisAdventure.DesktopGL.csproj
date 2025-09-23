@@ -15,7 +15,7 @@
     <None Remove="Icon.bmp" />
   </ItemGroup>
 	<ItemGroup>
-		<MonoGameContentReference Include="..\Project6\Content\Content.mgcb" Link="Content\Content.mgcb" />
+		<MonoGameContentReference Include="..\YoshisAdventure\Content\Content.mgcb" Link="Content\Content.mgcb" />
 	</ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico">

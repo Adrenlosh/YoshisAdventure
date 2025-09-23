@@ -1,4 +1,4 @@
-﻿namespace Project6.Status
+﻿namespace YoshisAdventure.Status
 {
     public class PlayerStatus
     {

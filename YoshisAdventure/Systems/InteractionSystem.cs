@@ -1,12 +1,11 @@
 ﻿// InteractionSystem.cs
 using Microsoft.Xna.Framework;
-using Project6.Enums;
-using Project6.GameObjects;
-using Project6.Interfaces;
+using YoshisAdventure.GameObjects;
+using YoshisAdventure.Interfaces;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Project6.Systems
+namespace YoshisAdventure.Systems
 {
     public class InteractionSystem
     {

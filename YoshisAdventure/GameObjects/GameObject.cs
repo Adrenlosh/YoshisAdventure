@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
-using Project6.Interfaces;
-using Project6.Structures;
+using YoshisAdventure.Interfaces;
+using YoshisAdventure.Structures;
 
-namespace Project6.GameObjects
+namespace YoshisAdventure.GameObjects
 {
     public abstract class GameObject : ICollidable
     {

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
 
-namespace Project6.GameObjects
+namespace YoshisAdventure.GameObjects
 {
     public class TestObject : GameObject
     {

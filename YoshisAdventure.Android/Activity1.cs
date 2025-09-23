@@ -4,7 +4,7 @@ using Android.OS;
 using Android.Views;
 using Microsoft.Xna.Framework;
 
-namespace Project6.Android
+namespace YoshisAdventure.Android
 {
     [Activity(
         Label = "@string/app_name",

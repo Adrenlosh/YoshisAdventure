@@ -5,11 +5,11 @@ using MonoGameGum;
 using MonoGameGum.GueDeriving;
 using System;
 
-namespace Project6.UI
+namespace YoshisAdventure.UI
 {
     public class TitleScreenUI : ContainerRuntime
     {
-        private static readonly string TITLE_TEXT = "Project6";
+        private static readonly string TITLE_TEXT = "YoshisAdventure";
 
         public event EventHandler StartButtonClicked;
 
