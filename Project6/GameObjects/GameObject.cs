@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
+using Project6.Interfaces;
 
 namespace Project6.GameObjects
 {
-    public abstract class GameObject
+    public abstract class GameObject : ICollidable
     {
         protected TiledMap _tilemap;
 
@@ -16,11 +17,19 @@ namespace Project6.GameObjects
 
         public Vector2 Velocity { get; set; } = Vector2.Zero;
 
-        public bool IsActive { get; protected set; }
+        public bool IsActive { get; set; } = true;
+
+        public string Name { get; set; } = string.Empty;
+
+        public abstract Rectangle CollisionRectangle { get; }
 
         protected GameObject(TiledMap tilemap)
         {
             _tilemap = tilemap;
+        }
+
+        public virtual void OnCollision(GameObject other)
+        {
         }
 
         protected bool IsCollidingWithTile(Rectangle objectRect, out Rectangle tileRect)
@@ -56,10 +65,9 @@ namespace Project6.GameObjects
             return new Rectangle((int)position.X, (int)position.Y, Size.X, Size.Y);
         }
 
-        protected bool IsOutOfBounds()
+        public bool IsOutOfScreenBounds()
         {
-            Rectangle collisionBox = GetCollisionBox(Position);
-            return !ScreenBounds.Intersects(collisionBox);
+            return !ScreenBounds.Intersects(GetCollisionBox(Position));
         }
 
         public abstract void Update(GameTime gameTime);

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
 using Project6.GameObjects;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Project6
@@ -12,6 +13,8 @@ namespace Project6
         private static List<GameObject> _gameObjects = new List<GameObject>();
         private static List<GameObject> _objectsToAdd = new List<GameObject>();
         private static List<GameObject> _objectsToRemove = new List<GameObject>();
+
+        public static List<GameObject> GameObjects => _gameObjects;
 
         public static Yoshi Player { get; private set; }
 
@@ -66,6 +69,7 @@ namespace Project6
             foreach (var gameObject in _gameObjects.Where(obj => obj.IsActive))
             {
                 gameObject.Update(gameTime);
+
             }
         }
 
@@ -87,6 +91,14 @@ namespace Project6
             return _gameObjects.OfType<T>().FirstOrDefault();
         }
 
+        public static List<TInterface> GetObjectsOfInterface<TInterface>()
+        {
+            return GameObjects
+                .Where(obj => obj is TInterface)
+                .Cast<TInterface>()
+                .ToList();
+        }
+
         public static List<GameObject> GetObjectsInRange(Vector2 position, float range)
         {
             return _gameObjects.Where(obj =>
@@ -97,6 +109,28 @@ namespace Project6
         {
             return _gameObjects.Where(obj =>
                 area.Contains(obj.Position) && obj.IsActive).ToList();
+        }
+
+        public static List<GameObject> GetAllActiveObjects()
+        {
+            return _gameObjects.Where(obj => obj.IsActive).ToList();
+        }
+
+        // 添加查找特定名称对象的方法
+        public static GameObject FindObjectByName(string name)
+        {
+            return _gameObjects.FirstOrDefault(obj => obj.Name == name && obj.IsActive);
+        }
+
+        // 添加批量添加对象的方法
+        public static void AddGameObjects(IEnumerable<GameObject> gameObjects)
+        {
+            _objectsToAdd.AddRange(gameObjects);
+        }
+
+        public static GameObject CheckObjectCollision(Rectangle area)
+        {
+            return _gameObjects.FirstOrDefault(obj => obj.IsActive && area.Intersects(obj.CollisionRectangle));
         }
     }
 }

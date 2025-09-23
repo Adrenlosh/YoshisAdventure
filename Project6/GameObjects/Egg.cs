@@ -2,11 +2,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
+using Project6.Interfaces;
 using System;
 
 namespace Project6.GameObjects
 {
-    public class Egg : GameObject
+    public class Egg : GameObject, IProjectile
     {
         private const int MaxCollisionCount = 10;
 
@@ -16,6 +17,14 @@ namespace Project6.GameObjects
         private bool _shouldFlyOut = false;
 
         public int CollisionCount => _collisionCount;
+
+        public int Damage { get; private set; } = 1;
+
+        public bool IsHeldAndThrew { get; set; } = false;
+
+        public GameObject Owner { get; private set; }
+
+        public override Rectangle CollisionRectangle => GetCollisionBox(Position);
 
         public event Action OnOutOfBounds;
 
@@ -79,7 +88,7 @@ namespace Project6.GameObjects
 
         public void Throw(Vector2 throwDirection)
         {
-            IsActive = true;
+            IsHeldAndThrew = true;
             _throwDirection = throwDirection;
             _shouldFlyOut = false;
             _collisionCount = 0;
@@ -87,7 +96,7 @@ namespace Project6.GameObjects
 
         public override void Update(GameTime gameTime)
         {
-            if (!IsActive) return;
+            if (!IsHeldAndThrew) return;
             Vector2 newPosition = Position + Velocity * _throwDirection;
             if (_shouldFlyOut)
             {
@@ -109,13 +118,13 @@ namespace Project6.GameObjects
                 }
                 catch
                 {
-                    IsActive = false;
+                    IsHeldAndThrew = false;
                     OnOutOfBounds.Invoke();
                 }
             }
-            if (IsOutOfBounds())
+            if (IsOutOfScreenBounds())
             {
-                IsActive = false;
+                IsHeldAndThrew = false;
                 _collisionCount = 0;
                 _shouldFlyOut = false;
                 OnOutOfBounds.Invoke();

@@ -19,9 +19,9 @@ namespace Project6
 
         public Yoshi CreatePlayer(Vector2 position, TiledMap tiledMap)
         {
-            var yoshiTexture = _contentManager.Load<Texture2D>("Atlas/yoshi");
-            var yoshiAtlas = Texture2DAtlas.Create("TextureAtlas//yoshi", yoshiTexture, 21, 31);
-            var yoshiSpriteSheet = new SpriteSheet("SpriteSheet//yoshi", yoshiAtlas);
+            Texture2D yoshiTexture = _contentManager.Load<Texture2D>("Atlas/yoshi");
+            Texture2DAtlas yoshiAtlas = Texture2DAtlas.Create("TextureAtlas//yoshi", yoshiTexture, 21, 31);
+            SpriteSheet yoshiSpriteSheet = new SpriteSheet("SpriteSheet//yoshi", yoshiAtlas);
             AddAnimationCycle(yoshiSpriteSheet, "Stand", [0, 0, 0, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 15, 15, 15, 14, 13, 0, 0, 0, 0, 0, 0, 0, 17, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
             AddAnimationCycle(yoshiSpriteSheet, "Walk", [7, 0, 8]);
             AddAnimationCycle(yoshiSpriteSheet, "Run", [10, 11, 12, 11], true, 0.05f);
@@ -42,45 +42,57 @@ namespace Project6
             AddAnimationCycle(yoshiSpriteSheet, "TongueOutRun", [33, 34, 35, 34], true, 0.05f);
             AddAnimationCycle(yoshiSpriteSheet, "TongueOutJump", [35], false);
 
-            AddAnimationCycle(yoshiSpriteSheet, "Stand_Mounting", [43, 43, 43, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 51, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 48, 49, 50, 50, 50, 49, 48, 43, 43, 43, 43, 43, 43, 43, 52, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 43, 43, 43, 43, 43, 43, 43, 43, 43]);
-            AddAnimationCycle(yoshiSpriteSheet, "Walk_Mounting", [36, 43, 37]);
-            AddAnimationCycle(yoshiSpriteSheet, "Run_Mounting", [40 ,41 ,42 ,41], true, 0.05f);
-            AddAnimationCycle(yoshiSpriteSheet, "Jump_Mounting", [38], false);
-            AddAnimationCycle(yoshiSpriteSheet, "Fall_Mounting", [39], false);
-            AddAnimationCycle(yoshiSpriteSheet, "Float_Mounting", [55, 56, 57, 56], true, 0.03f);
-            AddAnimationCycle(yoshiSpriteSheet, "Throw_Mounting", [60], false);
-            AddAnimationCycle(yoshiSpriteSheet, "Plummet1_Mounting", [43, 61, 27, 62], false, 0.08f);
-            AddAnimationCycle(yoshiSpriteSheet, "Plummet2_Mounting", [63], false);
-            AddAnimationCycle(yoshiSpriteSheet, "HoldEgg_Mounting", [58]);
-            AddAnimationCycle(yoshiSpriteSheet, "HoldEggWalk_Mounting", [58, 59], true, 0.09f);
-            AddAnimationCycle(yoshiSpriteSheet, "LookUp_Mounting", [64], false);
-            AddAnimationCycle(yoshiSpriteSheet, "Squat_Mounting", [23], false);
-            AddAnimationCycle(yoshiSpriteSheet, "Turn_Mounting", [9], false);
+            AddAnimationCycle(yoshiSpriteSheet, "Stand_Mouthing", [43, 43, 43, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 51, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 48, 49, 50, 50, 50, 49, 48, 43, 43, 43, 43, 43, 43, 43, 52, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 43, 43, 43, 43, 43, 43, 43, 43, 43]);
+            AddAnimationCycle(yoshiSpriteSheet, "Walk_Mouthing", [36, 43, 37]);
+            AddAnimationCycle(yoshiSpriteSheet, "Run_Mouthing", [40 ,41 ,42 ,41], true, 0.05f);
+            AddAnimationCycle(yoshiSpriteSheet, "Jump_Mouthing", [38], false);
+            AddAnimationCycle(yoshiSpriteSheet, "Fall_Mouthing", [39], false);
+            AddAnimationCycle(yoshiSpriteSheet, "Float_Mouthing", [55, 56, 57, 56], true, 0.03f);
+            AddAnimationCycle(yoshiSpriteSheet, "Throw_Mouthing", [60], false);
+            AddAnimationCycle(yoshiSpriteSheet, "Plummet1_Mouthing", [43, 61, 27, 62], false, 0.08f);
+            AddAnimationCycle(yoshiSpriteSheet, "Plummet2_Mouthing", [63], false);
+            AddAnimationCycle(yoshiSpriteSheet, "HoldEgg_Mouthing", [58]);
+            AddAnimationCycle(yoshiSpriteSheet, "HoldEggWalk_Mouthing", [58, 59], true, 0.09f);
+            AddAnimationCycle(yoshiSpriteSheet, "LookUp_Mouthing", [64], false);
+            AddAnimationCycle(yoshiSpriteSheet, "Squat_Mouthing", [23], false);
+            AddAnimationCycle(yoshiSpriteSheet, "Turn_Mouthing", [9], false);
 
-            var throwSightTextute = _contentManager.Load<Texture2D>("Atlas/throwsight");
-            var throwSightAtlas = Texture2DAtlas.Create("TextureAtlas//throwsight", throwSightTextute, 16, 16);
-            var throwSpriteSheet = new SpriteSheet("SpriteSheet//throwsight", throwSightAtlas);
-            AddAnimationCycle(throwSpriteSheet, "Shine", [0, 1], true, 0.005f);
+            Texture2D corsshairTextute = _contentManager.Load<Texture2D>("Atlas/crosshair");
+            Texture2DAtlas crosshairAtlas = Texture2DAtlas.Create("TextureAtlas//corsshair", corsshairTextute, 16, 16);
+            SpriteSheet crosshairSpriteSheet = new SpriteSheet("SpriteSheet//crosshair", crosshairAtlas);
+            AddAnimationCycle(crosshairSpriteSheet, "Shine", [0, 1], true, 0.005f);
 
-            var tongueTexture = _contentManager.Load<Texture2D>("Atlas/tongue");
+            Texture2D tongueTexture = _contentManager.Load<Texture2D>("Atlas/tongue");
 
-            var player = new Yoshi(yoshiSpriteSheet, throwSpriteSheet, tongueTexture, tiledMap);
+            Yoshi player = new Yoshi(yoshiSpriteSheet, crosshairSpriteSheet, tongueTexture, tiledMap);
             player.Position = position;
             return player;
         }
 
         public Egg CreateEgg(Vector2 position, TiledMap tiledMap)
         {
-            var texture = _contentManager.Load<Texture2D>("Atlas/egg");
-            var egg = new Egg(texture, tiledMap);
+            Texture2D texture = _contentManager.Load<Texture2D>("Atlas/egg");
+            Egg egg = new Egg(texture, tiledMap);
             egg.Position = position;
             return egg;
         }
 
+        public Spring CreateSpring(Vector2 position, TiledMap tiledMap)
+        {   
+            Texture2D texture = _contentManager.Load<Texture2D>("Atlas/spring");
+            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas//spring", texture, 16, 16);
+            SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet//spring", atlas);
+            AddAnimationCycle(spriteSheet, "Compress", [1, 2, 3, 4, 0], false, 0.05f);
+            AddAnimationCycle(spriteSheet, "Normal", [0], false);
+            Spring spring = new Spring(spriteSheet, tiledMap);
+            spring.Position = position;
+            return spring;
+        }
+
         public TestObject CreateTestObject(Vector2 position, TiledMap tiledMap)
         {
-            var texture = _contentManager.Load<Texture2D>("Atlas/test");
-            var testobj = new TestObject(texture, tiledMap);
+            Texture2D texture = _contentManager.Load<Texture2D>("Atlas/test");
+            TestObject testobj = new TestObject(texture, tiledMap);
             testobj.Position = position;
             return testobj;
         }
