@@ -16,7 +16,7 @@ namespace YoshisAdventure.GameObjects
 
         public Rectangle ScreenBounds { get; set; }
 
-        public Vector2 Velocity { get; set; } = Vector2.Zero;
+        public abstract Vector2 Velocity { get; set; }
 
         public bool IsActive { get; set; } = true;
 

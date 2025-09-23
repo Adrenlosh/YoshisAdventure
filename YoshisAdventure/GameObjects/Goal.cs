@@ -3,10 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace YoshisAdventure.GameObjects
 {
@@ -15,6 +11,8 @@ namespace YoshisAdventure.GameObjects
         AnimatedSprite _sprite;
 
         public override Rectangle CollisionRectangle => GetCollisionBox(Position);
+
+        public override Vector2 Velocity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public Goal(SpriteSheet sheet, TiledMap tilemap) : base(tilemap)
         {

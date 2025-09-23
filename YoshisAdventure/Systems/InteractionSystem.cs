@@ -73,7 +73,7 @@ namespace YoshisAdventure.Systems
                         switch (collisionResult.Direction)
                         {
                             case CollisionDirection.Bottom:
-                                player.Position = new Vector2(player.Position.X, springRect.Bottom);
+                                player.Velocity = new Vector2(1f, player.Velocity.Y);
                                 break;
                             case CollisionDirection.Left:
                                 player.Position = new Vector2(springRect.Left - playerRect.Width - 1, player.Position.Y);

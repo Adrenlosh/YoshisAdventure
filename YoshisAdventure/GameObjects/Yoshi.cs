@@ -146,7 +146,7 @@ namespace YoshisAdventure.GameObjects
 
         public GameObject CapturedObject => _capturedObject;
 
-        public new Vector2 Velocity { get => _velocity; set => _velocity = value; }
+        public override Vector2 Velocity{ set => _velocity = value; get => _velocity; }
 
         public Vector2 ThrowDirection => _throwDirection;
 
@@ -233,7 +233,6 @@ namespace YoshisAdventure.GameObjects
 
         public void Die()
         {
-            // 死亡逻辑
         }
 
         public void HandleInput(GameTime gameTime)
@@ -277,11 +276,20 @@ namespace YoshisAdventure.GameObjects
                     //吐出物体
                     if (_capturedObject != null)
                     {
+                        if (_isLookingUp)
+                        {
+                            _capturedObject.Position = CenterPosition - new Vector2(0, 30);
+                        }
+                        else
+                        {
+                            _capturedObject.Position = CenterPosition + new Vector2(_lastInputDirection == 1 ? _capturedObject.Size.X : - 5 - _capturedObject.Size.X, 0);
+                            _capturedObject.Velocity = new Vector2(4f * _lastInputDirection, 0);
+                        }
                         _capturedObject.IsActive = true;
-                        _capturedObject.Position = CenterPosition + _tongueDirection * (_tongueLength + 10);
                         _capturedObject = null;
                         _isMouthing = false;
                         _isSpitting = true;
+                        
                         if (!_isLookingUp)
                             SetYoshiAnimation("TongueOut", true, true);
                         else
@@ -486,7 +494,7 @@ namespace YoshisAdventure.GameObjects
                         else if (_capturedObject == null)
                         {
                             GameObject hitObject = GameObjectsSystem.CheckObjectCollision(tongueRect).CollidedObject;
-                            if (hitObject != null && hitObject != this)
+                            if (hitObject != null && hitObject != this && hitObject.GetType() != typeof(Egg)) //他会吃自己亲生的蛋吗？
                             {
                                 _capturedObject = hitObject;
                                 _tongueState = TongueState.Retracting;

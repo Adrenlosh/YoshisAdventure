@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
+using System.Diagnostics;
 using YoshisAdventure.Structures;
 using YoshisAdventure.Systems;
 
@@ -19,6 +20,7 @@ namespace YoshisAdventure.GameObjects
     {
         private const float Gravity = 0.5f;
         private const float MaxGravity = 8f;
+        private const float Friction = 0.5f;
 
         private readonly Point _normalCollisionBox = new Point(16, 16);
         private readonly Point _minimumCollisionBox = new Point(16, 8);
@@ -38,6 +40,12 @@ namespace YoshisAdventure.GameObjects
             {
                 Compress();
             }
+        }
+
+        public override Vector2 Velocity
+        {
+            get =>_velocity;
+            set => _velocity = value;
         }
 
         public override Rectangle CollisionRectangle => GetCollisionBox(Position);
@@ -95,6 +103,36 @@ namespace YoshisAdventure.GameObjects
                     break;
             }
 
+            Debug.WriteLine(_velocity);
+            if (_velocity.X > 0)
+            {
+                _velocity.X -= MathHelper.Lerp(0, Friction, 0.3f);
+                if (_velocity.X < 0)
+                    _velocity.X = 0;
+            }
+            else if (_velocity.X < 0)
+            {
+                _velocity.X += MathHelper.Lerp(0, Friction, 0.3f);
+                if (_velocity.X > 0)
+                    _velocity.X = 0;
+            }
+
+            if (_velocity.X != 0) //水平碰撞检测
+            {
+                Vector2 horizontalMove = new Vector2(Velocity.X, 0);
+                Vector2 testPosition = newPosition + horizontalMove;
+                Rectangle testRect = GetCollisionBox(testPosition);
+
+                if (!IsCollidingWithTile(testRect, out _))
+                {
+                    newPosition += horizontalMove;
+                }
+                else
+                {
+                    _velocity.X = 0;
+                }
+            }
+
             if (!_isOnGround)
             {
                 _velocity.Y += Gravity;
@@ -147,6 +185,7 @@ namespace YoshisAdventure.GameObjects
                     _isOnGround = true;
                 }
             }
+            
             Position = newPosition;
 
             _sprite.Update(gameTime);

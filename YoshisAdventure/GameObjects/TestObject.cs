@@ -17,6 +17,8 @@ namespace YoshisAdventure.GameObjects
 
         public override Rectangle CollisionRectangle => GetCollisionBox(Position);
 
+        public override Vector2 Velocity { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             _sprite.Draw(spriteBatch, Position, 0, Vector2.One);

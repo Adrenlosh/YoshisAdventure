@@ -15,9 +15,11 @@ namespace YoshisAdventure.GameObjects
         private Vector2 _throwDirection;
         private int _collisionCount = 0;
         private bool _shouldFlyOut = false;
+        private Vector2 _velocity;
 
         public int CollisionCount => _collisionCount;
 
+       
         public int Damage { get; private set; } = 1;
 
         public bool IsHeldAndThrew { get; set; } = false;
@@ -26,13 +28,15 @@ namespace YoshisAdventure.GameObjects
 
         public override Rectangle CollisionRectangle => GetCollisionBox(Position);
 
+        public override Vector2 Velocity { get => _velocity; set => _velocity = value; }
+
         public event Action OnOutOfBounds;
 
         public Egg(Texture2D texture, TiledMap tilemap) : base(tilemap)
         {
             _sprite = new Sprite(texture);
             Size = new Point(16, 16);
-            Velocity = new Vector2(10f, 10f);
+            _velocity = new Vector2(10f, 10f);
         }
 
         protected override Rectangle GetCollisionBox(Vector2 position)
@@ -83,7 +87,7 @@ namespace YoshisAdventure.GameObjects
                 _shouldFlyOut = true;
                 return;
             }
-            Velocity = Vector2.Reflect(Velocity, normal);
+            _velocity = Vector2.Reflect(_velocity, normal);
         }
 
         public void Throw(Vector2 throwDirection)
@@ -97,7 +101,7 @@ namespace YoshisAdventure.GameObjects
         public override void Update(GameTime gameTime)
         {
             if (!IsHeldAndThrew) return;
-            Vector2 newPosition = Position + Velocity * _throwDirection;
+            Vector2 newPosition = Position + _velocity * _throwDirection;
             if (_shouldFlyOut)
             {
                 Position = newPosition;

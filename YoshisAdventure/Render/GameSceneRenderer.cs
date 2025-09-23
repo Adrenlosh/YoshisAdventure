@@ -12,7 +12,6 @@ namespace YoshisAdventure.Rendering
 {
     public class GameSceneRenderer
     {
-        // 移除了游戏对象管理相关的代码
         private readonly GraphicsDevice _graphicsDevice;
         private TiledMap _map;
         private TiledMapRenderer _mapRenderer;
@@ -20,7 +19,6 @@ namespace YoshisAdventure.Rendering
         private BoxingViewportAdapter _viewportAdapter;
         private SpriteBatch _spriteBatch;
 
-        // 只保留与渲染相关的状态
         private float _cameraShakeTimer = -1f;
         private Vector2 _cameraShakeOffset = Vector2.Zero;
 

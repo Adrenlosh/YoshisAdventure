@@ -9,7 +9,7 @@ namespace YoshisAdventure.UI
 {
     public class TitleScreenUI : ContainerRuntime
     {
-        private static readonly string TITLE_TEXT = "YoshisAdventure";
+        private static readonly string TITLE_TEXT = "Yoshi's\nAdventure";
 
         public event EventHandler StartButtonClicked;
 

@@ -36,6 +36,7 @@ public class GameMain : Game
         IsFixedTimeStep = true;
         Window.AllowUserResizing = true;
         IsMouseVisible = true;
+        Window.Title = "Yoshi's Adventure";
         _screenManager = Components.Add<ScreenManager>();
     }
 
