@@ -9,7 +9,7 @@ using YoshisAdventure.Models;
 namespace YoshisAdventure.Systems
 {
 
-    
+
     public static class StageSystem
     {
         public const string StagesDirectory = "Stages";
@@ -50,7 +50,7 @@ namespace YoshisAdventure.Systems
             var tilemaps = root.Element("Tilemaps")?.Elements("Tilemap");
             if (tilemaps != null)
             {
-                foreach(var tilemap in tilemaps)
+                foreach (var tilemap in tilemaps)
                 {
                     string file = tilemap.Attribute("file")?.Value ?? "map0";
                     tmp.Add(file);

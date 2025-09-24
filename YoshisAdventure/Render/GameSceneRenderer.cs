@@ -76,13 +76,15 @@ namespace YoshisAdventure.Rendering
             Matrix projectionMatrix = Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, 0f, -1f);
             _mapRenderer.Draw(ref viewMatrix, ref projectionMatrix);
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: viewMatrix);
-            foreach (var gameObject in gameObjects)
+            if (gameObjects != null)
             {
-                if (gameObject != GameObjectsSystem.Player)
-                    gameObject.Draw(_spriteBatch);
+                foreach (var gameObject in gameObjects)
+                {
+                    if (gameObject != GameObjectsSystem.Player)
+                        gameObject.Draw(_spriteBatch);
+                }
+                GameObjectsSystem.Player?.Draw(_spriteBatch);
             }
-            if (GameObjectsSystem.Player != null)
-                GameObjectsSystem.Player.Draw(_spriteBatch);
             _spriteBatch.End();
         }
 

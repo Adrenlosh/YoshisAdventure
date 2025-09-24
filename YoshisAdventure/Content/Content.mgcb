@@ -102,8 +102,11 @@
 #begin Audio/Audio.xml
 /copy:Audio/Audio.xml
 
-#begin Audio/Song/title.ogg
-/copy:Audio/Song/title.ogg;Audio/Song/title
+#begin Audio/SFX/tada.wav
+/copy:Audio/SFX/tada.wav
+
+#begin Audio/Song/title.mp3
+/copy:Audio/Song/title.mp3
 
 #begin Fonts/ZFull-GB_0.png
 /importer:TextureImporter
@@ -149,10 +152,32 @@
 /processorParam:TextureFormat=Color
 /build:Tilemaps/background.png
 
+#begin Tilemaps/map.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Tilemaps/map.tmx
+
 #begin Tilemaps/map0.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Tilemaps/map0.tmx
+
+#begin Tilemaps/maptileset.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tilemaps/maptileset.png
+
+#begin Tilemaps/maptileset.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:Tilemaps/maptileset.tsx
 
 #begin Tilemaps/tileset.png
 /importer:TextureImporter

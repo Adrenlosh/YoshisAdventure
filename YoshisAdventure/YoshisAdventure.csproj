@@ -26,8 +26,7 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
-    <PackageReference Include="NAudio" Version="2.2.1" />
-    <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
+    <PackageReference Include="SoundFlow" Version="1.2.1" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Content\fonts\ZFull-GB.fnt">
@@ -36,10 +35,6 @@
     <None Update="Content\fonts\ZFull-GB_0.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\Audio\SFX\" />
-    <Folder Include="GameObjects\OnMapObjects\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameLibrary\GameLibrary.csproj" />

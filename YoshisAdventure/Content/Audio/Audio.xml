@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Audio>
 	<Songs>
-		<Song name="title" file="title" repeat="true" repeatStartSecond="60"/>
+		<Song name="title" file="title.mp3" repeat="true" repeatStartSecond="60"/>
 	</Songs>
 	<SoundEffects>
-		<!--<SoundEffect name="example" file="example.wav" keepInMemory="false"/>-->
+		<SoundEffect name="tada" file="tada.wav"/>
 	</SoundEffects>
 </Audio>

@@ -604,6 +604,7 @@ namespace YoshisAdventure.GameObjects
                             _plummetStage = PlummetState.None;
                             OnPlummeted?.Invoke(newPosition);
                             //Core.Audio.PlaySoundEffect(_plummetSFX);
+                            AudioSystem.PlaySoundEffect("tada");
                         }
                         else
                         {
@@ -623,6 +624,7 @@ namespace YoshisAdventure.GameObjects
                                     _plummetStage = PlummetState.None;
                                     OnPlummeted?.Invoke(newPosition);
                                     //Core.Audio.PlaySoundEffect(_plummetSFX);
+                                    AudioSystem.PlaySoundEffect("tada");
                                 }
                             }
                             else

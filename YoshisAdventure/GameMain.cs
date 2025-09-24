@@ -78,4 +78,10 @@ public class GameMain : Game
         ViewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, GlobalConfig.VirtualResolution_Width, GlobalConfig.VirtualResolution_Height);
         _screenManager.LoadScreen(new TitleScreen(this));
     }
+
+    protected override void UnloadContent()
+    {
+        AudioSystem.Dispose();
+        base.UnloadContent();
+    }
 }

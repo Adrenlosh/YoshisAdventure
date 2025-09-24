@@ -20,7 +20,7 @@ namespace YoshisAdventure.Screens
 
         public TitleScreen(Game game) : base(game)
         {
-        }
+        }<
 
         public override void Initialize()
         {
