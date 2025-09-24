@@ -3,48 +3,46 @@ using Microsoft.Xna.Framework;
 using MonoGameGum;
 using MonoGameGum.GueDeriving;
 using System;
+using YoshisAdventure.UI.CustomControls;
 
 namespace YoshisAdventure.UI
 {
     public class GamingScreenUI : ContainerRuntime
     {
-        private static readonly string PLAYER_TEXT = "Player\n x {0}";
-        private static readonly string EGG_TEXT = "Egg\n x {0}";
-        private static readonly string SCORE_TEXT = "Score\n{0}";
-
-        TextRuntime HPText = new TextRuntime();
+        TextRuntime LifeLeftText = new TextRuntime();
 
         TextRuntime EggText = new TextRuntime();
 
         TextRuntime ScoreText = new TextRuntime();
 
-        public event EventHandler StartButtonClicked;
+        public bool IsReadingMessage { get; set; }
+
+        public event EventHandler OnMessageBoxClosed;
 
         private Panel _titlePanel;
+
+        private MessageBox _messageBox;
 
         public GamingScreenUI()
         {
             Dock(Gum.Wireframe.Dock.Fill);
             this.AddToRoot();
 
+            LifeLeftText.Anchor(Gum.Wireframe.Anchor.TopLeft);
+            LifeLeftText.Text = Language.Strings.LifeLeftOnHud;
+            LifeLeftText.Color = Color.DarkGreen;
+            LifeLeftText.UseCustomFont = true;
+            LifeLeftText.CustomFontFile = "Fonts/ZFull-GB.fnt";
+            LifeLeftText.BindingContext = GameMain.playerStatus;
 
-            HPText.Anchor(Gum.Wireframe.Anchor.TopLeft);
-            HPText.Text = PLAYER_TEXT;
-            HPText.Color = Color.DarkGreen;
-            HPText.UseCustomFont = true;
-            HPText.CustomFontFile = "Fonts/ZFull-GB.fnt";
-            HPText.BindingContext = GameMain.playerStatus;
-
-
-            EggText.Text = EGG_TEXT;
+            EggText.Text = Language.Strings.EggCountOnHud;
             EggText.Color = Color.White;
             EggText.UseCustomFont = true;
             EggText.CustomFontFile = "Fonts/ZFull-GB.fnt";
             EggText.Anchor(Gum.Wireframe.Anchor.Top);
             EggText.BindingContext = GameMain.playerStatus;
 
-
-            ScoreText.Text = SCORE_TEXT;
+            ScoreText.Text = Language.Strings.ScoreOnHud;
             ScoreText.Color = Color.White;
             ScoreText.UseCustomFont = true;
             ScoreText.CustomFontFile = "Fonts/ZFull-GB.fnt";
@@ -52,16 +50,31 @@ namespace YoshisAdventure.UI
 
             _titlePanel = new Panel();
             _titlePanel.Dock(Gum.Wireframe.Dock.Fill);
-            _titlePanel.AddChild(HPText);
+            _titlePanel.AddChild(LifeLeftText);
             _titlePanel.AddChild(EggText);
             _titlePanel.AddChild(ScoreText);
             _titlePanel.AddToRoot();
+
+            _messageBox = new MessageBox();
+            _messageBox.OnClosed += () => { 
+                IsReadingMessage = false; 
+                OnMessageBoxClosed?.Invoke(this, EventArgs.Empty); 
+            };
+            _titlePanel.AddChild(_messageBox);
+        }
+
+
+        public void ShowMessageBox(string messageID)
+        {
+            IsReadingMessage = true;
+            _messageBox.Show(Language.Messages.ResourceManager.GetString(messageID));
         }
 
         public void Update(GameTime gameTime)
         {
-            HPText.Text = string.Format(PLAYER_TEXT, GameMain.playerStatus.HP.ToString());
-            EggText.Text = string.Format(EGG_TEXT, GameMain.playerStatus.Egg.ToString());
+            LifeLeftText.Text = string.Format(Language.Strings.LifeLeftOnHud, GameMain.playerStatus.HP.ToString());
+            EggText.Text = string.Format(Language.Strings.EggCountOnHud, GameMain.playerStatus.Egg.ToString());
+            _messageBox.Update(gameTime);
             GumService.Default.Update(gameTime);
         }
 

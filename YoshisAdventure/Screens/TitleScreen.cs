@@ -1,26 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
-using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.ViewportAdapters;
 using MonoGameGum;
+using YoshisAdventure.Systems;
 using YoshisAdventure.UI;
 
-namespace YoshisAdventure.Scenes
+namespace YoshisAdventure.Screens
 {
     public class TitleScreen : GameScreen
     {
-        private BitmapFont _font;
         private Texture2D _backgroundPattern;
         private Rectangle _backgroundDestination;
         private Vector2 _backgroundOffset = Vector2.Zero;
         private ViewportAdapter _viewportAdapter;
         private SpriteBatch _spriteBatch;
-
-        private Song _song;
-
         private TitleScreenUI _ui;
 
         public TitleScreen(Game game) : base(game)
@@ -33,22 +28,19 @@ namespace YoshisAdventure.Scenes
             _backgroundDestination = Game.GraphicsDevice.Viewport.Bounds;
             _viewportAdapter = new BoxingViewportAdapter(Game.Window, Game.GraphicsDevice, GlobalConfig.VirtualResolution_Width, GlobalConfig.VirtualResolution_Height);
             InitializeUI();
+
+            AudioSystem.PlaySong("title");
         }
 
         public override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _font = Content.Load<BitmapFont>("Fonts/ZFull-GB");
             _backgroundPattern = Content.Load<Texture2D>("Images/background-pattern");
-
-            _song = Content.Load<Song>("Audio/Song/Title");
-
-            GameMain.Audio.PlaySong(_song);
         }
 
         public override void Update(GameTime gameTime)
         {
-            
+            AudioSystem.Update(gameTime);
             float offset = 35f * (float)gameTime.ElapsedGameTime.TotalSeconds;
             _backgroundOffset.X += offset;
             _backgroundOffset.Y -= offset;

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
 using YoshisAdventure.Interfaces;
-using YoshisAdventure.Structures;
+using YoshisAdventure.Models;
 
 namespace YoshisAdventure.GameObjects
 {
@@ -20,7 +20,7 @@ namespace YoshisAdventure.GameObjects
 
         public bool IsActive { get; set; } = true;
 
-        public bool IsBeingCapturedByYoshi { get; set; } = false;
+        public bool IsEatable { get; set; } = true;
 
         public string Name { get; set; } = string.Empty;
 

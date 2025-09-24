@@ -4,16 +4,15 @@ using Microsoft.Xna.Framework;
 using MonoGameGum;
 using MonoGameGum.GueDeriving;
 using System;
+using YoshisAdventure.UI.CustomControls;
 
 namespace YoshisAdventure.UI
 {
     public class TitleScreenUI : ContainerRuntime
     {
-        private static readonly string TITLE_TEXT = "Yoshi's\nAdventure";
-
         public event EventHandler StartButtonClicked;
 
-        private Panel _titlePanel;
+        private readonly Panel _titlePanel;
 
         public TitleScreenUI()
         {
@@ -23,22 +22,29 @@ namespace YoshisAdventure.UI
             TextRuntime titleText = new TextRuntime();
             titleText.Anchor(Gum.Wireframe.Anchor.Center);
             titleText.WidthUnits = DimensionUnitType.RelativeToChildren;
-            titleText.Text = TITLE_TEXT;
+            titleText.Text = Language.Strings.GameName;
             titleText.Color = Color.Yellow;
             titleText.UseCustomFont = true;
             titleText.CustomFontFile = "Fonts/ZFull-GB.fnt";
-            titleText.FontScale = 3f;
+            titleText.FontScale = 1f;
 
-            Button startButton = new Button();
-            startButton.Text = "Start Game";
+            UIButton startButton = new UIButton();
+            startButton.Text = Language.Strings.Start;
             startButton.Dock(Gum.Wireframe.Dock.Bottom);
             startButton.Click += (s, e) => StartButtonClicked?.Invoke(this, EventArgs.Empty);
+
+            UIButton startButton1 = new UIButton();
+            startButton1.Text = Language.Strings.Settings;
+            startButton1.Dock(Gum.Wireframe.Dock.Top);
 
             _titlePanel = new Panel();
             _titlePanel.Dock(Gum.Wireframe.Dock.Fill);
             _titlePanel.AddChild(startButton);
+            _titlePanel.AddChild(startButton1);
             _titlePanel.AddChild(titleText);
             _titlePanel.AddToRoot();
+
+            startButton.IsFocused = true;
         }
 
         public void Update(GameTime gameTime)

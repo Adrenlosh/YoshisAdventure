@@ -4,9 +4,10 @@ using MonoGame.Extended;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using MonoGame.Extended.ViewportAdapters;
-using YoshisAdventure.GameObjects;
 using System;
 using System.Collections.Generic;
+using YoshisAdventure.GameObjects;
+using YoshisAdventure.Systems;
 
 namespace YoshisAdventure.Rendering
 {
@@ -71,21 +72,17 @@ namespace YoshisAdventure.Rendering
 
         public void Draw(GameTime gameTime, IEnumerable<GameObject> gameObjects)
         {
-            // 计算视图和投影矩阵
             Matrix viewMatrix = _camera.GetViewMatrix();
             Matrix projectionMatrix = Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, 0f, -1f);
-
-            // 渲染地图
             _mapRenderer.Draw(ref viewMatrix, ref projectionMatrix);
-
-            // 渲染游戏对象
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: viewMatrix);
-
             foreach (var gameObject in gameObjects)
             {
-                gameObject.Draw(_spriteBatch);
+                if (gameObject != GameObjectsSystem.Player)
+                    gameObject.Draw(_spriteBatch);
             }
-
+            if (GameObjectsSystem.Player != null)
+                GameObjectsSystem.Player.Draw(_spriteBatch);
             _spriteBatch.End();
         }
 

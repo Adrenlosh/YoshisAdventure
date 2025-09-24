@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
-using YoshisAdventure.Structures;
+using YoshisAdventure.Models;
 using YoshisAdventure.Systems;
 using System;
 
@@ -124,23 +124,59 @@ namespace YoshisAdventure.GameObjects
 
         public bool CanThrowEgg { get; set; } = true;
 
-        public bool IsOnGround => _isOnGround;
+        public bool IsOnGround
+        {
+            get => _isOnGround;
+            set => _isOnGround = value;
+        }
 
-        public bool IsJumping => _isJumping;
+        public bool IsJumping
+        {
+            get => _isJumping;
+            set => _isJumping = value;
+        }
 
-        public bool IsFloating => _isFloating;
+        public bool IsFloating
+        {
+            get => _isFloating;
+            set => _isFloating = value;
+        }
 
-        public bool IsSquatting => _isSquatting;
+        public bool IsSquatting
+        {
+            get => _isSquatting;
+            set => _isSquatting = value;
+        }
 
-        public bool IsLookingUp => _isLookingUp;
+        public bool IsLookingUp
+        {
+            get => _isLookingUp;
+            set => _isLookingUp = value;
+        }
 
-        public bool IsHoldingEgg => _isHoldingEgg;
+        public bool IsHoldingEgg
+        {
+            get => _isHoldingEgg;
+            set => _isHoldingEgg = value;
+        }
 
-        public bool IsMouthing => _isMouthing;
+        public bool IsMouthing
+        {
+            get => _isMouthing;
+            set => _isMouthing = value;
+        }
 
-        public bool IsPlummeting => _isPlummeting;
+        public bool IsPlummeting
+        {
+            get => _isPlummeting;
+            set => _isPlummeting = value;
+        }
 
-        public bool IsSpitting => _isSpitting;
+        public bool IsSpitting
+        {
+            get => _isSpitting;
+            set => _isSpitting = value;
+        }
 
         public PlummetState PlummetStage => _plummetStage;
 
@@ -494,7 +530,7 @@ namespace YoshisAdventure.GameObjects
                         else if (_capturedObject == null)
                         {
                             GameObject hitObject = GameObjectsSystem.CheckObjectCollision(tongueRect).CollidedObject;
-                            if (hitObject != null && hitObject != this && hitObject.GetType() != typeof(Egg)) //他会吃自己亲生的蛋吗？
+                            if (hitObject != null && hitObject != this && hitObject.IsEatable)
                             {
                                 _capturedObject = hitObject;
                                 _tongueState = TongueState.Retracting;

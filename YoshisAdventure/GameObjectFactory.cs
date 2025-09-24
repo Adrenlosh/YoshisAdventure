@@ -17,7 +17,7 @@ namespace YoshisAdventure
             _contentManager = contentManager;
         }
 
-        public Yoshi CreatePlayer(Vector2 position, TiledMap tiledMap)
+        public Yoshi CreatePlayer(Vector2 position, TiledMap tilemap)
         {
             Texture2D yoshiTexture = _contentManager.Load<Texture2D>("Atlas/yoshi");
             Texture2DAtlas yoshiAtlas = Texture2DAtlas.Create("TextureAtlas//yoshi", yoshiTexture, 21, 31);
@@ -64,20 +64,28 @@ namespace YoshisAdventure
 
             Texture2D tongueTexture = _contentManager.Load<Texture2D>("Atlas/tongue");
 
-            Yoshi player = new Yoshi(yoshiSpriteSheet, crosshairSpriteSheet, tongueTexture, tiledMap);
+            Yoshi player = new Yoshi(yoshiSpriteSheet, crosshairSpriteSheet, tongueTexture, tilemap);
             player.Position = position;
             return player;
         }
 
-        public Egg CreateEgg(Vector2 position, TiledMap tiledMap)
+        public Egg CreateEgg(Vector2 position, TiledMap tilemap)
         {
             Texture2D texture = _contentManager.Load<Texture2D>("Atlas/egg");
-            Egg egg = new Egg(texture, tiledMap);
+            Egg egg = new Egg(texture, tilemap);
             egg.Position = position;
             return egg;
         }
 
-        public Spring CreateSpring(Vector2 position, TiledMap tiledMap)
+        public Sign CreateSign(Vector2 position, TiledMap tilemap, string messageID = "", string message = "")
+        {
+            Texture2D texture = _contentManager.Load<Texture2D>("Atlas/sign");
+            Sign sign = new Sign(texture, tilemap, messageID);
+            sign.Position = position;
+            return sign;
+        }
+
+        public Spring CreateSpring(Vector2 position, TiledMap tilemap)
         {
             Texture2D texture = _contentManager.Load<Texture2D>("Atlas/spring");
             Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas//spring", texture, 16, 16);
@@ -85,12 +93,12 @@ namespace YoshisAdventure
             AddAnimationCycle(spriteSheet, "Compress", [0, 1, 2], false, 0.09f);
             AddAnimationCycle(spriteSheet, "Expand", [2, 3, 0], false, 0.09f);
             AddAnimationCycle(spriteSheet, "Normal", [0], false);
-            Spring spring = new Spring(spriteSheet, tiledMap);
+            Spring spring = new Spring(spriteSheet, tilemap);
             spring.Position = position;
             return spring;
         }
 
-        public Goal CreateGoal(Vector2 position, TiledMap tiledMap)
+        public Goal CreateGoal(Vector2 position, TiledMap tilemap)
         {
             Texture2D texture = _contentManager.Load<Texture2D>("Atlas/goal");
             Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas//goal", texture, 28, 134);
@@ -99,17 +107,9 @@ namespace YoshisAdventure
             AddAnimationCycle(spriteSheet, "NormalWhite", [20, 21, 22, 23, 22 ,21], true, 0.15f);
             AddAnimationCycle(spriteSheet, "FlagLowering", [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39], false, 0.2f);
             AddAnimationCycle(spriteSheet, "FlagRaising", [19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3], false, 0.2f);
-            Goal goal = new Goal(spriteSheet, tiledMap);
+            Goal goal = new Goal(spriteSheet, tilemap);
             goal.Position = position;
             return goal;
-        }
-
-        public TestObject CreateTestObject(Vector2 position, TiledMap tiledMap)
-        {
-            Texture2D texture = _contentManager.Load<Texture2D>("Atlas/test");
-            TestObject testobj = new TestObject(texture, tiledMap);
-            testobj.Position = position;
-            return testobj;
         }
 
         private void AddAnimationCycle(SpriteSheet spriteSheet, string name, int[] frames, bool isLooping = true, float frameDuration = 0.15f)

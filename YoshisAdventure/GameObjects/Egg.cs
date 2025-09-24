@@ -37,6 +37,7 @@ namespace YoshisAdventure.GameObjects
             _sprite = new Sprite(texture);
             Size = new Point(16, 16);
             _velocity = new Vector2(10f, 10f);
+            IsEatable = false;
         }
 
         protected override Rectangle GetCollisionBox(Vector2 position)

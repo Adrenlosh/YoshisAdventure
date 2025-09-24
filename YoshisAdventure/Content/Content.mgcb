@@ -1,15 +1,16 @@
 
 #----------------------------- Global Properties ----------------------------#
 
-/outputDir:bin/$(Platform)
-/intermediateDir:obj/$(Platform)
-/platform:DesktopGL
+/outputDir:bin
+/intermediateDir:obj
+/platform:Windows
 /config:
 /profile:Reach
 /compress:False
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\pipeline-references\MonoGame.Extended.dll
 /reference:..\pipeline-references\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
@@ -50,6 +51,18 @@
 /processorParam:TextureFormat=Color
 /build:Atlas/goal.png
 
+#begin Atlas/sign.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Atlas/sign.png
+
 #begin Atlas/spring.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -61,18 +74,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Atlas/spring.png
-
-#begin Atlas/test.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Atlas/test.png
 
 #begin Atlas/tongue.png
 /importer:TextureImporter
@@ -98,11 +99,11 @@
 /processorParam:TextureFormat=Color
 /build:Atlas/yoshi.png
 
-#begin Audio/Song/Title.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Audio/Song/Title.ogg;Audio/Song/Title
+#begin Audio/Audio.xml
+/copy:Audio/Audio.xml
+
+#begin Audio/Song/title.ogg
+/copy:Audio/Song/title.ogg;Audio/Song/title
 
 #begin Fonts/ZFull-GB_0.png
 /importer:TextureImporter
@@ -115,114 +116,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Fonts/ZFull-GB_0.png
-
-#begin Fonts/ZFull-GB_1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/ZFull-GB_1.png
-
-#begin Fonts/ZFull-GB_2.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/ZFull-GB_2.png
-
-#begin Fonts/ZFull-GB_3.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/ZFull-GB_3.png
-
-#begin Fonts/ZFull-GB_4.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/ZFull-GB_4.png
-
-#begin Fonts/ZFull-GB_5.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/ZFull-GB_5.png
-
-#begin Fonts/ZFull-GB_6.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/ZFull-GB_6.png
-
-#begin Fonts/ZFull-GB_7.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/ZFull-GB_7.png
-
-#begin Fonts/ZFull-GB_8.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/ZFull-GB_8.png
-
-#begin Fonts/ZFull-GB_9.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/ZFull-GB_9.png
 
 #begin Fonts/ZFull-GB.fnt
 /importer:BitmapFontImporter
@@ -240,6 +133,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/background-pattern.png
+
+#begin Stages/stage0.xml
+/copy:Stages/stage0.xml
 
 #begin Tilemaps/background.png
 /importer:TextureImporter
@@ -270,8 +166,8 @@
 /processorParam:TextureFormat=Color
 /build:Tilemaps/tileset.png
 
-#begin Tilemaps/Tileset.tsx
+#begin Tilemaps/tileset.tsx
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
-/build:Tilemaps/Tileset.tsx
+/build:Tilemaps/tileset.tsx
 

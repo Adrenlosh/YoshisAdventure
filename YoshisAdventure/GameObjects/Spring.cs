@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
 using System.Diagnostics;
-using YoshisAdventure.Structures;
+using YoshisAdventure.Models;
 using YoshisAdventure.Systems;
 
 namespace YoshisAdventure.GameObjects
@@ -103,7 +103,6 @@ namespace YoshisAdventure.GameObjects
                     break;
             }
 
-            Debug.WriteLine(_velocity);
             if (_velocity.X > 0)
             {
                 _velocity.X -= MathHelper.Lerp(0, Friction, 0.3f);

@@ -363,3 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 pipeline-references/
+
+*.tiled-session
+*.tiled-project

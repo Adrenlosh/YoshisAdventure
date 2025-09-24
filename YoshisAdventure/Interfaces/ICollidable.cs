@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using YoshisAdventure.GameObjects;
-using YoshisAdventure.Structures;
+using YoshisAdventure.Models;
 
 namespace YoshisAdventure.Interfaces
 {

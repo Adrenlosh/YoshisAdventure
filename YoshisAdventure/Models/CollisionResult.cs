@@ -4,7 +4,7 @@ using YoshisAdventure.GameObjects;
 using YoshisAdventure.Systems;
 using System;
 
-namespace YoshisAdventure.Structures
+namespace YoshisAdventure.Models
 {
     public struct CollisionResult
     {

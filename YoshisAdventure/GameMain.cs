@@ -1,13 +1,15 @@
-﻿using GameLibrary.Audio;
-using GameLibrary.Input;
+﻿using GameLibrary.Input;
+using Gum.Forms.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.ViewportAdapters;
 using MonoGameGum;
-using YoshisAdventure.Scenes;
+using MonoGameGum.Forms;
+using YoshisAdventure.Screens;
 using YoshisAdventure.Status;
+using YoshisAdventure.Systems;
 
 namespace YoshisAdventure;
 
@@ -22,7 +24,8 @@ public class GameMain : Game
 
     public static InputManager Input { get; private set; } = new InputManager();
 
-    public static AudioController Audio { get; private set; } = new AudioController();
+
+    public bool IsMonoStereoEngineRunning { get; private set; } = false;
 
     public GameMain()
     {
@@ -33,16 +36,25 @@ public class GameMain : Game
             SynchronizeWithVerticalRetrace = false
         };
         Content.RootDirectory = "Content";
-        IsFixedTimeStep = true;
         Window.AllowUserResizing = true;
-        IsMouseVisible = true;
         Window.Title = "Yoshi's Adventure";
+        IsFixedTimeStep = true;
+        IsMouseVisible = true;
+        
         _screenManager = Components.Add<ScreenManager>();
+
+        StageSystem.Initialize(Content);
+        AudioSystem.Initialize(Content);
+
     }
 
     private void InitializeGum()
     {
-        GumService.Default.Initialize(this);
+        GumService.Default.Initialize(this, DefaultVisualsVersion.V2);
+        FrameworkElement.KeyboardsForUiControl.Add(GumService.Default.Keyboard);
+        FrameworkElement.GamePadsForUiControl.AddRange(GumService.Default.Gamepads);
+        FrameworkElement.TabReverseKeyCombos.Add(new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Up });
+        FrameworkElement.TabKeyCombos.Add(new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Down });
         GumService.Default.ContentLoader.XnaContentManager = Content;
     }
 
@@ -56,6 +68,7 @@ public class GameMain : Game
     protected override void Update(GameTime gameTime)
     {
         Input.Update(gameTime);
+        GumService.Default.Update(gameTime);
         base.Update(gameTime);
     }
 
