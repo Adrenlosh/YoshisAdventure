@@ -61,7 +61,7 @@ namespace YoshisAdventure.Language {
         }
         
         /// <summary>
-        ///   查找类似 Hello, world! The quick brown fox jumps over the lazy dog. 的本地化字符串。
+        ///   查找类似 Hello, world! The quick brown fox jumps over the lazy dog. 中国智造，惠及全球。 的本地化字符串。
         /// </summary>
         internal static string Message1 {
             get {

@@ -6,6 +6,7 @@ using YoshisAdventure.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using YoshisAdventure.GameObjects.OnMapObjects;
 
 namespace YoshisAdventure.Systems
 {
@@ -28,6 +29,8 @@ namespace YoshisAdventure.Systems
 
         public static Yoshi Player { get; private set; }
 
+        public static MapYoshi MapPlayer { get; private set; }
+
         public static TiledMap CurrentMap { get; private set; }
 
         public static void Initialize(TiledMap map)
@@ -43,6 +46,11 @@ namespace YoshisAdventure.Systems
             if (gameObject is Yoshi yoshi)
             {
                 Player = yoshi;
+            }
+
+            if(gameObject  is MapYoshi mapYoshi)
+            {
+                MapPlayer = mapYoshi;
             }
         }
 
@@ -126,13 +134,11 @@ namespace YoshisAdventure.Systems
             return _gameObjects.Where(obj => obj.IsActive).ToList();
         }
 
-        // 添加查找特定名称对象的方法
         public static GameObject FindObjectByName(string name)
         {
             return _gameObjects.FirstOrDefault(obj => obj.Name == name && obj.IsActive);
         }
 
-        // 添加批量添加对象的方法
         public static void AddGameObjects(IEnumerable<GameObject> gameObjects)
         {
             _objectsToAdd.AddRange(gameObjects);

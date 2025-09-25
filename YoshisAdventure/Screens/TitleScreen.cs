@@ -20,7 +20,7 @@ namespace YoshisAdventure.Screens
 
         public TitleScreen(Game game) : base(game)
         {
-        }<
+        }
 
         public override void Initialize()
         {
@@ -63,7 +63,7 @@ namespace YoshisAdventure.Screens
         {
             GumService.Default.Root.Children.Clear();
             _ui = new TitleScreenUI();
-            _ui.StartButtonClicked += (s, e) => ScreenManager.LoadScreen(new GamingScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+            _ui.StartButtonClicked += (s, e) => ScreenManager.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
         }
     }
 }

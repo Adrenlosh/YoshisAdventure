@@ -5,6 +5,7 @@ using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
 using YoshisAdventure.GameObjects;
 using System;
+using YoshisAdventure.GameObjects.OnMapObjects;
 
 namespace YoshisAdventure
 {
@@ -110,6 +111,20 @@ namespace YoshisAdventure
             Goal goal = new Goal(spriteSheet, tilemap);
             goal.Position = position;
             return goal;
+        }
+
+        public MapYoshi CreateMapYoshi(Vector2 position, TiledMap tilemap)
+        {
+            Texture2D texture = _contentManager.Load<Texture2D>("Atlas/mapYoshi");
+            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas//mapYoshi", texture, 16, 16);
+            SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet//mapYoshi", atlas);
+            AddAnimationCycle(spriteSheet, "Walk", [1, 0, 1, 5], true, 0.2f);
+            AddAnimationCycle(spriteSheet, "WalkSide", [2, 3, 2, 11], true, 0.2f);
+            AddAnimationCycle(spriteSheet, "WalkBack", [8, 9, 8, 6], true, 0.2f);
+            AddAnimationCycle(spriteSheet, "Start", [4, 1], false, 0.2f);
+            MapYoshi mapYoshi = new MapYoshi(spriteSheet, tilemap);
+            mapYoshi.Position = position;
+            return mapYoshi;
         }
 
         private void AddAnimationCycle(SpriteSheet spriteSheet, string name, int[] frames, bool isLooping = true, float frameDuration = 0.15f)
