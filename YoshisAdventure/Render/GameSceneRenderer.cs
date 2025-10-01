@@ -55,7 +55,8 @@ namespace YoshisAdventure.Rendering
             if (useFluentCamera)
             {
                 Vector2 lerpResult = Vector2.Lerp(_currentCameraPosition, _targetCameraPosition, 0.1f);
-
+                if (Math.Abs(velocity.X) >= 1)
+                {
                     float lookAheadDistance = 30f * MathHelper.Clamp(Math.Abs(velocity.X) / 10f, 0f, 1f);
                     if (cameraDirection == 1)
                     {
@@ -65,7 +66,7 @@ namespace YoshisAdventure.Rendering
                     {
                         lerpResult.X -= lookAheadDistance;
                     }
-                
+                }
                 _currentCameraPosition = GetCameraPosition(lerpResult);
             }
             else

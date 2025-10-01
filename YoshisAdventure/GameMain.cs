@@ -33,16 +33,14 @@ public class GameMain : Game
 
     public GameMain()
     {
-        _graphicsDeviceManager = new GraphicsDeviceManager(this)
-        {
-            PreferredBackBufferWidth = GlobalConfig.VirtualResolution_Width,
-            PreferredBackBufferHeight = GlobalConfig.VirtualResolution_Height
-        };
+        _graphicsDeviceManager = new GraphicsDeviceManager(this);
+        _graphicsDeviceManager.PreferredBackBufferWidth = GlobalConfig.VirtualResolution_Width;
+        _graphicsDeviceManager.PreferredBackBufferHeight = GlobalConfig.VirtualResolution_Height;
         _graphicsDeviceManager.ApplyChanges();
+
         Content.RootDirectory = "Content";
         Window.AllowUserResizing = true;
         Window.Title = Language.Strings.GameName;
-        IsFixedTimeStep = true;
         IsMouseVisible = true;
 
         _screenManager = new ScreenManager();
@@ -51,7 +49,7 @@ public class GameMain : Game
 
     private void InitializeGum()
     {
-        GumService.Default.Initialize(this, DefaultVisualsVersion.V2);
+        GumService.Default.Initialize(this);
         FrameworkElement.KeyboardsForUiControl.Add(GumService.Default.Keyboard);
         FrameworkElement.GamePadsForUiControl.AddRange(GumService.Default.Gamepads);
         FrameworkElement.TabReverseKeyCombos.Add(new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Up });
@@ -70,7 +68,6 @@ public class GameMain : Game
     {
         Input.Update(gameTime);
         GumService.Default.Update(gameTime);
-        SFXSystem.Update(gameTime);
         base.Update(gameTime);
     }
 
