@@ -5,7 +5,6 @@ using YoshisAdventure.GameObjects;
 using YoshisAdventure.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using YoshisAdventure.GameObjects.OnMapObjects;
 
 namespace YoshisAdventure.Systems
@@ -148,10 +147,10 @@ namespace YoshisAdventure.Systems
         {
             foreach (var obj in _gameObjects)
             {
-                if (obj.IsActive && area.Intersects(obj.CollisionRectangle))
+                if (obj.IsActive && area.Intersects(obj.CollisionBox))
                 {
-                    var intersection = Rectangle.Intersect(area, obj.CollisionRectangle);
-                    return new CollisionResult(obj, intersection, obj.CollisionRectangle, area);
+                    var intersection = Rectangle.Intersect(area, obj.CollisionBox);
+                    return new CollisionResult(obj, intersection, obj.CollisionBox, area);
                 }
             }
             return new CollisionResult();
@@ -159,7 +158,7 @@ namespace YoshisAdventure.Systems
 
         public static CollisionResult CheckObjectCollision(GameObject obj)
         {
-            var result = CheckObjectCollision(obj.CollisionRectangle);
+            var result = CheckObjectCollision(obj.CollisionBox);
             if(result.CollidedObject != obj) // 如果碰撞的对象不是自身
                 return result;
             return new CollisionResult();
@@ -169,8 +168,8 @@ namespace YoshisAdventure.Systems
         {
             if (objA == null || objB == null || !objA.IsActive || !objB.IsActive)
                 return null;
-            Rectangle rectA = objA.CollisionRectangle;
-            Rectangle rectB = objB.CollisionRectangle;
+            Rectangle rectA = objA.CollisionBox;
+            Rectangle rectB = objB.CollisionBox;
             if (!rectA.Intersects(rectB))
                 return null;
             Rectangle intersection = Rectangle.Intersect(rectA, rectB);

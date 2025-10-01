@@ -26,7 +26,7 @@ namespace YoshisAdventure.GameObjects
 
         public GameObject Owner { get; private set; }
 
-        public override Rectangle CollisionRectangle => GetCollisionBox(Position);
+        public override Rectangle CollisionBox => GetCollisionBox(Position);
 
         public override Vector2 Velocity { get => _velocity; set => _velocity = value; }
 

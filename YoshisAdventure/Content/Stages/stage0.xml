@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Stage name="grassland1" description="Welcome to the Adventure" entryMap="map0">
+<Stage name="grassland1" displayName="Grassland 1" description="Welcome to the Adventure" entryMap="map0">
 	<Tilemaps>
 		<Tilemap name="map0" file="map0.tmx"/>
 	</Tilemaps>

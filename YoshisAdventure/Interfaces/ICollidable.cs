@@ -6,7 +6,8 @@ namespace YoshisAdventure.Interfaces
 {
     public interface ICollidable
     {
-        Rectangle CollisionRectangle { get; }
+        Rectangle CollisionBox { get; }
+
         void OnCollision(GameObject other, CollisionResult collision);
     }
 }

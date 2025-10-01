@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
+using System;
 using YoshisAdventure.Interfaces;
 using YoshisAdventure.Models;
 
@@ -24,7 +25,7 @@ namespace YoshisAdventure.GameObjects
 
         public string Name { get; set; } = string.Empty;
 
-        public abstract Rectangle CollisionRectangle { get; }
+        public abstract Rectangle CollisionBox { get; }
 
         protected GameObject(TiledMap tilemap)
         {
@@ -64,6 +65,20 @@ namespace YoshisAdventure.GameObjects
         protected virtual Rectangle GetCollisionBox(Vector2 position)
         {
             return new Rectangle((int)position.X, (int)position.Y, Size.X, Size.Y);
+        }
+
+        protected virtual Rectangle GetCollisionBoxBottomCenter(Vector2 position, Point spriteSize)
+        {
+            int X = (int)(position.X + spriteSize.X / 2 - Size.X / 2);
+            int Y = (int)(position.Y + spriteSize.Y - Size.Y);
+            return new Rectangle(X, Y, Size.X, Size.Y);
+        }
+
+        protected virtual Rectangle GetCollisionBoxCenter(Vector2 position, Point spriteSize)
+        {
+            Point centerPosition = new Point((int)Position.X, (int)Position.Y);
+            var collisionBox = GetCollisionBox(position);
+            return new Rectangle(centerPosition.X, centerPosition.Y, collisionBox.Width, collisionBox.Height);
         }
 
         public bool IsOutOfScreenBounds()

@@ -18,8 +18,19 @@ namespace YoshisAdventure.Systems
 
         public static void Initialize(ContentManager contentManager)
         {
-            string directoryPath = Path.Combine(contentManager.RootDirectory, StagesDirectory);
-            string[] stageFiles = Directory.GetFiles(directoryPath, "*.xml");
+            var stageListPath = Path.Combine(contentManager.RootDirectory, StagesDirectory, "Stages.txt");
+            List<string> stageFiles = new List<string>();
+            using (var stream = TitleContainer.OpenStream(stageListPath))
+            using (var reader = new StreamReader(stream))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(line))
+                        stageFiles.Add(Path.Combine(contentManager.RootDirectory, StagesDirectory, line.Trim()));
+                }
+            }
+
             foreach (var stageFile in stageFiles)
             {
                 var stage = LoadStageFromFile(stageFile);
@@ -34,16 +45,13 @@ namespace YoshisAdventure.Systems
 
         public static Stage LoadStageFromFile(string filePath)
         {
-            if (!File.Exists(filePath))
-            {
-                throw new FileNotFoundException($"Stage file not found: {filePath}");
-            }
 
             using Stream stream = TitleContainer.OpenStream(filePath);
             using XmlReader xmlReader = XmlReader.Create(stream);
             XDocument doc = XDocument.Load(xmlReader);
             XElement root = doc.Root;
-            string name = root.Attribute("name")?.Value ?? "Map";
+            string name = root.Attribute("name")?.Value ?? "map";
+            string displayName = root.Attribute("displayName")?.Value ?? "Map";
             string description = root.Attribute("description")?.Value ?? "No description";
             string entryMap = root.Attribute("entryMap")?.Value ?? "map0";
             List<string> tmp = new List<string>();
@@ -56,7 +64,7 @@ namespace YoshisAdventure.Systems
                     tmp.Add(file);
                 }
             }
-            return new Stage(name, description, tmp, entryMap);
+            return new Stage(name, displayName,  description, tmp, entryMap);
         }
     }
 }

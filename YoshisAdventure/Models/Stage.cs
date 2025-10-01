@@ -8,7 +8,9 @@ namespace YoshisAdventure.Models
 {
     public class Stage
     {
-        public string Name { get; set; } = "Map";
+        public string Name { get; set; } = "map";
+
+        public string DisplayName { get; set; } = "Map";
 
         public string Description { get; set; } = "Yoshi's Adventure Map";
 
@@ -18,9 +20,10 @@ namespace YoshisAdventure.Models
 
         public string CurrentMap { get; set; } = "map0";
 
-        public Stage(string name, string description, List<string> tilemaps, string entryMap) 
+        public Stage(string name,string displayName,  string description, List<string> tilemaps, string entryMap) 
         {
             Name = name;
+            DisplayName = displayName;
             Description = description;
             Tilemaps = tilemaps;
             EntryMap = entryMap;
@@ -38,7 +41,7 @@ namespace YoshisAdventure.Models
                 switch (obj.Name)
                 {
                     case "Player":
-                        var player = gameObjectFactory.CreatePlayer(obj.Position, map);
+                        var player = gameObjectFactory.CreateYoshi(obj.Position, map);
                         GameObjectsSystem.AddGameObject(player);
                         break;
                     case "Spring":

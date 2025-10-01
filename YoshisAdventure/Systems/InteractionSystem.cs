@@ -28,7 +28,7 @@ namespace YoshisAdventure.Systems
             {
                 if (obj is Sign sign)
                 {
-                    var collisionResult = GameObjectsSystem.CheckObjectCollision(sign.CollisionRectangle);
+                    var collisionResult = GameObjectsSystem.CheckObjectCollision(sign.CollisionBox);
                     if (GameController.MoveUp() && collisionResult.CollidedObject == player)
                     {
                         sign.ScreenBounds = GameObjectsSystem.Player.ScreenBounds;
@@ -55,13 +55,13 @@ namespace YoshisAdventure.Systems
         {
             var collidables = GameObjectsSystem.GetObjectsOfInterface<ICollidable>();
             Yoshi player = GameObjectsSystem.Player;
-            Rectangle playerRect = player.CollisionRectangle;
+            Rectangle playerRect = player.CollisionBox;
 
             foreach (var collidable in collidables)
             {
                 if (collidable is Spring spring && player.CapturedObject != spring)
                 {
-                    Rectangle springRect = spring.CollisionRectangle;
+                    Rectangle springRect = spring.CollisionBox;
                     var collisionResult = GameObjectsSystem.CheckObjectCollision(springRect);
                     if (collisionResult.CollidedObject != null && collisionResult.CollidedObject == player)
                     {

@@ -2,7 +2,7 @@
 
 namespace YoshisAdventure.Models
 {
-    public class Audio
+    public class Song
     {
         public string Name { get; set; }
 
@@ -11,8 +11,6 @@ namespace YoshisAdventure.Models
         public float Volume { get; set; } = 1.0f;
 
         public bool IsLooping { get; set; }
-
-        public bool IsSFX { get; set; }
 
         public TimeSpan RepeatStartTime { get; set; } = TimeSpan.Zero;
     }

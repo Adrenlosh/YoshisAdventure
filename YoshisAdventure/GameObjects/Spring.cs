@@ -48,7 +48,7 @@ namespace YoshisAdventure.GameObjects
             set => _velocity = value;
         }
 
-        public override Rectangle CollisionRectangle => GetCollisionBox(Position);
+        public override Rectangle CollisionBox => GetCollisionBox(Position);
 
         public Spring(SpriteSheet spriteSheet, TiledMap tilemap) : base(tilemap)
         {

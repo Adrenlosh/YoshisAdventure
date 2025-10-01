@@ -18,7 +18,7 @@ namespace YoshisAdventure
             _contentManager = contentManager;
         }
 
-        public Yoshi CreatePlayer(Vector2 position, TiledMap tilemap)
+        public Yoshi CreateYoshi(Vector2 position, TiledMap tilemap)
         {
             Texture2D yoshiTexture = _contentManager.Load<Texture2D>("Atlas/yoshi");
             Texture2DAtlas yoshiAtlas = Texture2DAtlas.Create("TextureAtlas//yoshi", yoshiTexture, 21, 31);
@@ -62,12 +62,19 @@ namespace YoshisAdventure
             Texture2DAtlas crosshairAtlas = Texture2DAtlas.Create("TextureAtlas//corsshair", corsshairTextute, 16, 16);
             SpriteSheet crosshairSpriteSheet = new SpriteSheet("SpriteSheet//crosshair", crosshairAtlas);
             AddAnimationCycle(crosshairSpriteSheet, "Shine", [0, 1], true, 0.005f);
-
             Texture2D tongueTexture = _contentManager.Load<Texture2D>("Atlas/tongue");
-
             Yoshi player = new Yoshi(yoshiSpriteSheet, crosshairSpriteSheet, tongueTexture, tilemap);
             player.Position = position;
             return player;
+        }
+
+        public AnimatedSprite CreateYoshiAnimatedSprite()
+        {
+            Texture2D yoshiTexture = _contentManager.Load<Texture2D>("Atlas/yoshi");
+            Texture2DAtlas yoshiAtlas = Texture2DAtlas.Create("TextureAtlas//yoshi", yoshiTexture, 21, 31);
+            SpriteSheet yoshiSpriteSheet = new SpriteSheet("SpriteSheet//yoshi", yoshiAtlas);
+            AddAnimationCycle(yoshiSpriteSheet, "Walk", [7, 0, 8]);
+            return new AnimatedSprite(yoshiSpriteSheet);
         }
 
         public Egg CreateEgg(Vector2 position, TiledMap tilemap)

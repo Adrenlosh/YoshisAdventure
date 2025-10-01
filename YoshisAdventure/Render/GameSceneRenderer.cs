@@ -14,42 +14,66 @@ namespace YoshisAdventure.Rendering
     public class GameSceneRenderer
     {
         private readonly GraphicsDevice _graphicsDevice;
-        private TiledMap _map;
-        private TiledMapRenderer _mapRenderer;
+        private TiledMap _tilemap;
+        private TiledMapRenderer _tilemapRenderer;
         private OrthographicCamera _camera;
         private BoxingViewportAdapter _viewportAdapter;
         private SpriteBatch _spriteBatch;
 
+        private Vector2 _currentCameraPosition;
+        private Vector2 _targetCameraPosition;
+
         private float _cameraShakeTimer = -1f;
         private Vector2 _cameraShakeOffset = Vector2.Zero;
+
+        public BoxingViewportAdapter ViewportAdapter => _viewportAdapter;
 
         public GameSceneRenderer(GraphicsDevice graphicsDevice, GameWindow window)
         {
             _graphicsDevice = graphicsDevice;
-            _viewportAdapter = new BoxingViewportAdapter(
-                window,
-                graphicsDevice,
-                GlobalConfig.VirtualResolution_Width,
-                GlobalConfig.VirtualResolution_Height);
+            _viewportAdapter = new BoxingViewportAdapter(window, graphicsDevice, GlobalConfig.VirtualResolution_Width, GlobalConfig.VirtualResolution_Height);
             _camera = new OrthographicCamera(_viewportAdapter);
             _spriteBatch = new SpriteBatch(graphicsDevice);
         }
 
         public void LoadContent(TiledMap map)
         {
-            _map = map;
-            _mapRenderer = new TiledMapRenderer(_graphicsDevice, _map);
+            _tilemap = map;
+            _tilemapRenderer = new TiledMapRenderer(_graphicsDevice, _tilemap);
         }
 
-        public void Update(GameTime gameTime, Vector2 cameraFocus)
+        public void Update(GameTime gameTime, Vector2 cameraFocus, bool useFluentCamera = false, int cameraDirection = 1, Vector2 velocity = new Vector2())
         {
-            _mapRenderer.Update(gameTime);
-            UpdateCamera(gameTime, cameraFocus);
+            _tilemapRenderer.Update(gameTime);
+            UpdateCamera(gameTime, cameraFocus, useFluentCamera, cameraDirection, velocity);
         }
 
-        private void UpdateCamera(GameTime gameTime, Vector2 cameraFocus)
+        private void UpdateCamera(GameTime gameTime, Vector2 cameraFocus, bool useFluentCamera = false, int cameraDirection = 1, Vector2 velocity = new Vector2())
         {
-            _camera.LookAt(GetCameraPosition(cameraFocus));
+            var elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _targetCameraPosition = GetCameraPosition(cameraFocus);
+            if (useFluentCamera)
+            {
+                Vector2 lerpResult = Vector2.Lerp(_currentCameraPosition, _targetCameraPosition, 0.1f);
+
+                    float lookAheadDistance = 30f * MathHelper.Clamp(Math.Abs(velocity.X) / 10f, 0f, 1f);
+                    if (cameraDirection == 1)
+                    {
+                        lerpResult.X += lookAheadDistance;
+                    }
+                    else
+                    {
+                        lerpResult.X -= lookAheadDistance;
+                    }
+                
+                _currentCameraPosition = GetCameraPosition(lerpResult);
+            }
+            else
+            {
+                _currentCameraPosition = GetCameraPosition(cameraFocus);
+            }
+            _camera.LookAt(_currentCameraPosition);
+
             if (_cameraShakeTimer >= 0f)
             {
                 _cameraShakeTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -60,21 +84,19 @@ namespace YoshisAdventure.Rendering
                 }
                 else
                 {
-                    float shakeAmount = 3f * (1f - (_cameraShakeTimer / 0.5f));
+                    float shakeAmount = 2f;
                     Random random = new Random();
-                    _cameraShakeOffset = new Vector2(
-                        (float)(random.NextDouble() - 1) * shakeAmount,
-                        (float)(random.NextDouble() - 1) * shakeAmount);
+                    _cameraShakeOffset = new Vector2((float)(random.NextDouble() - 1) * shakeAmount, (float)(random.NextDouble() - 1) * shakeAmount);
                     _camera.Position += _cameraShakeOffset;
                 }
             }
         }
 
-        public void Draw(GameTime gameTime, IEnumerable<GameObject> gameObjects)
+        public void Draw(IEnumerable<GameObject> gameObjects)
         {
             Matrix viewMatrix = _camera.GetViewMatrix();
             Matrix projectionMatrix = Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, 0f, -1f);
-            _mapRenderer.Draw(ref viewMatrix, ref projectionMatrix);
+            _tilemapRenderer.Draw(ref viewMatrix, ref projectionMatrix);
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: viewMatrix);
             if (gameObjects != null)
             {
@@ -93,25 +115,23 @@ namespace YoshisAdventure.Rendering
             _cameraShakeTimer = 0f;
         }
 
-        public BoxingViewportAdapter ViewportAdapter => _viewportAdapter;
-
         public Rectangle GetScreenBounds()
         {
-            return new Rectangle((int)((_camera.Position.X - GlobalConfig.VirtualResolution_Width / 2) + GlobalConfig.VirtualResolution_Width / 2), (int)((_camera.Position.Y - GlobalConfig.VirtualResolution_Height / 2) + GlobalConfig.VirtualResolution_Height / 2), GlobalConfig.VirtualResolution_Width, GlobalConfig.VirtualResolution_Height);
+            return new Rectangle((int)(_camera.Position.X - ViewportAdapter.VirtualWidth / 2 + ViewportAdapter.VirtualHeight / 2), (int)(_camera.Position.Y - ViewportAdapter.VirtualHeight / 2 + ViewportAdapter.VirtualHeight / 2), ViewportAdapter.VirtualWidth, ViewportAdapter.VirtualHeight);
         }
 
         public void UnloadContent()
         {
-            _mapRenderer?.Dispose();
-            _map = null;
+            _tilemapRenderer?.Dispose();
+            _tilemap = null;
         }
 
         private Vector2 GetCameraPosition(Vector2 position)
         {
             Vector2 cameraPos = new Vector2();
-            Rectangle worldBounds = new Rectangle(0, 0, _map.WidthInPixels, _map.HeightInPixels);
+            Rectangle worldBounds = new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels);
             Rectangle screenBounds = GetScreenBounds();
-            cameraPos.X = (int)Math.Max(position.X, worldBounds.Left + screenBounds.Width / 2);
+            cameraPos.X = Math.Max(position.X, worldBounds.Left + screenBounds.Width / 2);
             cameraPos.X = Math.Min(cameraPos.X, worldBounds.Right - screenBounds.Width / 2);
             cameraPos.Y = Math.Max(position.Y, worldBounds.Top + screenBounds.Height / 2);
             cameraPos.Y = Math.Min(cameraPos.Y, worldBounds.Bottom - screenBounds.Height / 2);

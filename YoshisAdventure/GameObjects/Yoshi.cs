@@ -178,6 +178,8 @@ namespace YoshisAdventure.GameObjects
             set => _isSpitting = value;
         }
 
+        public int FaceDirection => _lastInputDirection;
+
         public PlummetState PlummetStage => _plummetStage;
 
         public GameObject CapturedObject => _capturedObject;
@@ -190,7 +192,7 @@ namespace YoshisAdventure.GameObjects
 
         public AnimatedSprite Sprite => _yoshiSprite;
 
-        public override Rectangle CollisionRectangle => GetCollisionBox(Position);
+        public override Rectangle CollisionBox => GetCollisionBoxBottomCenter(Position, _yoshiSprite.Size);
 
         public event Action<Vector2> OnThrowEgg;
         public event Action<Vector2> OnReadyThrowEgg;
@@ -553,9 +555,6 @@ namespace YoshisAdventure.GameObjects
                         {
                             _capturedObject.IsActive = false;
                             _isMouthing = true;
-
-                            //OnObjectCaptured?.Invoke(_capturedObject);
-                            //_capturedObject = null;
                         }
                     }
 
@@ -603,8 +602,7 @@ namespace YoshisAdventure.GameObjects
                             _plummetTimer = 0;
                             _plummetStage = PlummetState.None;
                             OnPlummeted?.Invoke(newPosition);
-                            //Core.Audio.PlaySoundEffect(_plummetSFX);
-                            AudioSystem.PlaySoundEffect("tada");
+                            SFXSystem.Play("tada");
                         }
                         else
                         {
@@ -623,8 +621,7 @@ namespace YoshisAdventure.GameObjects
                                     _plummetTimer = 0;
                                     _plummetStage = PlummetState.None;
                                     OnPlummeted?.Invoke(newPosition);
-                                    //Core.Audio.PlaySoundEffect(_plummetSFX);
-                                    AudioSystem.PlaySoundEffect("tada");
+                                    SFXSystem.Play("tada");
                                 }
                             }
                             else
@@ -1000,7 +997,6 @@ namespace YoshisAdventure.GameObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _yoshiSprite.Draw(spriteBatch, Position, 0, Vector2.One);
             if (_isHoldingEgg)
             {
                 _crosshairSprite.Draw(spriteBatch, _rotatingSpritePosition, 0, Vector2.One);
@@ -1052,8 +1048,7 @@ namespace YoshisAdventure.GameObjects
                     spriteBatch.Draw(_tongueSprite.TextureRegion.Texture, tipPosition, tipSource, Color.White, rotation, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
                 }
             }
-
-            Rectangle collisionBox = GetCollisionBox(Position);
+            _yoshiSprite.Draw(spriteBatch, new Vector2((int)Position.X, Position.Y), 0, Vector2.One);
         }
 
         public void Bounce()

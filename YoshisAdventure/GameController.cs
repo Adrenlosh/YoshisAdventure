@@ -10,18 +10,19 @@ namespace YoshisAdventure;
 /// </summary>
 public static class GameController
 {
-    private static KeyboardInfo s_keyboard => GameMain.Input.Keyboard;
-    private static GamePadInfo s_gamePad => GameMain.Input.GamePads[(int)PlayerIndex.One];
+    private static KeyboardInfo Keyboard => GameMain.Input.Keyboard;
+
+    private static GamePadInfo GamePad => GameMain.Input.GamePads[(int)PlayerIndex.One];
 
     /// <summary>
     /// Returns true if the player has triggered the "move up" action.
     /// </summary>
     public static bool MoveUp()
     {
-        return s_keyboard.IsKeyDown(Keys.Up) ||
-               s_keyboard.IsKeyDown(Keys.W) ||
-               s_gamePad.IsButtonDown(Buttons.DPadUp) ||
-               s_gamePad.IsButtonDown(Buttons.LeftThumbstickUp);
+        return Keyboard.IsKeyDown(Keys.Up) ||
+               Keyboard.IsKeyDown(Keys.W) ||
+               GamePad.IsButtonDown(Buttons.DPadUp) ||
+               GamePad.IsButtonDown(Buttons.LeftThumbstickUp);
     }
 
     /// <summary>
@@ -29,10 +30,10 @@ public static class GameController
     /// </summary>
     public static bool MoveDown()
     {
-        return s_keyboard.IsKeyDown(Keys.Down) ||
-               s_keyboard.IsKeyDown(Keys.S) ||
-               s_gamePad.IsButtonDown(Buttons.DPadDown) ||
-               s_gamePad.IsButtonDown(Buttons.LeftThumbstickDown);
+        return Keyboard.IsKeyDown(Keys.Down) ||
+               Keyboard.IsKeyDown(Keys.S) ||
+               GamePad.IsButtonDown(Buttons.DPadDown) ||
+               GamePad.IsButtonDown(Buttons.LeftThumbstickDown);
     }
 
     /// <summary>
@@ -40,10 +41,10 @@ public static class GameController
     /// </summary>
     public static bool MoveLeft()
     {
-        return s_keyboard.IsKeyDown(Keys.Left) ||
-               s_keyboard.IsKeyDown(Keys.A) ||
-               s_gamePad.IsButtonDown(Buttons.DPadLeft) ||
-               s_gamePad.IsButtonDown(Buttons.LeftThumbstickLeft);
+        return Keyboard.IsKeyDown(Keys.Left) ||
+               Keyboard.IsKeyDown(Keys.A) ||
+               GamePad.IsButtonDown(Buttons.DPadLeft) ||
+               GamePad.IsButtonDown(Buttons.LeftThumbstickLeft);
     }
 
     /// <summary>
@@ -51,48 +52,45 @@ public static class GameController
     /// </summary>
     public static bool MoveRight()
     {
-        return s_keyboard.IsKeyDown(Keys.Right) ||
-               s_keyboard.IsKeyDown(Keys.D) ||
-               s_gamePad.IsButtonDown(Buttons.DPadRight) ||
-               s_gamePad.IsButtonDown(Buttons.LeftThumbstickRight);
+        return Keyboard.IsKeyDown(Keys.Right) ||
+               Keyboard.IsKeyDown(Keys.D) ||
+               GamePad.IsButtonDown(Buttons.DPadRight) ||
+               GamePad.IsButtonDown(Buttons.LeftThumbstickRight);
     }
 
     public static bool JumpPressed()
     {
-        return s_keyboard.WasKeyJustPressed(Keys.L) ||
-               s_gamePad.WasButtonJustPressed(Buttons.A);
+        return Keyboard.WasKeyJustPressed(Keys.L) ||
+               GamePad.WasButtonJustPressed(Buttons.A);
     }
 
     public static bool JumpHeld()
     {
-        return s_keyboard.IsKeyDown(Keys.L) ||
-               s_gamePad.IsButtonDown(Buttons.A);
+        return Keyboard.IsKeyDown(Keys.L) ||
+               GamePad.IsButtonDown(Buttons.A);
     }
 
     public static bool ActionPressed()
     {
-        return s_keyboard.WasKeyJustPressed(Keys.K) ||
-               s_gamePad.WasButtonJustPressed(Buttons.B);
+        return Keyboard.WasKeyJustPressed(Keys.K) ||
+               GamePad.WasButtonJustPressed(Buttons.B);
     }
 
     public static bool ActionHeld()
     {
-        return s_keyboard.IsKeyDown(Keys.K) ||
-               s_gamePad.IsButtonDown(Buttons.B);
+        return Keyboard.IsKeyDown(Keys.K) ||
+               GamePad.IsButtonDown(Buttons.B);
     }
 
     public static bool AttackPressed()
     {
-        return s_keyboard.WasKeyJustPressed(Keys.O) ||
-            s_gamePad.WasButtonJustPressed(Buttons.X);
+        return Keyboard.WasKeyJustPressed(Keys.O) ||
+            GamePad.WasButtonJustPressed(Buttons.X);
     }
 
-    /// <summary>
-    /// Returns true if the player has triggered the "pause" action.
-    /// </summary>
     public static bool Pause()
     {
-        return s_keyboard.WasKeyJustPressed(Keys.Escape) ||
-               s_gamePad.WasButtonJustPressed(Buttons.Start);
+        return Keyboard.WasKeyJustPressed(Keys.Escape) ||
+               GamePad.WasButtonJustPressed(Buttons.Start);
     }
 }

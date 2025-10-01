@@ -2,7 +2,7 @@
 {
     public class PlayerStatus
     {
-        public int HP { get; set; } = 5;
+        public int LifeLeft { get; set; } = 5;
 
         public int Egg { get; set; } = 10;
 

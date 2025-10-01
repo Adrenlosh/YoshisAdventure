@@ -5,13 +5,13 @@
   <image source="background.png" width="609" height="450"/>
  </imagelayer>
  <layer id="1" name="Ground" width="70" height="20">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACu3SQQrAIAxE0WCLrdR6/+OaTSC4LoyF/2CYLIPGDAAAAAAA4BuHp3hO0bxGvU/M1XMJe6Q/6hvsE317mrDf9C7PBvtEq/+Fe/nXvUzKxAWE4BUAAA==
+  <data encoding="base64" compression="zlib">
+   eJzt08sKgDAMRNGixQc+/v9zjYtAEKG4kGn1HhjSZWinKQHA9wwhwB068swf74qO4E30CyV0BC3rLZ0li87XqPfx8/mfR+HcwxutFezjc7LMwrmFe1kq2Men+l3oS1t9OQBk2glU
   </data>
  </layer>
  <layer id="3" name="Decorations" width="70" height="20">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACu3IIQEAAAwCMLK9f6hnQOA2uQQAAABYufIBoPEX8V8n4BUAAA==
+  <data encoding="base64" compression="zlib">
+   eJztyCEBAAAMAjCyvX+oZ0DgNrkEAAAAWLnyAaDxXX0AhQ==
   </data>
  </layer>
  <objectgroup id="2" name="Objects">
@@ -19,7 +19,7 @@
   <object id="16" name="Player" x="48" y="208">
    <point/>
   </object>
-  <object id="30" name="Spring" x="320" y="224">
+  <object id="30" name="Spring" x="16" y="208">
    <point/>
   </object>
   <object id="31" name="Sign" x="432" y="224">

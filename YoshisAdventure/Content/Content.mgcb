@@ -137,6 +137,18 @@
 /processor:BitmapFontProcessor
 /build:Fonts/ZFull-GB.fnt
 
+#begin Images/Adrenlosh.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/Adrenlosh.png
+
 #begin Images/background-pattern.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -151,6 +163,15 @@
 
 #begin Stages/stage0.xml
 /copy:Stages/stage0.xml
+
+#begin Stages/stage1.xml
+/copy:Stages/stage1.xml
+
+#begin Stages/stage2.xml
+/copy:Stages/stage2.xml
+
+#begin Stages/Stages.txt
+/copy:Stages/Stages.txt
 
 #begin Tilemaps/background.png
 /importer:TextureImporter
@@ -173,6 +194,11 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Tilemaps/map0.tmx
+
+#begin Tilemaps/map1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Tilemaps/map1.tmx
 
 #begin Tilemaps/maptileset.png
 /importer:TextureImporter
