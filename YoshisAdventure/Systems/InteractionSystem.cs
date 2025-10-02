@@ -99,6 +99,15 @@ namespace YoshisAdventure.Systems
                         }
                     }
                 }
+                else if(collidable is Enemy enemy && player.CapturedObject != enemy)
+                {
+                    Rectangle enemyRect = enemy.CollisionBox;
+                    var collisionResult = GameObjectsSystem.CheckObjectCollision(enemyRect);
+                    if(collisionResult.CollidedObject != null && collisionResult.CollidedObject == player)
+                    {
+                        player.TakeDamage(1, enemy);
+                    }
+                }
             }
         }
 

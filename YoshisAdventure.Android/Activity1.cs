@@ -13,7 +13,7 @@ namespace YoshisAdventure.Android
         AlwaysRetainTaskState = true,
         LaunchMode = LaunchMode.SingleInstance,
         ScreenOrientation = ScreenOrientation.SensorLandscape,
-        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard
     )]
     public class Activity1 : AndroidGameActivity
     {

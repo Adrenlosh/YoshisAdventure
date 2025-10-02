@@ -60,13 +60,7 @@ namespace YoshisAdventure.Screens
                 }
             }
 
-
             base.LoadContent();
-        }
-
-        public override void UnloadContent()
-        {
-            base.UnloadContent();
         }
 
         public override void Draw(GameTime gameTime)
@@ -86,13 +80,11 @@ namespace YoshisAdventure.Screens
         {
             if (GameController.AttackPressed() && _stage != null)
             {
-                Game.LoadScreen(new GamingScreen(Game, _stage), new FadeOnceTransition(GraphicsDevice, Color.Black, 1.5f));
+                Game.LoadScreen(new StageEnterScreen(Game, _stage), new FadeOutTransition(GraphicsDevice, Color.Black, 1.5f));
             }
             GameObjectsSystem.Update(gameTime);
             _sceneRenderer.Update(gameTime, GameObjectsSystem.MapPlayer.Position);
-
             string currentStageName = GameObjectsSystem.MapPlayer.StageName;
-
             if (!string.IsNullOrEmpty(currentStageName))
             {
                 if (_stage == null || _stage.Name != currentStageName)
@@ -104,7 +96,6 @@ namespace YoshisAdventure.Screens
             {
                 _stage = null;
             }
-
             _animatedSprite.Update(gameTime);
         }
     }

@@ -17,6 +17,8 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
         private string _stageName;
         private bool _wasOnStagePoint = false;
 
+        public bool CanHandleInput { get; set; } = true;
+
         public override Vector2 Velocity { get => _velocity; set => _velocity = value; }
 
         public override Rectangle CollisionBox => GetCollisionBoxCenter(Position, _sprite.Size);
@@ -71,6 +73,8 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
             {
                 if (_sprite.CurrentAnimation != "Start")
                     _sprite.SetAnimation("Start");
+                CanHandleInput = false;
+                _velocity = Vector2.Zero;
             }
             if (_velocity == Vector2.Zero && _sprite.CurrentAnimation != "Walk" && _sprite.CurrentAnimation != "Start")
             {
@@ -81,7 +85,8 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
         public override void Update(GameTime gameTime)
         {
             Vector2 newPosition = Position;
-            HandleInput(gameTime);
+            if(CanHandleInput)
+                HandleInput(gameTime);
             newPosition += _velocity;
 
             Rectangle rect = Rectangle.Empty;

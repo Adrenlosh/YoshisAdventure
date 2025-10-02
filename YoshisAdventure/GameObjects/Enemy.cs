@@ -33,6 +33,7 @@ namespace YoshisAdventure.GameObjects
         {
 
         }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             _sprite.Draw(spriteBatch, Position, 0, Vector2.One);

@@ -37,6 +37,7 @@ namespace YoshisAdventure
             AddAnimationCycle(yoshiSpriteSheet, "LookUp", [28], false);
             AddAnimationCycle(yoshiSpriteSheet, "Squat", [23], false);
             AddAnimationCycle(yoshiSpriteSheet, "Turn", [9], false);
+            AddAnimationCycle(yoshiSpriteSheet, "Die", [65], false);
             AddAnimationCycle(yoshiSpriteSheet, "TongueOut", [33], false);
             AddAnimationCycle(yoshiSpriteSheet, "TongueOutUp", [32], false);
             AddAnimationCycle(yoshiSpriteSheet, "TongueOutWalk", [33, 34, 35, 34], true);
@@ -98,8 +99,8 @@ namespace YoshisAdventure
             Texture2D texture = _contentManager.Load<Texture2D>("Atlas/spring");
             Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas//spring", texture, 16, 16);
             SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet//spring", atlas);
-            AddAnimationCycle(spriteSheet, "Compress", [0, 1, 2], false, 0.09f);
-            AddAnimationCycle(spriteSheet, "Expand", [2, 3, 0], false, 0.09f);
+            AddAnimationCycle(spriteSheet, "Compress", [0, 1, 2], false, 0.5f);
+            AddAnimationCycle(spriteSheet, "Expand", [2, 3, 0], false, 0.5f);
             AddAnimationCycle(spriteSheet, "Normal", [0], false);
             Spring spring = new Spring(spriteSheet, tilemap);
             spring.Position = position;
@@ -132,6 +133,17 @@ namespace YoshisAdventure
             MapYoshi mapYoshi = new MapYoshi(spriteSheet, tilemap);
             mapYoshi.Position = position;
             return mapYoshi;
+        }
+
+        public Enemy CreateEnemy(Vector2 position, TiledMap tilemap)
+        {
+            Texture2D texture = _contentManager.Load<Texture2D>("Atlas/enemy");
+            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas//enemy", texture, 16, 32);
+            SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet//enemy", atlas);
+            AddAnimationCycle(spriteSheet, "Normal", [0, 1, 0], true, 0.3f);
+            Enemy enemy = new Enemy(spriteSheet, tilemap);
+            enemy.Position = position;
+            return enemy;
         }
 
         private void AddAnimationCycle(SpriteSheet spriteSheet, string name, int[] frames, bool isLooping = true, float frameDuration = 0.15f)

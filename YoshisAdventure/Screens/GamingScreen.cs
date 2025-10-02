@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Tiled;
 using MonoGameGum;
-using System;
 using System.Linq;
 using YoshisAdventure.GameObjects;
 using YoshisAdventure.Models;
@@ -21,7 +20,8 @@ namespace YoshisAdventure.Screens
         private GamingScreenUI _ui;
         private Stage _stage;
         private TiledMap _tilemap;
-        private float _timer = 0f;
+        private bool _isPlayerDie = false;
+        private Vector2 _cameraLockPosition;
 
         public new GameMain Game => (GameMain)base.Game;
 
@@ -49,19 +49,31 @@ namespace YoshisAdventure.Screens
                 _tilemap = _stage.StartStage(Content);
             }
             _gameObjectFactory = new GameObjectFactory(Content);
-            _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content, true);
-            _sceneRenderer.DrawString = _stage.DisplayName + Environment.NewLine + _stage.Description;
+            _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content);
             _sceneRenderer.LoadContent(_tilemap);
 
             Yoshi player = GameObjectsSystem.Player;
             player.OnThrowEgg += OnThrowEgg;
             player.OnPlummeted += OnPlummeted;
             player.OnReadyThrowEgg += OnReadyThrowEgg;
+            player.OnDie += Player_OnDie;
+            player.OnDieComplete += Player_OnDieComplete;
 
             _interactionSystem = new InteractionSystem();
             _interactionSystem.OnDialogue += _interactionSystem_OnDialogue;
 
             InitializeUI();
+        }
+
+        private void Player_OnDieComplete()
+        {
+            Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+        }
+
+        private void Player_OnDie()
+        {
+            _isPlayerDie = true;
+            _cameraLockPosition = GameObjectsSystem.Player.Position;
         }
 
         private void OnPlummeted(Vector2 position)
@@ -104,27 +116,23 @@ namespace YoshisAdventure.Screens
         public override void Update(GameTime gameTime)
         {
             var elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if(_timer >= 0)
-            {
-                GameObjectsSystem.Player.CanHandleInput = false;
-                _timer += elapsedTime;
-            }
-            if(_timer >= 4f)
-            {
-                _timer = -1f;
-                GameObjectsSystem.Player.CanHandleInput = true;
-            }
-
             if (!_ui.IsReadingMessage)
             {
-                GameObjectsSystem.Update(gameTime);
-                _interactionSystem.Update(gameTime);
-                if (GameObjectsSystem.Player != null)
+                if (!_isPlayerDie)
                 {
-                    GameObjectsSystem.Player.ScreenBounds = _sceneRenderer.GetScreenBounds();
-                    _sceneRenderer.Update(gameTime, GameObjectsSystem.Player.Position, true, GameObjectsSystem.Player.FaceDirection, GameObjectsSystem.Player.Velocity);
+                    GameObjectsSystem.Update(gameTime);
+                    _interactionSystem.Update(gameTime);
+                    if (GameObjectsSystem.Player != null)
+                    {
+                        GameObjectsSystem.Player.ScreenBounds = _sceneRenderer.GetScreenBounds();
+                        _sceneRenderer.Update(gameTime, GameObjectsSystem.Player.Position, true, GameObjectsSystem.Player.FaceDirection, GameObjectsSystem.Player.Velocity);
+                    }
                 }
-
+                else
+                {
+                    GameObjectsSystem.Player.Update(gameTime);
+                    _sceneRenderer.Update(gameTime, _cameraLockPosition, true, GameObjectsSystem.Player.FaceDirection, Vector2.Zero);
+                }
                 if (GameController.Pause())
                     Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
             }

@@ -127,6 +127,15 @@ namespace YoshisAdventure.Language {
         }
         
         /// <summary>
+        ///   查找类似 Yoshi Start 的本地化字符串。
+        /// </summary>
+        internal static string StageStart {
+            get {
+                return ResourceManager.GetString("StageStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Start 的本地化字符串。
         /// </summary>
         internal static string Start {
