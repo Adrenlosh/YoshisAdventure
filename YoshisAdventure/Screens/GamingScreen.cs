@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Tiled;
 using MonoGameGum;
+using System;
 using System.Linq;
-using System.Xml.Linq;
 using YoshisAdventure.GameObjects;
 using YoshisAdventure.Models;
 using YoshisAdventure.Rendering;
@@ -21,6 +21,7 @@ namespace YoshisAdventure.Screens
         private GamingScreenUI _ui;
         private Stage _stage;
         private TiledMap _tilemap;
+        private float _timer = 0f;
 
         public new GameMain Game => (GameMain)base.Game;
 
@@ -48,7 +49,8 @@ namespace YoshisAdventure.Screens
                 _tilemap = _stage.StartStage(Content);
             }
             _gameObjectFactory = new GameObjectFactory(Content);
-            _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window);
+            _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content, true);
+            _sceneRenderer.DrawString = _stage.DisplayName + Environment.NewLine + _stage.Description;
             _sceneRenderer.LoadContent(_tilemap);
 
             Yoshi player = GameObjectsSystem.Player;
@@ -101,6 +103,18 @@ namespace YoshisAdventure.Screens
 
         public override void Update(GameTime gameTime)
         {
+            var elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if(_timer >= 0)
+            {
+                GameObjectsSystem.Player.CanHandleInput = false;
+                _timer += elapsedTime;
+            }
+            if(_timer >= 4f)
+            {
+                _timer = -1f;
+                GameObjectsSystem.Player.CanHandleInput = true;
+            }
+
             if (!_ui.IsReadingMessage)
             {
                 GameObjectsSystem.Update(gameTime);

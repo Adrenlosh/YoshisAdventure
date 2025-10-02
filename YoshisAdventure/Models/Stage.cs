@@ -57,6 +57,10 @@ namespace YoshisAdventure.Models
                         var sign = gameObjectFactory.CreateSign(obj.Position, map, messageID);
                         GameObjectsSystem.AddGameObject(sign);
                         break;
+                    case "Enemy":
+                        var enemy = gameObjectFactory.CreateEnemy(obj.Position, map); 
+                        GameObjectsSystem.AddGameObject(enemy);
+                        break;
                     //case "CoinSpawn":
                     //    var coin = gameObjectFactory.CreateCoin(obj.Position, map);
                     //    GameObjectsSystem.AddGameObject(coin);
@@ -70,7 +74,6 @@ namespace YoshisAdventure.Models
                     //    GameObjectsSystem.AddGameObject(platform);
                     //    break;
                     default:
-                        // Handle unknown object types if necessary
                         break;
                 }
             }

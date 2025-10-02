@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.ViewportAdapters;
-using System.Diagnostics;
 using YoshisAdventure.Systems;
 
 namespace YoshisAdventure.Screens

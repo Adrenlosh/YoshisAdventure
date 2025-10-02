@@ -67,10 +67,14 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
                     _sprite.SetAnimation("WalkSide");
                 _sprite.Effect = SpriteEffects.None;
             }
-            if (_velocity == Vector2.Zero)
+            else if (GameController.AttackPressed() && _stageName != string.Empty) 
             {
-                if (_sprite.CurrentAnimation != "Walk")
-                    _sprite.SetAnimation("Walk");
+                if (_sprite.CurrentAnimation != "Start")
+                    _sprite.SetAnimation("Start");
+            }
+            if (_velocity == Vector2.Zero && _sprite.CurrentAnimation != "Walk" && _sprite.CurrentAnimation != "Start")
+            {
+                _sprite.SetAnimation("Walk");
             }
         }
 

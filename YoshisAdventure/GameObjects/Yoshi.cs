@@ -124,6 +124,8 @@ namespace YoshisAdventure.GameObjects
 
         public bool CanThrowEgg { get; set; } = true;
 
+        public bool CanHandleInput { get; set; } = true;
+
         public bool IsOnGround
         {
             get => _isOnGround;
@@ -501,7 +503,8 @@ namespace YoshisAdventure.GameObjects
         public override void Update(GameTime gameTime)
         {
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            HandleInput(gameTime);
+            if(CanHandleInput)
+                HandleInput(gameTime);
             Vector2 newPosition = Position;
             if (_isSpitting)
             {
@@ -1048,7 +1051,7 @@ namespace YoshisAdventure.GameObjects
                     spriteBatch.Draw(_tongueSprite.TextureRegion.Texture, tipPosition, tipSource, Color.White, rotation, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
                 }
             }
-            _yoshiSprite.Draw(spriteBatch, new Vector2((int)Position.X, Position.Y), 0, Vector2.One);
+            _yoshiSprite.Draw(spriteBatch, Position, 0, Vector2.One);
         }
 
         public void Bounce()
