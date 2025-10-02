@@ -8,13 +8,23 @@ using MonoGame.Extended.Tiled.Renderers;
 using MonoGame.Extended.ViewportAdapters;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using YoshisAdventure.GameObjects;
 using YoshisAdventure.Systems;
 
 namespace YoshisAdventure.Rendering
 {
+    public enum FadeStatus
+    {
+        None, 
+        Out, 
+        Keep, 
+        In
+    }
+
     public class GameSceneRenderer
     {
+        private const float FadeDuration = 10f;
         private readonly GraphicsDevice _graphicsDevice;
         private TiledMap _tilemap;
         private TiledMapRenderer _tilemapRenderer;
@@ -22,7 +32,10 @@ namespace YoshisAdventure.Rendering
         private BoxingViewportAdapter _viewportAdapter;
         private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFont;
+        private Effect _effect;
         private ContentManager _content;
+
+        private float _fadeTimer = -1;
 
         private Vector2 _currentCameraPosition;
         private Vector2 _targetCameraPosition;
@@ -32,7 +45,11 @@ namespace YoshisAdventure.Rendering
 
         public bool IsFirstCameraUpdate { get; set; } = true;
 
+        public FadeStatus FadeStatus { get; set; } = FadeStatus.None;
+
         public BoxingViewportAdapter ViewportAdapter => _viewportAdapter;
+
+        public event Action OnFadeComplete;
 
         public GameSceneRenderer(GraphicsDevice graphicsDevice, GameWindow window, ContentManager content)
         {
@@ -52,6 +69,17 @@ namespace YoshisAdventure.Rendering
 
         public void Update(GameTime gameTime, Vector2 cameraFocus, bool useFluentCamera = false, int cameraDirection = 1, Vector2 velocity = new Vector2())
         {
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (_fadeTimer >= 0f && _fadeTimer <= FadeDuration)
+            {
+                _fadeTimer += elapsedTime;
+            }
+            else if(_fadeTimer > FadeDuration)
+            {
+                _fadeTimer = -1f;
+                FadeStatus = FadeStatus.None;
+                OnFadeComplete?.Invoke();
+            }
             UpdateCamera(gameTime, cameraFocus, useFluentCamera, cameraDirection, velocity);
             _tilemapRenderer.Update(gameTime);
         }
@@ -121,9 +149,39 @@ namespace YoshisAdventure.Rendering
                         gameObject.Draw(_spriteBatch);
                     }
                 }
+                DrawFade();
                 GameObjectsSystem.Player?.Draw(_spriteBatch);
             }
             _spriteBatch.End();
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _viewportAdapter.GetScaleMatrix());
+            if (_fadeTimer >= 3f && _fadeTimer <= 5.5f)
+            {
+                SizeF line1Size = _bitmapFont.MeasureString(Language.Strings.Goal);
+                _spriteBatch.DrawString(_bitmapFont, Language.Strings.Goal, new Vector2(_viewportAdapter.VirtualWidth / 2 - line1Size.Width / 2, _viewportAdapter.VirtualHeight / 2 - line1Size.Height / 2), Color.Yellow, _viewportAdapter.BoundingRectangle);
+            }
+            _spriteBatch.End();
+        }
+
+        private void DrawFade()
+        {
+            Rectangle screenBounds = GetScreenBounds();
+            screenBounds.Inflate(10f, 10f);
+            if(_fadeTimer>= 0f && _fadeTimer <= 2f)
+            {
+                _spriteBatch.FillRectangle(screenBounds, new Color(Color.Black, (_fadeTimer / 2f)));
+                FadeStatus = FadeStatus.Out;
+            }
+            else if(_fadeTimer > 2f && _fadeTimer <= 6f)
+            {
+                _spriteBatch.FillRectangle(screenBounds, Color.Black);
+
+                FadeStatus = FadeStatus.Keep;
+            }
+            else if(_fadeTimer > 6f && _fadeTimer <= 8f)
+            {
+                _spriteBatch.FillRectangle(screenBounds, new Color(Color.Black, 1 - (_fadeTimer - 6f) / 2f));
+                FadeStatus = FadeStatus.In;
+            }
         }
 
         public void TriggerCameraShake()
@@ -143,6 +201,14 @@ namespace YoshisAdventure.Rendering
         {
             _tilemapRenderer?.Dispose();
             _tilemap = null;
+        }
+
+        public void StartFade()
+        {
+            if (_fadeTimer < 0f)
+            {
+                _fadeTimer = 0f;
+            }
         }
 
         private Vector2 GetCameraPosition(Vector2 position)

@@ -159,7 +159,7 @@ namespace YoshisAdventure.Systems
         public static CollisionResult CheckObjectCollision(GameObject obj)
         {
             var result = CheckObjectCollision(obj.CollisionBox);
-            if(result.CollidedObject != obj) // 如果碰撞的对象不是自身
+            if(result.CollidedObject != obj)
                 return result;
             return new CollisionResult();
         }

@@ -5,6 +5,8 @@ using MonoGame.Extended.Tiled;
 using YoshisAdventure.Models;
 using YoshisAdventure.Systems;
 using System;
+using System.Diagnostics;
+using MonoGame.Extended;
 
 namespace YoshisAdventure.GameObjects
 {
@@ -65,6 +67,7 @@ namespace YoshisAdventure.GameObjects
 
         private Vector2 _velocity = Vector2.Zero;
         private Vector2 _acceleration = Vector2.Zero;
+
         private bool _isOnGround = false;
         private bool _isTurning = false;
         private float _turnTimer = 0f;
@@ -1041,6 +1044,23 @@ namespace YoshisAdventure.GameObjects
         public void Bounce()
         {
             _velocity = new Vector2(_velocity.X, BaseJumpForce * 1.6f);
+        }
+
+        public void ResetVelocity(bool resetAllMovement = false)
+        {
+            _velocity = Vector2.Zero;
+            _acceleration = Vector2.Zero;
+            if (resetAllMovement)
+            {
+                _isJumping = false;
+                _isFloating = false;
+                _isPlummeting = false;
+                _jumpHoldTime = 0f;
+                _floatTime = 0f;
+                _jumpInitiated = false;
+                _plummetTimer = 0f;
+                _plummetStage = PlummetState.None;
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ namespace YoshisAdventure.Systems
     public class InteractionSystem
     {
         public event Action<string> OnDialogue;
+        public event Action OnGoal;
 
         public void Update(GameTime gameTime)
         {
@@ -110,11 +111,12 @@ namespace YoshisAdventure.Systems
                 } 
                 else if (collidable is Goal goal)
                 {
-                    var collisionResult = GameObjectsSystem.CheckObjectCollision(player);
-                    if (collisionResult.CollidedObject != null && collisionResult.CollidedObject == goal)
+                    var collisionResult = GameObjectsSystem.CheckObjectCollision(goal.CollisionBox);
+                    if (collisionResult.CollidedObject != null && collisionResult.CollidedObject == player)
                     {
                         player.OnCollision(goal, collisionResult);
                         goal.OnCollision(player, collisionResult);
+                        OnGoal?.Invoke();
                     }
                 }
             }

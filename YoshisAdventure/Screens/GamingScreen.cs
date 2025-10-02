@@ -5,6 +5,7 @@ using MonoGame.Extended.Tiled;
 using MonoGameGum;
 using System;
 using System.Linq;
+using System.Threading;
 using YoshisAdventure.GameObjects;
 using YoshisAdventure.Models;
 using YoshisAdventure.Rendering;
@@ -23,6 +24,7 @@ namespace YoshisAdventure.Screens
         private TiledMap _tilemap;
         private bool _isPlayerDie = false;
         private Vector2 _cameraLockPosition;
+        private bool _shouldMovePlayer = false;
 
         public new GameMain Game => (GameMain)base.Game;
 
@@ -51,6 +53,7 @@ namespace YoshisAdventure.Screens
             _gameObjectFactory = new GameObjectFactory(Content);
             _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content);
             _sceneRenderer.LoadContent(_tilemap);
+            _sceneRenderer.OnFadeComplete += _sceneRenderer_OnFadeComplete;
 
             Yoshi player = GameObjectsSystem.Player;
             player.OnThrowEgg += OnThrowEgg;
@@ -61,8 +64,25 @@ namespace YoshisAdventure.Screens
 
             _interactionSystem = new InteractionSystem();
             _interactionSystem.OnDialogue += _interactionSystem_OnDialogue;
+            _interactionSystem.OnGoal += _interactionSystem_OnGoal;
 
             InitializeUI();
+        }
+
+        private void _sceneRenderer_OnFadeComplete()
+        {
+            GameObjectsSystem.Player.CanHandleInput = true;
+            //Thread.Sleep(TimeSpan.FromSeconds(1));
+            Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+            //_shouldMovePlayer = false;
+        }
+
+        private void _interactionSystem_OnGoal()
+        {
+            GameObjectsSystem.Player.ResetVelocity(true);
+            GameObjectsSystem.Player.CanHandleInput = false;
+            _shouldMovePlayer = true;
+            _sceneRenderer.StartFade();
         }
 
         private void Player_OnDieComplete()
@@ -116,6 +136,10 @@ namespace YoshisAdventure.Screens
         public override void Update(GameTime gameTime)
         {
             var elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if(_shouldMovePlayer)
+            {
+                GameObjectsSystem.Player.Velocity = new Vector2(1f, 1);
+            }
             if (!_ui.IsReadingMessage)
             {
                 if (!_isPlayerDie)

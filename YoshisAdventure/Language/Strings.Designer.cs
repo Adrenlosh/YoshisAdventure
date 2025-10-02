@@ -89,6 +89,15 @@ namespace YoshisAdventure.Language {
         }
         
         /// <summary>
+        ///   查找类似 YOSHI Goal! 的本地化字符串。
+        /// </summary>
+        internal static string Goal {
+            get {
+                return ResourceManager.GetString("Goal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Yoshi
         /// x {0} 的本地化字符串。
         /// </summary>

@@ -33,8 +33,8 @@ namespace YoshisAdventure.Screens
             _backgroundDestination = new Rectangle(0, 0, _viewportAdapter.VirtualWidth, _viewportAdapter.ViewportHeight);
             _backgroundPattern = Content.Load<Texture2D>("Images/background-pattern");
             _font = Content.Load<BitmapFont>("Fonts/ZFull-GB");
-            InitializeUI();
             SongSystem.Play("title");
+            InitializeUI();
             base.LoadContent();
         }
 

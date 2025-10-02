@@ -147,4 +147,7 @@
   <data name="StageStart" xml:space="preserve">
     <value>YOSHI START</value>
   </data>
+  <data name="Goal" xml:space="preserve">
+    <value>YOSHI Goal!</value>
+  </data>
 </root>

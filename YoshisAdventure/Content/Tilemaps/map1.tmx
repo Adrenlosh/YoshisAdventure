@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="2">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="7">
  <tileset firstgid="1" source="tileset.tsx"/>
+ <imagelayer id="4" name="Background" parallaxx="0.8" parallaxy="0.8" repeatx="1" repeaty="1">
+  <image source="background.png" width="609" height="450"/>
+ </imagelayer>
  <layer id="2" name="Ground" width="50" height="40">
   <data encoding="base64" compression="zlib">
-   eJztmMEKgCAQRPWS///HESSIELk6q7PLPliIDjUvJw+mFAS+uH6GjZmspxx3vLcAnsHQgRUPpr6OerDk/UKyHswu0l4xdall9v9g80HvV6dAeFT+9l9NV6THCGjP/A4bUk9Ghxk8eLB2Sko4cOChT9YdcsI6lIFrNBprsCt7RatHpZv2PhJ0j3q0e6Wdv6LlsSu/FpbzW87+4CG7xfztvmwtv4fvbil7/hgko+ct0vMIzcyrnDxjCoKHG096A38=
+   eJztmEEKwCAMBPVS+/8Xl0IFCViMTTTZZmCheNqpwUNSCoIgwOIgORmxQNudyy6H2b49dt6LtEuFM4czeXPR8NkBms8NmhN9f3tBQNozP7EG19OiwwwIHlZniks42ABhnrw75CTrUAa+pdG4g1XdK1pzVEjac0mk54iiPVfa/StaHqv6a+G5v+fuNwjdPfZv32Vv/RH+u6fuuRNJRvct3H2EZuev/GnHFNjkApi0A64=
   </data>
  </layer>
  <objectgroup id="3" name="Objects">
   <object id="1" name="Player" x="16" y="560">
+   <point/>
+  </object>
+  <object id="2" name="Goal" x="448" y="10" width="28" height="134"/>
+  <object id="3" name="Spring" x="382.25" y="272.75">
+   <point/>
+  </object>
+  <object id="5" name="Enemy" x="670.667" y="123.333">
    <point/>
   </object>
  </objectgroup>

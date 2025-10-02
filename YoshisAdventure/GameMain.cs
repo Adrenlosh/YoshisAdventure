@@ -76,11 +76,10 @@ namespace YoshisAdventure
             StageSystem.Initialize(Content);
             SFXSystem.Initialize(Content, engine, playbackDevice);
             SongSystem.Initialize(Content, engine, playbackDevice);
-
 #if !DEBUG
             LoadScreen(new LogoScreen(this));
 #else
-            LoadScreen(new MapScreen(this));
+            LoadScreen(new TitleScreen(this));
 #endif
             base.LoadContent();
         }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="70" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="34">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="70" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="36">
  <tileset firstgid="1" source="tileset.tsx"/>
- <imagelayer id="6" name="Background" offsetx="0" offsety="-152.5" parallaxx="0.8" parallaxy="0.8" repeatx="1" repeaty="1">
+ <imagelayer id="7" name="Background" offsetx="0" offsety="-152.5" parallaxx="0.8" parallaxy="0.8" repeatx="1" repeaty="1">
   <image source="background.png" width="609" height="450"/>
  </imagelayer>
  <layer id="1" name="Ground" width="70" height="20">
   <data encoding="base64" compression="zlib">
-   eJztk0sKgDAMREssfvBz/+MaF4EsBOlCkup7MEyWw3RaCgDA9xidAO5gI238sSs2Am/CvuAJNgI9M6hEVYNucVkkQR67r/88BfrhetkS5DGfVUug766XNUEe8+h3YS997eUEURIJUA==
+   eJztk0sKgDAMREssfvBz/+MaF4EsBOlCkup7MEyWw3RaCgDA9xidAO5gI+38rSs2Am/CvuAJ9gE9M6hEVYNucVkkQR67rz89BfrhetkS5DGfVUug766XNUEe8+h3YS997eUEzcMJRA==
   </data>
  </layer>
  <layer id="3" name="Decorations" width="70" height="20">
@@ -15,7 +15,6 @@
   </data>
  </layer>
  <objectgroup id="2" name="Objects">
-  <object id="7" name="Goal" x="1056" y="106"/>
   <object id="16" name="Player" x="48" y="208">
    <point/>
   </object>
@@ -31,5 +30,7 @@
   <object id="33" name="Enemy" x="128" y="208">
    <point/>
   </object>
+  <object id="34" name="Goal" x="611" y="26" width="28" height="134"/>
+  <object id="35" name="Goal" x="702" y="106" width="28" height="134"/>
  </objectgroup>
 </map>

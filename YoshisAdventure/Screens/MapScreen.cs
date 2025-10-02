@@ -58,7 +58,7 @@ namespace YoshisAdventure.Screens
                         break;
                 }
             }
-
+            SongSystem.Stop();
             base.LoadContent();
         }
 
@@ -67,7 +67,7 @@ namespace YoshisAdventure.Screens
             GraphicsDevice.Clear(Color.Black);
             _sceneRenderer.Draw(GameObjectsSystem.GetAllActiveObjects());
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _sceneRenderer.ViewportAdapter.GetScaleMatrix());
-            _spriteBatch.FillRectangle(new RectangleF(0, 0, _sceneRenderer.ViewportAdapter.VirtualWidth, 40), Color.Gray * 0.7f);
+            _spriteBatch.FillRectangle(new RectangleF(0, 0, _sceneRenderer.ViewportAdapter.VirtualWidth, 40), Color.Gray * 0.8f);
             _animatedSprite.Draw(_spriteBatch, Vector2.One, 0, Vector2.One);
             _spriteBatch.DrawString(_bitmapFont, $"x{GameMain.PlayerStatus.LifeLeft}", new Vector2(25, 20), Color.White);
             string stageName = _stage != null ? _stage.DisplayName : "Overworld";
