@@ -14,7 +14,7 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
         private AnimatedSprite _sprite;
         private Vector2 _velocity;
         private readonly TiledMapObject[] _objects;
-        private string _stageName;
+        private string _stageName = string.Empty;
         private bool _wasOnStagePoint = false;
 
         public bool CanHandleInput { get; set; } = true;

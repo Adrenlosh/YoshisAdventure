@@ -33,14 +33,14 @@ namespace YoshisAdventure.UI
             LifeLeftText.Color = Color.DarkGreen;
             LifeLeftText.UseCustomFont = true;
             LifeLeftText.CustomFontFile = "Fonts/ZFull-GB.fnt";
-            LifeLeftText.BindingContext = GameMain.playerStatus;
+            LifeLeftText.BindingContext = GameMain.PlayerStatus;
 
             EggText.Text = Language.Strings.EggCountOnHud;
             EggText.Color = Color.White;
             EggText.UseCustomFont = true;
             EggText.CustomFontFile = "Fonts/ZFull-GB.fnt";
             EggText.Anchor(Gum.Wireframe.Anchor.Top);
-            EggText.BindingContext = GameMain.playerStatus;
+            EggText.BindingContext = GameMain.PlayerStatus;
 
             ScoreText.Text = Language.Strings.ScoreOnHud;
             ScoreText.Color = Color.White;
@@ -72,8 +72,8 @@ namespace YoshisAdventure.UI
 
         public void Update(GameTime gameTime)
         {
-            LifeLeftText.Text = string.Format(Language.Strings.LifeLeftOnHud, GameMain.playerStatus.LifeLeft.ToString());
-            EggText.Text = string.Format(Language.Strings.EggCountOnHud, GameMain.playerStatus.Egg.ToString());
+            LifeLeftText.Text = string.Format(Language.Strings.LifeLeftOnHud, GameMain.PlayerStatus.LifeLeft.ToString());
+            EggText.Text = string.Format(Language.Strings.EggCountOnHud, GameMain.PlayerStatus.Egg.ToString());
             _messageBox.Update(gameTime);
             GumService.Default.Update(gameTime);
         }

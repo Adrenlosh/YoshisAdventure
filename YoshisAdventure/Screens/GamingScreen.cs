@@ -33,7 +33,6 @@ namespace YoshisAdventure.Screens
 
         private void _interactionSystem_OnDialogue(string messageID)
         {
-            GameObjectsSystem.Player.IsLookingUp = false;
             _ui.ShowMessageBox(messageID);
         }
 
@@ -104,7 +103,7 @@ namespace YoshisAdventure.Screens
                 egg.ScreenBounds = _sceneRenderer.GetScreenBounds();
                 egg.Throw(direction);
                 GameObjectsSystem.Player.CanThrowEgg = false;
-                GameMain.playerStatus.Egg--;
+                GameMain.PlayerStatus.Egg--;
             }
         }
 

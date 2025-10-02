@@ -4,7 +4,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Screens;
-using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Tiled;
 using MonoGameGum;
 using System.Linq;
@@ -70,7 +69,7 @@ namespace YoshisAdventure.Screens
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _sceneRenderer.ViewportAdapter.GetScaleMatrix());
             _spriteBatch.FillRectangle(new RectangleF(0, 0, _sceneRenderer.ViewportAdapter.VirtualWidth, 40), Color.Gray * 0.7f);
             _animatedSprite.Draw(_spriteBatch, Vector2.One, 0, Vector2.One);
-            _spriteBatch.DrawString(_bitmapFont, $"x{GameMain.playerStatus.LifeLeft}", new Vector2(25, 20), Color.White);
+            _spriteBatch.DrawString(_bitmapFont, $"x{GameMain.PlayerStatus.LifeLeft}", new Vector2(25, 20), Color.White);
             string stageName = _stage != null ? _stage.DisplayName : "Overworld";
             _spriteBatch.DrawString(_bitmapFont, $"{stageName}", new Vector2(25, 10), Color.White);
             _spriteBatch.End();
@@ -80,7 +79,6 @@ namespace YoshisAdventure.Screens
         {
             if (GameController.AttackPressed() && _stage != null)
             {
-                Game.LoadScreen(new GamingScreen(Game, _stage), new FadeOnceTransition(GraphicsDevice, Color.Black, 1.5f));
                 Game.LoadScreen(new StageEnterScreen(Game, _stage), new FadeOutTransition(GraphicsDevice, Color.Black, 1.5f));
             }
             GameObjectsSystem.Update(gameTime);

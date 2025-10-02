@@ -33,15 +33,6 @@ namespace YoshisAdventure.GameObjects
 
         public SpringStatus Status { get; private set; } = SpringStatus.Normal;
 
-        public override void OnCollision(GameObject other, CollisionResult collision)
-        {
-            base.OnCollision(other, collision);
-            if (collision.Direction == CollisionDirection.Top && Status == SpringStatus.Normal)
-            {
-                Compress();
-            }
-        }
-
         public override Vector2 Velocity
         {
             get =>_velocity;
@@ -55,6 +46,16 @@ namespace YoshisAdventure.GameObjects
             _sprite = new AnimatedSprite(spriteSheet);
             _sprite.SetAnimation("Normal");
             Size = _normalCollisionBox;
+            IsEatable = true;
+        }
+
+        public override void OnCollision(GameObject other, CollisionResult collision)
+        {
+            base.OnCollision(other, collision);
+            if (collision.Direction == CollisionDirection.Top && Status == SpringStatus.Normal)
+            {
+                Compress();
+            }
         }
 
         public void Compress()

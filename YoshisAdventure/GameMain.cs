@@ -23,7 +23,7 @@ namespace YoshisAdventure
 
         public ViewportAdapter ViewportAdapter { get; private set; }
 
-        public static PlayerStatus playerStatus { get; set; } = new PlayerStatus();
+        public static PlayerStatus PlayerStatus { get; set; } = new PlayerStatus();
 
         public static InputManager Input { get; private set; } = new InputManager();
 
@@ -39,7 +39,7 @@ namespace YoshisAdventure
             Window.AllowUserResizing = true;
             Window.Title = Language.Strings.GameName;
             IsMouseVisible = true;
-
+            
             _screenManager = new ScreenManager();
             Components.Add(_screenManager);
         }

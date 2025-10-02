@@ -99,13 +99,22 @@ namespace YoshisAdventure.Systems
                         }
                     }
                 }
-                else if(collidable is Enemy enemy && player.CapturedObject != enemy)
+                else if (collidable is Enemy enemy && player.CapturedObject != enemy)
                 {
                     Rectangle enemyRect = enemy.CollisionBox;
                     var collisionResult = GameObjectsSystem.CheckObjectCollision(enemyRect);
-                    if(collisionResult.CollidedObject != null && collisionResult.CollidedObject == player)
+                    if (collisionResult.CollidedObject != null && collisionResult.CollidedObject == player)
                     {
                         player.TakeDamage(1, enemy);
+                    }
+                } 
+                else if (collidable is Goal goal)
+                {
+                    var collisionResult = GameObjectsSystem.CheckObjectCollision(player);
+                    if (collisionResult.CollidedObject != null && collisionResult.CollidedObject == goal)
+                    {
+                        player.OnCollision(goal, collisionResult);
+                        goal.OnCollision(player, collisionResult);
                     }
                 }
             }

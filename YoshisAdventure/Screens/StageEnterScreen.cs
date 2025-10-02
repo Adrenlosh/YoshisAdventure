@@ -12,7 +12,7 @@ namespace YoshisAdventure.Screens
 {
     internal class StageEnterScreen : GameScreen
     {
-        private const float DisplayKeepTime = 1.4f;
+        private const float DisplayDuration = 1.4f;
         private float _timer = 0f;
         private BitmapFont _bitmapFont;
         private BoxingViewportAdapter _viewportAdapter;
@@ -60,7 +60,7 @@ namespace YoshisAdventure.Screens
                 _timer += elapsedTime;
             }
 
-            if(_timer >= DisplayKeepTime)
+            if(_timer >= DisplayDuration)
             {
                 Game.LoadScreen(new GamingScreen(Game, _stage), new FadeInTransition(GraphicsDevice, Color.Black, 1.5f));
             }

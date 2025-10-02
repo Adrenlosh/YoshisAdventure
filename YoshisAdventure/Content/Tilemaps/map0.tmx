@@ -6,7 +6,7 @@
  </imagelayer>
  <layer id="1" name="Ground" width="70" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt08sKgDAMRNGixQc+/v9zjYtAEKG4kGn1HhjSZWinKQHA9wwhwB068swf74qO4E30CyV0BC3rLZ0li87XqPfx8/mfR+HcwxutFezjc7LMwrmFe1kq2Men+l3oS1t9OQBk2glU
+   eJztk0sKgDAMREssfvBz/+MaF4EsBOlCkup7MEyWw3RaCgDA9xidAO5gI238sSs2Am/CvuAJNgI9M6hEVYNucVkkQR67r/88BfrhetkS5DGfVUug766XNUEe8+h3YS997eUEURIJUA==
   </data>
  </layer>
  <layer id="3" name="Decorations" width="70" height="20">

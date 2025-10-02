@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
-using System;
 using YoshisAdventure.Interfaces;
 using YoshisAdventure.Models;
 
@@ -17,7 +16,7 @@ namespace YoshisAdventure.GameObjects
 
         public Rectangle ScreenBounds { get; set; }
 
-        public abstract Vector2 Velocity { get; set; }
+        public virtual Vector2 Velocity { get; set; }
 
         public bool IsActive { get; set; } = true;
 
@@ -79,6 +78,24 @@ namespace YoshisAdventure.GameObjects
             Point centerPosition = new Point((int)Position.X, (int)Position.Y);
             var collisionBox = GetCollisionBox(position);
             return new Rectangle(centerPosition.X, centerPosition.Y, collisionBox.Width, collisionBox.Height);
+        }
+
+        protected virtual bool IsOutOfTilemap(Vector2 position)
+        {
+            Rectangle worldRect = new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels);
+            if (!worldRect.Contains(position))
+                return true;
+            else
+                return false;
+        }
+
+        protected virtual bool IsOutOfTilemapBottom(Vector2 position)
+        {
+            Rectangle worldRect = new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels);
+            if (position.Y > worldRect.Bottom)
+                return true;
+            else
+                return false;
         }
 
         public bool IsOutOfScreenBounds()

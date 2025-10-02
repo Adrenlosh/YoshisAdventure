@@ -6,6 +6,7 @@ using SoundFlow.Components;
 using SoundFlow.Enums;
 using SoundFlow.Providers;
 using SoundFlow.Structs;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -107,6 +108,10 @@ namespace YoshisAdventure.Systems
                 sfxPlayer.Volume = sfx.Volume;
                 sfxPlayer.Play();
                 _activeSfxPlayers[sfxName] = sfxPlayer;
+            }
+            else
+            {
+                throw new ArgumentException(nameof(sfxName));
             }
         }
 

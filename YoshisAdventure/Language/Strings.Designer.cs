@@ -127,7 +127,7 @@ namespace YoshisAdventure.Language {
         }
         
         /// <summary>
-        ///   查找类似 Yoshi Start 的本地化字符串。
+        ///   查找类似 YOSHI START 的本地化字符串。
         /// </summary>
         internal static string StageStart {
             get {

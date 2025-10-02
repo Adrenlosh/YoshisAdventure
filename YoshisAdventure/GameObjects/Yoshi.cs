@@ -52,7 +52,7 @@ namespace YoshisAdventure.GameObjects
         private const float PlummetStage1Duration = 0.5f;
         private const float MaxPlummetVelocity = 8f;
 
-        private const float DieKeepTime = 2f;
+        private const float DieDuration = 3.5f;
 
         private readonly float MaxAngleRadians = MathHelper.ToRadians(130);
 
@@ -83,6 +83,7 @@ namespace YoshisAdventure.GameObjects
         private bool _isSpitting = false;
         private bool _isDie = false;
         private float _dieTimer = 0f;
+        private bool _isHurt = false;
 
         private float _tongueLength = 0f;
         private GameObject _capturedObject = null;
@@ -130,73 +131,13 @@ namespace YoshisAdventure.GameObjects
 
         public bool CanHandleInput { get; set; } = true;
 
-        public bool IsOnGround
-        {
-            get => _isOnGround;
-            set => _isOnGround = value;
-        }
-
-        public bool IsJumping
-        {
-            get => _isJumping;
-            set => _isJumping = value;
-        }
-
-        public bool IsFloating
-        {
-            get => _isFloating;
-            set => _isFloating = value;
-        }
-
-        public bool IsSquatting
-        {
-            get => _isSquatting;
-            set => _isSquatting = value;
-        }
-
-        public bool IsLookingUp
-        {
-            get => _isLookingUp;
-            set => _isLookingUp = value;
-        }
-
-        public bool IsHoldingEgg
-        {
-            get => _isHoldingEgg;
-            set => _isHoldingEgg = value;
-        }
-
-        public bool IsMouthing
-        {
-            get => _isMouthing;
-            set => _isMouthing = value;
-        }
-
-        public bool IsPlummeting
-        {
-            get => _isPlummeting;
-            set => _isPlummeting = value;
-        }
-
-        public bool IsSpitting
-        {
-            get => _isSpitting;
-            set => _isSpitting = value;
-        }
-
         public int FaceDirection => _lastInputDirection;
-
-        public PlummetState PlummetStage => _plummetStage;
 
         public GameObject CapturedObject => _capturedObject;
 
         public override Vector2 Velocity { set => _velocity = value; get => _velocity; }
 
-        public Vector2 ThrowDirection => _throwDirection;
-
-        public int Health { get; private set; } = 1;
-
-        public AnimatedSprite Sprite => _yoshiSprite;
+        public int Health { get; private set; } = 4;
 
         public override Rectangle CollisionBox => GetCollisionBoxBottomCenter(Position, _yoshiSprite.Size);
 
@@ -229,18 +170,31 @@ namespace YoshisAdventure.GameObjects
             if (!_isDie)
             {
                 Velocity = new Vector2(2 * -_lastInputDirection, -10);
-                //Bounce();
                 Health -= damage;
                 if (Health <= 0)
+                {
                     Die();
+                }
+                else
+                {
+                    Hurt();
+                }
             }
+        }
+
+        private void Hurt()
+        {
+            CanHandleInput = false;
+            _isHurt = true;
         }
 
         public void Die()
         {
             OnDie?.Invoke();
+            SFXSystem.Play("player-died");
             CanHandleInput = false;
             _isDie = true;
+            GameMain.PlayerStatus.LifeLeft--;
         }
 
         public void HandleInput(GameTime gameTime)
@@ -478,9 +432,9 @@ namespace YoshisAdventure.GameObjects
 
         private void UpdateAnimation()
         {
-            if (_isDie)
+            if (_isDie || _isHurt)
             {
-                SetYoshiAnimation("Die");
+                SetYoshiAnimation("Die", true, true);
                 return;
             }
 
@@ -647,6 +601,11 @@ namespace YoshisAdventure.GameObjects
 
             Vector2 newPosition = Position;
 
+            if(IsOutOfTilemapBottom(Position) && !_isDie)
+            {
+                Die();
+            }
+
             if(_isDie)
             {
                 UpdateDie(elapsed);
@@ -714,7 +673,7 @@ namespace YoshisAdventure.GameObjects
             {
                 _dieTimer += elapsed;
             }
-            if(_dieTimer >= DieKeepTime)
+            if(_dieTimer >= DieDuration)
             {
                 _dieTimer = -1f;
                 OnDieComplete?.Invoke();
@@ -861,17 +820,17 @@ namespace YoshisAdventure.GameObjects
 
             if (_acceleration.X == 0 || _isTurning)
             {
-                float frictionToApply = _isTurning ? TurnFriction : Friction;
+                float applyFriction = _isTurning ? TurnFriction : Friction;
 
                 if (_velocity.X > 0)
                 {
-                    _velocity.X -= frictionToApply;
+                    _velocity.X -= applyFriction;
                     if (_velocity.X < 0)
                         _velocity.X = 0;
                 }
                 else if (_velocity.X < 0)
                 {
-                    _velocity.X += frictionToApply;
+                    _velocity.X += applyFriction;
                     if (_velocity.X > 0)
                         _velocity.X = 0;
                 }
@@ -897,6 +856,11 @@ namespace YoshisAdventure.GameObjects
                 else
                 {
                     _velocity.X = 0;
+                    if (_isHurt)
+                    {
+                        _isHurt = false;
+                        CanHandleInput = true;
+                    }
                 }
             }
 
@@ -934,6 +898,11 @@ namespace YoshisAdventure.GameObjects
                             _isJumping = false;
                             _isFloating = false;
                             _jumpInitiated = false;
+                        }
+                        if (_isHurt)
+                        {
+                            _isHurt = false;
+                            CanHandleInput = true;
                         }
                     }
                     else

@@ -126,6 +126,9 @@
 #begin Audio/Audio.xml
 /copy:Audio/Audio.xml
 
+#begin Audio/SFX/player-died.wav
+/copy:Audio/SFX/player-died.wav;Audio/SFX/player-died.wav
+
 #begin Audio/SFX/tada.wav
 /copy:Audio/SFX/tada.wav
 

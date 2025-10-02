@@ -362,7 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-pipeline-references/
-
 *.tiled-session
 *.tiled-project
