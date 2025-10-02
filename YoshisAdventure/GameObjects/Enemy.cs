@@ -31,7 +31,6 @@ namespace YoshisAdventure.GameObjects
 
         public void TakeDamage(int damage, GameObject source)
         {
-
         }
 
         public override void Draw(SpriteBatch spriteBatch)

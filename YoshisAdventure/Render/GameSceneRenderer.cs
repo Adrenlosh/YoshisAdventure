@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using MonoGame.Extended.ViewportAdapters;
@@ -14,6 +15,7 @@ namespace YoshisAdventure.Rendering
 {
     public class GameSceneRenderer
     {
+        private const float FadeAnimationKeepTime = 4f;
         private readonly GraphicsDevice _graphicsDevice;
         private TiledMap _tilemap;
         private TiledMapRenderer _tilemapRenderer;
@@ -45,6 +47,7 @@ namespace YoshisAdventure.Rendering
         {
             _tilemap = map;
             _tilemapRenderer = new TiledMapRenderer(_graphicsDevice, _tilemap);
+            _bitmapFont = _content.Load<BitmapFont>("Fonts/ZFull-GB");
         }
 
         public void Update(GameTime gameTime, Vector2 cameraFocus, bool useFluentCamera = false, int cameraDirection = 1, Vector2 velocity = new Vector2())
@@ -116,6 +119,29 @@ namespace YoshisAdventure.Rendering
                     if (gameObject != GameObjectsSystem.Player)
                         gameObject.Draw(_spriteBatch);
                 }
+
+                Rectangle screenBounds = GetScreenBounds();
+                 screenBounds.Inflate(10, 10);
+
+                if (_animationTimer <= 1.5f && _animationTimer >= 0f)
+                {
+                    _spriteBatch.FillRectangle(screenBounds, new Color(Color.Black, 255));
+                    if(DrawString != string.Empty)
+                    {
+                        _spriteBatch.DrawString(_bitmapFont, DrawString, _camera.ScreenToWorld(new Vector2(10,400)), Color.White);
+                    }
+                }
+                else if (_animationTimer > 1.5f && _animationTimer <= FadeAnimationKeepTime)
+                {
+                    float progress = _animationTimer / FadeAnimationKeepTime / 3f;
+                    int alpha = (int)MathHelper.Lerp(255, 0, progress);
+                    _spriteBatch.FillRectangle(screenBounds, new Color(Color.Black, alpha));
+                    if (DrawString != string.Empty)
+                    {
+                        _spriteBatch.DrawString(_bitmapFont, DrawString, _camera.ScreenToWorld(new Vector2(10, 400)), new Color(Color.White, alpha));
+                    }
+                }
+                
                 GameObjectsSystem.Player?.Draw(_spriteBatch);
 
             }
