@@ -7,13 +7,12 @@ using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Tiled;
 using MonoGameGum;
-using System.Diagnostics;
 using System.Linq;
-using YoshisAdventure.GameObjects;
 using YoshisAdventure.GameObjects.OnMapObjects;
 using YoshisAdventure.Models;
 using YoshisAdventure.Rendering;
 using YoshisAdventure.Systems;
+using YoshisAdventure.Transitions;
 
 namespace YoshisAdventure.Screens
 {
@@ -35,7 +34,7 @@ namespace YoshisAdventure.Screens
         public override void LoadContent()
         {
             GumService.Default.Root.Children.Clear();
-            _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window);
+            _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content);
             _tilemap = Content.Load<TiledMap>("Tilemaps/map");
             _sceneRenderer.LoadContent(_tilemap);
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -87,7 +86,7 @@ namespace YoshisAdventure.Screens
         {
             if (GameController.AttackPressed() && _stage != null)
             {
-                Game.LoadScreen(new GamingScreen(Game, _stage), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+                Game.LoadScreen(new GamingScreen(Game, _stage), new FadeOnceTransition(GraphicsDevice, Color.Black, 1.5f));
             }
             GameObjectsSystem.Update(gameTime);
             _sceneRenderer.Update(gameTime, GameObjectsSystem.MapPlayer.Position);
