@@ -4,6 +4,7 @@ using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
 using YoshisAdventure.Interfaces;
 using System;
+using YoshisAdventure.Models;
 
 namespace YoshisAdventure.GameObjects
 {
@@ -47,13 +48,13 @@ namespace YoshisAdventure.GameObjects
             return new Rectangle(centerX, centerY, Size.X, Size.Y);
         }
 
-        private bool IsCollidingWithTileDetailed(Rectangle rect, out Rectangle tileRect, out Vector2 normal, out float penetrationDepth)
+        private bool IsCollidingWithTileDetailed(Rectangle rect, out TileCollisionResult result, out Vector2 normal, out float penetrationDepth)
         {
             normal = Vector2.Zero;
             penetrationDepth = 0;
-            if (IsCollidingWithTile(rect, out tileRect))
+            if (IsCollidingWithTile(rect, out result))
             {
-                CalculateCollisionDetails(rect, tileRect, out normal, out penetrationDepth);
+                CalculateCollisionDetails(rect, result.TileRectangle, out normal, out penetrationDepth);
                 return true;
             }
             return false;
@@ -112,7 +113,7 @@ namespace YoshisAdventure.GameObjects
                 try
                 {
                     Rectangle collisionBox = GetCollisionBox(newPosition);
-                    if (IsCollidingWithTileDetailed(collisionBox, out Rectangle tileRect, out Vector2 normal, out float penetrationDepth))
+                    if (IsCollidingWithTileDetailed(collisionBox, out _, out Vector2 normal, out float penetrationDepth))
                     {
                         Bounce(normal, penetrationDepth);
                     }

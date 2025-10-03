@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
+using System.Diagnostics;
 using YoshisAdventure.Interfaces;
 using YoshisAdventure.Models;
 
@@ -31,9 +32,9 @@ namespace YoshisAdventure.GameObjects
             _tilemap = tilemap;
         }
 
-        public virtual void OnCollision(GameObject other, CollisionResult collision) { }
+        public virtual void OnCollision(GameObject other, ObjectCollisionResult collision) { }
 
-        protected bool IsCollidingWithTile(Rectangle objectRect, out Rectangle tileRect)
+        protected bool IsCollidingWithTile(Rectangle objectRect, out TileCollisionResult result)
         {
             TiledMapTileLayer tileLayer = _tilemap.GetLayer<TiledMapTileLayer>("Ground");
             int tileSize = _tilemap.TileWidth;
@@ -41,8 +42,7 @@ namespace YoshisAdventure.GameObjects
             int right = objectRect.Right / tileSize;
             int top = objectRect.Top / tileSize;
             int bottom = objectRect.Bottom / tileSize;
-            tileRect = Rectangle.Empty;
-
+            result = new TileCollisionResult();
             for (int x = left; x <= right; x++)
             {
                 for (int y = top; y <= bottom; y++)
@@ -51,8 +51,10 @@ namespace YoshisAdventure.GameObjects
                     {
                         if (tile.HasValue && !tile.Value.IsBlank)
                         {
-                            tileRect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
-                            if (objectRect.Intersects(tileRect))
+                            Rectangle rect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
+                            result = new TileCollisionResult(tile, Rectangle.Intersect(objectRect, rect), objectRect, rect);
+                            Debug.WriteLine(result.CollidedTile);
+                            if (objectRect.Intersects(rect))
                                 return true;
                         }
                     }

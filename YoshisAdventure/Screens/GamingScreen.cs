@@ -72,9 +72,8 @@ namespace YoshisAdventure.Screens
         private void _sceneRenderer_OnFadeComplete()
         {
             GameObjectsSystem.Player.CanHandleInput = true;
-            //Thread.Sleep(TimeSpan.FromSeconds(1));
             Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
-            //_shouldMovePlayer = false;
+            SFXSystem.Play("exit");
         }
 
         private void _interactionSystem_OnGoal()
@@ -83,11 +82,20 @@ namespace YoshisAdventure.Screens
             GameObjectsSystem.Player.CanHandleInput = false;
             _shouldMovePlayer = true;
             _sceneRenderer.StartFade();
+            SongSystem.Play("goal");
         }
 
         private void Player_OnDieComplete()
         {
-            Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+            if (GameMain.PlayerStatus.LifeLeft > 0)
+            {
+                Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+            }
+            else
+            {
+                GameMain.PlayerStatus.Reset();
+                Game.LoadScreen(new TitleScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+            }
         }
 
         private void Player_OnDie()
@@ -103,6 +111,7 @@ namespace YoshisAdventure.Screens
 
         private void OnReadyThrowEgg(Vector2 position)
         {
+            GameObjectsSystem.Player.CanThrowEgg = true;
             Egg egg = _gameObjectFactory.CreateEgg(position, _tilemap);
             egg.OnOutOfBounds += () =>
             {

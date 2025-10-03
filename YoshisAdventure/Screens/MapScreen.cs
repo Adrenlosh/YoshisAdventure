@@ -4,6 +4,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Tiled;
 using MonoGameGum;
 using System.Linq;
@@ -81,6 +82,11 @@ namespace YoshisAdventure.Screens
             {
                 Game.LoadScreen(new StageEnterScreen(Game, _stage), new FadeOutTransition(GraphicsDevice, Color.Black, 1.5f));
             }
+            else if(GameController.Pause())
+            {
+                Game.LoadScreen(new TitleScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+            }
+                
             GameObjectsSystem.Update(gameTime);
             _sceneRenderer.Update(gameTime, GameObjectsSystem.MapPlayer.Position);
             string currentStageName = GameObjectsSystem.MapPlayer.StageName;

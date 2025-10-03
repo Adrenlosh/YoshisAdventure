@@ -8,6 +8,6 @@ namespace YoshisAdventure.Interfaces
     {
         Rectangle CollisionBox { get; }
 
-        void OnCollision(GameObject other, CollisionResult collision);
+        void OnCollision(GameObject other, ObjectCollisionResult collision);
     }
 }

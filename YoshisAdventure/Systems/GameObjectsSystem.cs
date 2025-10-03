@@ -143,28 +143,28 @@ namespace YoshisAdventure.Systems
             _objectsToAdd.AddRange(gameObjects);
         }
 
-        public static CollisionResult CheckObjectCollision(Rectangle area)
+        public static ObjectCollisionResult CheckObjectCollision(Rectangle area)
         {
             foreach (var obj in _gameObjects)
             {
                 if (obj.IsActive && area.Intersects(obj.CollisionBox))
                 {
                     var intersection = Rectangle.Intersect(area, obj.CollisionBox);
-                    return new CollisionResult(obj, intersection, obj.CollisionBox, area);
+                    return new ObjectCollisionResult(obj, intersection, obj.CollisionBox, area);
                 }
             }
-            return new CollisionResult();
+            return new ObjectCollisionResult();
         }
 
-        public static CollisionResult CheckObjectCollision(GameObject obj)
+        public static ObjectCollisionResult CheckObjectCollision(GameObject obj)
         {
             var result = CheckObjectCollision(obj.CollisionBox);
             if(result.CollidedObject != obj)
                 return result;
-            return new CollisionResult();
+            return new ObjectCollisionResult();
         }
 
-        public static CollisionResult? CheckCollisionBetween(GameObject objA, GameObject objB)
+        public static ObjectCollisionResult? CheckObjectCollisionBetween(GameObject objA, GameObject objB)
         {
             if (objA == null || objB == null || !objA.IsActive || !objB.IsActive)
                 return null;
@@ -173,7 +173,7 @@ namespace YoshisAdventure.Systems
             if (!rectA.Intersects(rectB))
                 return null;
             Rectangle intersection = Rectangle.Intersect(rectA, rectB);
-            return new CollisionResult(objB, intersection, rectA, rectB);
+            return new ObjectCollisionResult(objB, intersection, rectA, rectB);
         }
     }
 }

@@ -98,6 +98,8 @@ namespace YoshisAdventure.Systems
 
         public static void Play(string sfxName)
         {
+            if (_activeSfxPlayers.ContainsKey(sfxName))
+                return;
             if (_SFXs.TryGetValue(sfxName, out SFX sfx))
             {
                 Stop(sfxName);

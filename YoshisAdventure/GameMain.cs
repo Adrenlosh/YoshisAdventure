@@ -64,6 +64,7 @@ namespace YoshisAdventure
         protected override void Update(GameTime gameTime)
         {
             Input.Update(gameTime);
+            SFXSystem.Update(gameTime);
             GumService.Default.Update(gameTime);
             base.Update(gameTime);
         }

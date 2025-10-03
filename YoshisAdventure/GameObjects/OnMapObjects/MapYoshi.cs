@@ -5,6 +5,7 @@ using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
 using YoshisAdventure;
 using YoshisAdventure.GameObjects;
+using YoshisAdventure.Systems;
 
 namespace YoshisAdventure.GameObjects.OnMapObjects
 {
@@ -63,7 +64,7 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
                 _sprite.Effect = SpriteEffects.FlipHorizontally;
             }
             else if (GameController.MoveRight())
-            {
+            { 
                 _velocity.X = MoveSpeed;
                 if (_sprite.CurrentAnimation != "WalkSide")
                     _sprite.SetAnimation("WalkSide");
@@ -75,6 +76,7 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
                     _sprite.SetAnimation("Start");
                 CanHandleInput = false;
                 _velocity = Vector2.Zero;
+                SFXSystem.Play("yoshi");
             }
             if (_velocity == Vector2.Zero && _sprite.CurrentAnimation != "Walk" && _sprite.CurrentAnimation != "Start")
             {

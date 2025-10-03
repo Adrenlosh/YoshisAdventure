@@ -8,7 +8,6 @@ using MonoGame.Extended.Tiled.Renderers;
 using MonoGame.Extended.ViewportAdapters;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using YoshisAdventure.GameObjects;
 using YoshisAdventure.Systems;
 
@@ -32,7 +31,6 @@ namespace YoshisAdventure.Rendering
         private BoxingViewportAdapter _viewportAdapter;
         private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFont;
-        private Effect _effect;
         private ContentManager _content;
 
         private float _fadeTimer = -1;

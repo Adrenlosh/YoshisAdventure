@@ -20,7 +20,7 @@ namespace YoshisAdventure.GameObjects
             IsEatable = false;
         }
 
-        public override void OnCollision(GameObject other, CollisionResult collision)
+        public override void OnCollision(GameObject other, ObjectCollisionResult collision)
         {
             base.OnCollision(other, collision);
         }

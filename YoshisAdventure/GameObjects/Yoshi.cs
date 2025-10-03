@@ -160,7 +160,7 @@ namespace YoshisAdventure.GameObjects
             Size = _normalCollisionBox;
         }
 
-        public override void OnCollision(GameObject other, CollisionResult collision)
+        public override void OnCollision(GameObject other, ObjectCollisionResult collision)
         {
             if (other == _capturedObject)
                 return;
@@ -189,12 +189,13 @@ namespace YoshisAdventure.GameObjects
         {
             CanHandleInput = false;
             _isHurt = true;
+            SFXSystem.Play("yoshi-hurt");
         }
 
         public void Die()
         {
             OnDie?.Invoke();
-            SFXSystem.Play("player-died");
+            SFXSystem.Play("yoshi-died");
             CanHandleInput = false;
             _isDie = true;
             GameMain.PlayerStatus.LifeLeft--;
@@ -207,17 +208,21 @@ namespace YoshisAdventure.GameObjects
 
             if (GameController.ActionPressed() && !_isFloating && _isOnGround && CanThrowEgg)
             {
-                if (_isHoldingEgg)
+                if (GameMain.PlayerStatus.Egg > 0)
                 {
-                    _throwDirection = GetCurrentThrowDirection();
-                    _hasThrownEgg = true;
-                    OnThrowEgg?.Invoke(_throwDirection);
+                    if (_isHoldingEgg)
+                    {
+                        _throwDirection = GetCurrentThrowDirection();
+                        _hasThrownEgg = true;
+                        OnThrowEgg?.Invoke(_throwDirection);
+                        SFXSystem.Play("throw");
+                    }
+                    else
+                    {
+                        OnReadyThrowEgg?.Invoke(Position);
+                    }
+                    _isHoldingEgg = !_isHoldingEgg;
                 }
-                else
-                {
-                    OnReadyThrowEgg?.Invoke(Position);
-                }
-                _isHoldingEgg = !_isHoldingEgg;
             }
 
             if (GameController.AttackPressed() && _tongueState == 0 && !_isHoldingEgg && !_isSquatting && !_isFloating && !_hasThrownEgg && !_isTurning)
@@ -227,6 +232,7 @@ namespace YoshisAdventure.GameObjects
                     _tongueLength = 0f;
                     _capturedObject = null;
                     _tongueState = TongueState.Extending;
+                    SFXSystem.Play("yoshi-tongue");
                     if (_isLookingUp)
                     {
                         _tongueDirection = new Vector2(0, -1);
@@ -254,6 +260,7 @@ namespace YoshisAdventure.GameObjects
                         _capturedObject = null;
                         _isMouthing = false;
                         _isSpitting = true;
+                        SFXSystem.Play("yoshi-spit");
                     }
                 }
             }
@@ -262,6 +269,14 @@ namespace YoshisAdventure.GameObjects
             {
                 _isSquatting = true;
                 Size = _squatCollisionBox;
+
+                if(_isMouthing == true && _capturedObject != null && _isOnGround == true)
+                {
+                    GameObjectsSystem.RemoveGameObject(_capturedObject);
+                    GameMain.PlayerStatus.Egg++;
+                    _capturedObject = null;
+                    _isMouthing = false;
+                }
             }
             else
             {
@@ -325,6 +340,7 @@ namespace YoshisAdventure.GameObjects
                 _velocity.Y = BaseJumpForce;
                 _isOnGround = false;
                 _canJump = false;
+                SFXSystem.Play("yoshi-jump");
             }
 
             // 按住A键增加跳跃高度 - 只有在跳跃状态下且速度Y为负(上升)时有效
@@ -369,11 +385,13 @@ namespace YoshisAdventure.GameObjects
                     {
                         // 第二阶段：向上浮动
                         _velocity.Y = FloatForce;
+                        SFXSystem.Play("yoshi-float");
                     }
                     else
                     {
                         // 第三阶段：缓慢下落
                         _velocity.Y = Math.Min(_velocity.Y + Gravity * 0.3f, 1.2f);
+                        SFXSystem.Stop("yoshi-float");
                     }
                 }
                 else
@@ -762,18 +780,18 @@ namespace YoshisAdventure.GameObjects
                         _plummetTimer = 0;
                         _plummetStage = PlummetState.None;
                         OnPlummeted?.Invoke(newPosition);
-                        SFXSystem.Play("tada");
+                        SFXSystem.Play("plummet");
                     }
                     else
                     {
                         Rectangle testRect = GetCollisionBox(testPosition);
 
-                        if (IsCollidingWithTile(testRect, out Rectangle tileRect))
+                        if (IsCollidingWithTile(testRect, out TileCollisionResult result))
                         {
                             if (_velocity.Y > 0)
                             {
                                 float spriteBottom = newPosition.Y + _yoshiSprite.Size.X;
-                                float tileTop = tileRect.Top;
+                                float tileTop = result.TileRectangle.Top;
                                 newPosition.Y = tileTop - _yoshiSprite.Size.Y;
                                 _velocity.Y = 0;
                                 _isOnGround = true;
@@ -781,7 +799,7 @@ namespace YoshisAdventure.GameObjects
                                 _plummetTimer = 0;
                                 _plummetStage = PlummetState.None;
                                 OnPlummeted?.Invoke(newPosition);
-                                SFXSystem.Play("tada");
+                                SFXSystem.Play("plummet");
                             }
                         }
                         else
@@ -882,11 +900,11 @@ namespace YoshisAdventure.GameObjects
                 else
                 {
                     Rectangle testRect = GetCollisionBox(testPosition);
-                    if (IsCollidingWithTile(testRect, out Rectangle tileRect) && !_isDie)
+                    if (IsCollidingWithTile(testRect, out TileCollisionResult result) && !_isDie)
                     {
                         if (_velocity.Y > 0.5)
                         {
-                            float tileTop = tileRect.Top;
+                            float tileTop = result.TileRectangle.Top;
                             newPosition.Y = tileTop - _yoshiSprite.Size.Y;
                             _velocity.Y = 0;
                             _isOnGround = true;
@@ -896,7 +914,7 @@ namespace YoshisAdventure.GameObjects
                         }
                         else if (_velocity.Y < 0)
                         {
-                            newPosition.Y = tileRect.Bottom;
+                            newPosition.Y = result.TileRectangle.Bottom;
                             _velocity.Y = 0;
                             _isJumping = false;
                             _isFloating = false;

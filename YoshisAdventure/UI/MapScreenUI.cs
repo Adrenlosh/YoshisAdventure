@@ -1,14 +1,10 @@
-﻿using Gum.DataTypes;
-using Gum.Forms.Controls;
+﻿using Gum.Forms.Controls;
 using Gum.Graphics.Animation;
-using Gum.StateAnimation.Runtime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Graphics;
 using MonoGameGum;
 using MonoGameGum.GueDeriving;
-using System;
-using YoshisAdventure.UI.CustomControls;
 
 namespace YoshisAdventure.UI
 {
@@ -17,8 +13,6 @@ namespace YoshisAdventure.UI
         private ContentManager _content;
         private Panel _panel;
         private SpriteRuntime _spriteRunTime;
-        private AnimationRuntime _animationRuntime;
-        private TextRuntime _lifeLeftTextRunTime;
         private TextRuntime _stageNameTextRunTime;
         private ColoredRectangleRuntime _coloredRectangleRuntime;
 

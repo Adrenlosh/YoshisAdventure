@@ -126,11 +126,44 @@
 #begin Audio/Audio.xml
 /copy:Audio/Audio.xml
 
-#begin Audio/SFX/player-died.wav
-/copy:Audio/SFX/player-died.wav
+#begin Audio/SFX/pause.wav
+/copy:Audio/SFX/pause.wav;Audio/SFX/pause.wav
+
+#begin Audio/SFX/exit.wav
+/copy:Audio/SFX/exit.wav;Audio/SFX/exit.wav
+
+#begin Audio/SFX/plummet.wav
+/copy:Audio/SFX/plummet.wav;Audio/SFX/plummet.wav
 
 #begin Audio/SFX/tada.wav
 /copy:Audio/SFX/tada.wav
+
+#begin Audio/SFX/throw.wav
+/copy:Audio/SFX/throw.wav;Audio/SFX/throw.wav
+
+#begin Audio/SFX/yoshi-died.wav
+/copy:Audio/SFX/yoshi-died.wav;Audio/SFX/yoshi-died.wav
+
+#begin Audio/SFX/yoshi-float.wav
+/copy:Audio/SFX/yoshi-float.wav;Audio/SFX/yoshi-float.wav
+
+#begin Audio/SFX/yoshi-hurt.wav
+/copy:Audio/SFX/yoshi-hurt.wav;Audio/SFX/yoshi-hurt.wav
+
+#begin Audio/SFX/yoshi-jump.wav
+/copy:Audio/SFX/yoshi-jump.wav;Audio/SFX/yoshi-jump.wav
+
+#begin Audio/SFX/yoshi-spit.wav
+/copy:Audio/SFX/yoshi-spit.wav;Audio/SFX/yoshi-spit.wav
+
+#begin Audio/SFX/yoshi-tongue.wav
+/copy:Audio/SFX/yoshi-tongue.wav;Audio/SFX/yoshi-tongue.wav
+
+#begin Audio/SFX/yoshi.wav
+/copy:Audio/SFX/yoshi.wav;Audio/SFX/yoshi.wav
+
+#begin Audio/Song/goal.mp3
+/copy:Audio/Song/goal.mp3
 
 #begin Audio/Song/title.mp3
 /copy:Audio/Song/title.mp3

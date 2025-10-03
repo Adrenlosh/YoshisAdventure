@@ -49,7 +49,7 @@ namespace YoshisAdventure.GameObjects
             IsEatable = true;
         }
 
-        public override void OnCollision(GameObject other, CollisionResult collision)
+        public override void OnCollision(GameObject other, ObjectCollisionResult collision)
         {
             base.OnCollision(other, collision);
             if (collision.Direction == CollisionDirection.Top && Status == SpringStatus.Normal)
@@ -151,18 +151,18 @@ namespace YoshisAdventure.GameObjects
                 else
                 {
                     Rectangle testRect = GetCollisionBox(testPosition);
-                    if (IsCollidingWithTile(testRect, out Rectangle tileRect))
+                    if (IsCollidingWithTile(testRect, out TileCollisionResult result))
                     {
                         if (_velocity.Y > 0.5)
                         {
-                            float tileTop = tileRect.Top;
+                            float tileTop = result.TileRectangle.Top;
                             newPosition.Y = tileTop - _sprite.Size.Y;
                             _velocity.Y = 0;
                             _isOnGround = true;
                         }
                         else if (_velocity.Y < 0)
                         {
-                            newPosition.Y = tileRect.Bottom;
+                            newPosition.Y = result.TileRectangle.Bottom;
                             _velocity.Y = 0;
                         }
                     }

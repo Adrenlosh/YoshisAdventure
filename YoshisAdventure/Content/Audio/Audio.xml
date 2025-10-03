@@ -2,9 +2,20 @@
 <Audio>
 	<Songs>
 		<Song name="title" file="title.mp3" repeat="true" repeatStartSecond="60"/>
+		<Song name="goal" file="goal.mp3" repeat="false" />
 	</Songs>
 	<SoundEffects>
 		<SoundEffect name="tada" file="tada.wav"/>
-		<SoundEffect name="player-died" file="player-died.wav"/>
+		<SoundEffect name="yoshi" file="yoshi.wav"/>
+		<SoundEffect name="yoshi-float" file="yoshi-float.wav"/>
+		<SoundEffect name="yoshi-hurt" file="yoshi-hurt.wav"/>
+		<SoundEffect name="yoshi-jump" file="yoshi-jump.wav"/>
+		<SoundEffect name="yoshi-spit" file="yoshi-spit.wav"/>
+		<SoundEffect name="yoshi-tongue" file="yoshi-tongue.wav"/>
+		<SoundEffect name="yoshi-died" file="yoshi-died.wav"/>
+		<SoundEffect name="throw" file="throw.wav"/>
+		<SoundEffect name="plummet" file="plummet.wav"/>
+		<SoundEffect name="pause" file="pause.wav"/>
+		<SoundEffect name="exit" file="exit.wav"/>
 	</SoundEffects>
 </Audio>
