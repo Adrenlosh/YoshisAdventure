@@ -96,4 +96,54 @@
    <property name="TileType" propertytype="TileType" value="Blocking"/>
   </properties>
  </tile>
+ <tile id="19" type="GameTile">
+  <properties>
+   <property name="TileType" propertytype="TileType" value="Blocking"/>
+  </properties>
+ </tile>
+ <tile id="20" type="GameTile">
+  <properties>
+   <property name="TileType" propertytype="TileType" value="Blocking"/>
+  </properties>
+ </tile>
+ <tile id="21" type="GameTile">
+  <properties>
+   <property name="TileType" propertytype="TileType" value="Blocking"/>
+  </properties>
+ </tile>
+ <tile id="22" type="GameTile">
+  <properties>
+   <property name="TileType" propertytype="TileType" value="Blocking"/>
+  </properties>
+ </tile>
+ <tile id="23" type="GameTile">
+  <properties>
+   <property name="TileType" propertytype="TileType" value="Blocking"/>
+  </properties>
+ </tile>
+ <tile id="24" type="GameTile">
+  <properties>
+   <property name="TileType" propertytype="TileType" value="Blocking"/>
+  </properties>
+ </tile>
+ <tile id="25" type="GameTile">
+  <properties>
+   <property name="TileType" propertytype="TileType" value="Blocking"/>
+  </properties>
+ </tile>
+ <tile id="26" type="GameTile">
+  <properties>
+   <property name="TileType" propertytype="TileType" value="Blocking"/>
+  </properties>
+ </tile>
+ <tile id="27" type="GameTile">
+  <properties>
+   <property name="TileType" propertytype="TileType" value="Blocking"/>
+  </properties>
+ </tile>
+ <tile id="28" type="GameTile">
+  <properties>
+   <property name="TileType" propertytype="TileType" value="Blocking"/>
+  </properties>
+ </tile>
 </tileset>

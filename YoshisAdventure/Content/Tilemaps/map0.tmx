@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="150" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="37">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="37">
  <tileset firstgid="1" source="tileset.tsx"/>
  <imagelayer id="7" name="Background" offsetx="0" offsety="-152.5" parallaxx="0.8" parallaxy="0.8" repeatx="1" repeaty="1">
   <image source="background.png" width="609" height="450"/>
  </imagelayer>
- <layer id="1" name="Ground" width="150" height="20">
+ <layer id="1" name="Ground" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJztmNsOwiAMhpnzMN30xvd/V2mEhJCZUFdo2f4vaTqNF/9qT+Dc8Zi93YJdg3+pKgJ7YPF2DzYF/1RVBPYA+hXgMHi7FPwOeQU4UL6U5AfmIOBA+VKSH+/M0K/6gObR6O3kvnMp/1yL0n6VzsGHQ15Zo1W+SGtpOQctxagXYt3T7qtd7xwtLfd2SzHqhVj3VPPaey9HS8u8shSjXpCsxXSPltaS7+nLyndkQ2JSoF/xoNjTzjAmfsv+sCWvuFrifz0Fq9WvpGN0BKRmyVrfqK2l1RzE/Sufmmcqbn5xtbQ6D+L+lU/NWuTmFfqVPeLsPys9//Jaeuh56w4U9yoJTRbi8Y+OWEfwcue22ch7aPo49+Hl7pkWI++h6bXz2qJHv0K/Qr+y6T9HyBqU
+   eJztmN1OwzAMRgODwcbPzRi7Ge//msSqKlVRGyWdvzR2vyNFO+Vidlkdxw2BaHHZOgFCCBzWOSH+YZ0T4h/NOn+K6zmuQ1wvE0+vxV87joHAat7EB5p1/hHXMa5zXG8TT6/FvzqOgcBq3sQHmnX+GYbn9D0Mz+3o6bX4d8cxEFjNm/hAu5+fwvDMnieeXos/0s/RMRBYzZv4QKvOl+bPnNfOoS1iILCaN/GDVp0vzZ85r+1bLWIgsJo38YNWnS/NnzmvnUNbxEBgNe89cg/1Z69S/2t4Hyma/Xxu/sz5mn6OjoHAat575Brqz16lfmt4HykadS7z59o9rnQObREDgdW898pPqD97lfpvw/tAIP1q7R5X2rdaxEBgNe+9Iv289uxV6lv2cw1k/ly7x5XOoS1iILCa916Rfi51Of4Gmu6hn6/d42r6OToGAqt59wDqfVjOx/MU4tx+AuQ8927vDvr/PPodLX9Huh1HvQ/z5HNnhGsnudHpJY7qq9483R+3zodOr3HU+zA6nd6Py+dx8jc6ne7P/wECrzRQ
   </data>
  </layer>
- <layer id="3" name="Decorations" width="150" height="20">
+ <layer id="3" name="Decorations" width="250" height="20" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzt1rEJACAMBEBXM/sPZWsTFBUFuYMv80mZUgC4LV4fAABwQHQBAGBdJAEAYM/op6pJZmSzs107uwEAAH7XAE42CG0=
+   eJzt2skJACAMBMC0pv0X5deHARE8kBlYQkpYkggAAHYoSQAAAIA7Rr1cXwcA4KSaJLoZyQ7wM3d1AAAAXpf9hq8EAAAAAABmNCQJCjE=
   </data>
  </layer>
  <objectgroup id="2" name="Objects">
@@ -30,7 +30,7 @@
   <object id="33" name="Enemy" x="128" y="208">
    <point/>
   </object>
-  <object id="35" name="Goal" x="1824" y="106" width="28" height="134"/>
+  <object id="35" name="Goal" x="3360" y="106" width="28" height="134"/>
   <object id="36" name="Spring" x="400" y="64">
    <point/>
   </object>

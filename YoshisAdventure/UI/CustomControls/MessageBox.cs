@@ -126,10 +126,10 @@ namespace YoshisAdventure.UI.CustomControls
         {
             if (_isAnimating)
             {
-                float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (_isOpening)
                 {
-                    _animationProgress += elapsed / AnimationDuration;
+                    _animationProgress += elapsedTime / AnimationDuration;
                     if (_animationProgress >= 1f)
                     {
                         _animationProgress = 1f;
@@ -138,7 +138,7 @@ namespace YoshisAdventure.UI.CustomControls
                 }
                 else
                 {
-                    _animationProgress -= elapsed / AnimationDuration;
+                    _animationProgress -= elapsedTime / AnimationDuration;
                     if (_animationProgress <= 0f)
                     {
                         _animationProgress = 0f;

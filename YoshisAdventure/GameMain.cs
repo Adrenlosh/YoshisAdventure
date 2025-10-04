@@ -22,7 +22,6 @@ namespace YoshisAdventure
     {
         private GraphicsDeviceManager _graphicsDeviceManager;
         private ScreenManager _screenManager;
-        private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 
         public ViewportAdapter ViewportAdapter { get; private set; }
 
@@ -32,7 +31,6 @@ namespace YoshisAdventure
 
         public GameMain()
         {
-            IsFixedTimeStep = false;
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             _graphicsDeviceManager.PreferredBackBufferWidth = GlobalConfig.VirtualResolution_Width;
             _graphicsDeviceManager.PreferredBackBufferHeight = GlobalConfig.VirtualResolution_Height;
@@ -68,15 +66,12 @@ namespace YoshisAdventure
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            _fpsCounter.Draw(gameTime);
-            Window.Title = $"{_fpsCounter.FramesPerSecond}";
             GumService.Default.Draw();
             base.Draw(gameTime);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            _fpsCounter.Update(gameTime);
             Input.Update(gameTime);
             SFXSystem.Update(gameTime);
             GumService.Default.Update(gameTime);

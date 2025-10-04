@@ -2,11 +2,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Timers;
+using System;
+using System.Diagnostics;
+using YoshisAdventure.Enums;
 using YoshisAdventure.Models;
 using YoshisAdventure.Systems;
-using System;
-using YoshisAdventure.Enums;
-using System.Diagnostics;
 
 namespace YoshisAdventure.GameObjects
 {
@@ -204,8 +205,7 @@ namespace YoshisAdventure.GameObjects
         public void HandleInput(GameTime gameTime)
         {
             int currentInputDirection = 0;
-            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (GameController.ActionPressed() && !_isFloating && _isOnGround && CanThrowEgg)
             {
                 if (GameMain.PlayerStatus.Egg > 0)
@@ -348,7 +348,7 @@ namespace YoshisAdventure.GameObjects
             {
                 if (isJumpButtonHeld)
                 {
-                    _jumpHoldTime += elapsed;
+                    _jumpHoldTime += elapsedTime;
                     // 根据按住时间增加跳跃高度
                     float jumpProgress = _jumpHoldTime / MaxJumpHoldTime;
                     _velocity.Y = BaseJumpForce * (1 - jumpProgress * 0.5f);
@@ -370,7 +370,7 @@ namespace YoshisAdventure.GameObjects
             // 浮动状态处理
             if (_isFloating && !_isHoldingEgg)
             {
-                _floatTime += elapsed;
+                _floatTime += elapsedTime;
 
                 if (_floatTime < MaxFloatTime && isJumpButtonHeld)
                 {
@@ -616,7 +616,7 @@ namespace YoshisAdventure.GameObjects
         #region Update
         public override void Update(GameTime gameTime)
         {
-            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (CanHandleInput)
                 HandleInput(gameTime);
 
@@ -629,17 +629,17 @@ namespace YoshisAdventure.GameObjects
 
             if(_isDie)
             {
-                UpdateDie(elapsed);
+                UpdateDie(gameTime);
             }
 
             if (_tongueState != TongueState.None)
             {
-                UpdateTongueState(elapsed);
+                UpdateTongueState(gameTime);
             }
 
             if (_isSpitting)
             {
-                _spitTimer += elapsed;
+                _spitTimer += elapsedTime;
                 if (_spitTimer >= SpitAnimationDuration)
                 {
                     _spitTimer = 0f;
@@ -656,11 +656,11 @@ namespace YoshisAdventure.GameObjects
 
             if (_isPlummeting && !_isOnGround)
             {
-                UpdatePlummetState(elapsed, ref newPosition);
+                UpdatePlummetState(gameTime, ref newPosition);
             }
             else
             {
-                UpdateNormalMovement(elapsed, ref newPosition);
+                UpdateNormalMovement(gameTime, ref newPosition);
             }
 
             Position = newPosition;
@@ -688,11 +688,12 @@ namespace YoshisAdventure.GameObjects
             _crosshairSprite.Update(gameTime);
         }
 
-        private void UpdateDie(float elapsed)
+        private void UpdateDie(GameTime gameTime)
         {
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (_dieTimer >= 0)
             {
-                _dieTimer += elapsed;
+                _dieTimer += elapsedTime;
             }
             if(_dieTimer >= DieDuration)
             {
@@ -701,11 +702,12 @@ namespace YoshisAdventure.GameObjects
             }
         }
 
-        private void UpdateTongueState(float elapsed)
+        private void UpdateTongueState(GameTime gameTime)
         {
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (_tongueState == TongueState.Extending)
             {
-                _tongueLength += TongueSpeed * elapsed;
+                _tongueLength += TongueSpeed * elapsedTime;
                 if (_tongueLength >= MaxTongueLength)
                 {
                     _tongueState = TongueState.Retracting;
@@ -731,7 +733,7 @@ namespace YoshisAdventure.GameObjects
             }
             else if (_tongueState == TongueState.Retracting)
             {
-                _tongueLength -= TongueSpeed * elapsed;
+                _tongueLength -= TongueSpeed * elapsedTime;
                 if (_capturedObject != null)
                 {
                     _capturedObject.Position = CenterPosition + _tongueDirection * _tongueLength;
@@ -749,9 +751,10 @@ namespace YoshisAdventure.GameObjects
             }
         }
 
-        private void UpdatePlummetState(float elapsed, ref Vector2 newPosition)
+        private void UpdatePlummetState(GameTime gameTime, ref Vector2 newPosition)
         {
-            _plummetTimer += elapsed;
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _plummetTimer += elapsedTime;
 
             if (_plummetTimer > 0 && _plummetTimer < PlummetStage1Duration) //阶段1
             {
@@ -812,11 +815,12 @@ namespace YoshisAdventure.GameObjects
             }
         }
 
-        private void UpdateNormalMovement(float elapsed, ref Vector2 newPosition)
+        private void UpdateNormalMovement(GameTime gameTime, ref Vector2 newPosition)
         {
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (_hasThrownEgg)
             {
-                _throwingAnimationTimer += elapsed;
+                _throwingAnimationTimer += elapsedTime;
                 if (_throwingAnimationTimer >= ThrowAnimationDuration)
                 {
                     _hasThrownEgg = false;
@@ -826,7 +830,7 @@ namespace YoshisAdventure.GameObjects
 
             if (_isTurning)
             {
-                _turnTimer -= elapsed;
+                _turnTimer -= elapsedTime;
                 if (_turnTimer <= 0)
                 {
                     _isTurning = false;
