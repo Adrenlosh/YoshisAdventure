@@ -5,8 +5,8 @@ using MonoGame.Extended.Tiled;
 using YoshisAdventure.Models;
 using YoshisAdventure.Systems;
 using System;
+using YoshisAdventure.Enums;
 using System.Diagnostics;
-using MonoGame.Extended;
 
 namespace YoshisAdventure.GameObjects
 {
@@ -714,7 +714,7 @@ namespace YoshisAdventure.GameObjects
                 {
                     Vector2 tongueEnd = CenterPosition + _tongueDirection * _tongueLength;
                     Rectangle tongueRect = new Rectangle((int)(tongueEnd.X - 5), (int)(tongueEnd.Y - 5), 10, 10);
-                    if (IsCollidingWithTile(tongueRect, out _))
+                    if (IsCollidingWithTile(tongueRect, out TileCollisionResult result) && (result.TileType != TileType.Penetrable && result .TileType != TileType.Platform))
                     {
                         _tongueState = TongueState.Retracting;
                     }
@@ -835,9 +835,13 @@ namespace YoshisAdventure.GameObjects
 
             _velocity.X += _acceleration.X;
             if (_velocity.X > MoveSpeed)
+            {
                 _velocity.X = MoveSpeed;
+            }
             if (_velocity.X < -MoveSpeed)
+            {
                 _velocity.X = -MoveSpeed;
+            }
 
             if (_acceleration.X == 0 || _isTurning)
             {
@@ -869,12 +873,8 @@ namespace YoshisAdventure.GameObjects
                 Vector2 horizontalMove = new Vector2(_velocity.X, 0);
                 Vector2 testPosition = newPosition + horizontalMove;
                 Rectangle testRect = GetCollisionBox(testPosition);
-
-                if (!IsCollidingWithTile(testRect, out _))
-                {
-                    newPosition += horizontalMove;
-                }
-                else
+                bool isCollided = IsCollidingWithTile(testRect, out TileCollisionResult result);
+                if (isCollided && result.TileType != TileType.Penetrable && result.TileType != TileType.Platform)
                 {
                     _velocity.X = 0;
                     if (_isHurt)
@@ -883,14 +883,20 @@ namespace YoshisAdventure.GameObjects
                         CanHandleInput = true;
                     }
                 }
+                else
+                {
+                    newPosition += horizontalMove;
+                }
             }
 
             if (_velocity.Y != 0) //垂直碰撞检测
             {
                 Vector2 verticalMove = new Vector2(0, _velocity.Y);
                 Vector2 testPosition = newPosition + verticalMove;
+
                 if (testPosition.Y < 0)
                 {
+                    // 处理上边界碰撞
                     newPosition.Y = 0;
                     _velocity.Y = 0;
                     _isJumping = false;
@@ -900,33 +906,138 @@ namespace YoshisAdventure.GameObjects
                 else
                 {
                     Rectangle testRect = GetCollisionBox(testPosition);
+
+                    // 首先检查与任何瓦片的碰撞
                     if (IsCollidingWithTile(testRect, out TileCollisionResult result) && !_isDie)
                     {
-                        if (_velocity.Y > 0.5)
+                        // 如果是可穿透瓦片，需要额外检查下方是否有固体地面
+                        if (result.TileType == TileType.Penetrable)
                         {
-                            float tileTop = result.TileRectangle.Top;
-                            newPosition.Y = tileTop - _yoshiSprite.Size.Y;
-                            _velocity.Y = 0;
-                            _isOnGround = true;
-                            _isJumping = false;
-                            _isFloating = false;
-                            _jumpInitiated = false;
+                            // 计算穿透瓦片后的位置
+                            Vector2 penetratedPosition = newPosition + verticalMove;
+                            Rectangle penetratedRect = GetCollisionBox(penetratedPosition);
+
+                            // 检查穿透瓦片后是否会与固体地面碰撞
+                            bool willHitBlockingGround = false;
+                            TileCollisionResult groundResult = new TileCollisionResult();
+
+                            // 如果正在下落，检查下方
+                            if (_velocity.Y > 0)
+                            {
+                                // 创建一个向下的测试矩形，检查穿透瓦片后下方是否有固体地面
+                                Rectangle groundTestRect = new Rectangle(penetratedRect.X,
+                                    penetratedRect.Y + penetratedRect.Height, // 从穿透位置下方开始
+                                    penetratedRect.Width,
+                                    (int)Math.Abs(_velocity.Y) + 1); // 检查下落距离+1像素
+
+                                willHitBlockingGround = IsCollidingWithTile(groundTestRect, out groundResult) &&
+                                                    groundResult.TileType != TileType.Penetrable;
+                            }
+
+                            if (willHitBlockingGround)
+                            {
+                                // 如果穿透后会碰到固体地面，则停在固体地面上方
+                                float tileTop = groundResult.TileRectangle.Top;
+                                newPosition.Y = tileTop - _yoshiSprite.Size.Y;
+                                _velocity.Y = 0;
+                                _isOnGround = true;
+                                _isJumping = false;
+                                _isFloating = false;
+                                _jumpInitiated = false;
+
+                                if (_isHurt)
+                                {
+                                    _isHurt = false;
+                                    CanHandleInput = true;
+                                }
+                            }
+                            else
+                            {
+                                // 如果没有固体地面，允许穿过
+                                newPosition += verticalMove;
+                                _isOnGround = false;
+                            }
                         }
-                        else if (_velocity.Y < 0)
+                        else // 对于不可穿透的瓦片，正常处理碰撞
                         {
-                            newPosition.Y = result.TileRectangle.Bottom;
-                            _velocity.Y = 0;
-                            _isJumping = false;
-                            _isFloating = false;
-                            _jumpInitiated = false;
-                        }
-                        if (_isHurt)
-                        {
-                            _isHurt = false;
-                            CanHandleInput = true;
+                            if (_velocity.Y > 0.5) // 向下碰撞（落地）
+                            {
+                                if (result.TileType == TileType.Platform)
+                                {
+                                    // 平台瓦片：角色从上方下落时可以站上去
+                                    if (result.TileType == TileType.Platform)
+                                    {
+                                        // 检查角色是否从平台上方接近（脚部在平台顶部以上）
+                                        float characterBottom = newPosition.Y + _yoshiSprite.Size.Y;
+                                        float platformTop = result.TileRectangle.Top;
+
+                                        // 只有当角色是从平台上方下落时才站在平台上
+                                        if (characterBottom <= platformTop + 5) // 添加一个小容差
+                                        {
+                                            newPosition.Y = platformTop - _yoshiSprite.Size.Y;
+                                            _velocity.Y = 0;
+                                            _isOnGround = true;
+                                            _isJumping = false;
+                                            _isFloating = false;
+                                            _jumpInitiated = false;
+                                        }
+                                        else
+                                        {
+                                            // 从下方接近平台，允许穿过
+                                            newPosition += verticalMove;
+                                            _isOnGround = false;
+                                        }
+                                    }
+                                    else // 其他固体瓦片
+                                    {
+                                        float tileTop = result.TileRectangle.Top;
+                                        newPosition.Y = tileTop - _yoshiSprite.Size.Y;
+                                        _velocity.Y = 0;
+                                        _isOnGround = true;
+                                        _isJumping = false;
+                                        _isFloating = false;
+                                        _jumpInitiated = false;
+                                    }
+                                }
+                                else
+                                {
+                                    float tileTop = result.TileRectangle.Top;
+                                    newPosition.Y = tileTop - _yoshiSprite.Size.Y;
+                                    _velocity.Y = 0;
+                                    _isOnGround = true;
+                                    _isJumping = false;
+                                    _isFloating = false;
+                                    _jumpInitiated = false;
+                                    Debug.WriteLine(result.TileType);
+                                }
+                            }
+                            else if (_velocity.Y < 0) // 向上碰撞（碰头）
+                            {
+                                if (result.TileType == TileType.Platform)
+                                {
+                                    newPosition += verticalMove;
+                                    _isOnGround = false;
+                                    
+                                }
+                                else
+                                {
+                                    newPosition.Y = result.TileRectangle.Bottom;
+                                    _velocity.Y = 0;
+                                    _isJumping = false;
+                                    _isFloating = false;
+                                    _jumpInitiated = false;
+                                    Debug.WriteLine(result.TileType);
+                                }
+                            }
+
+                            if (_isHurt)
+                            {
+                                _isHurt = false;
+                                CanHandleInput = true;
+                            }
                         }
                     }
-                    else
+                    else // 没有碰撞到任何瓦片
                     {
                         newPosition += verticalMove;
                         _isOnGround = false;
@@ -935,14 +1046,23 @@ namespace YoshisAdventure.GameObjects
             }
             else
             {
+                // 垂直速度为零时的地面检测
                 Rectangle collisionBox = GetCollisionBox(newPosition);
-                if (!IsCollidingWithTile(new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 3), out _))
+                if (IsCollidingWithTile(new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 3), out TileCollisionResult groundResult))
                 {
-                    _isOnGround = false;
+                    // 检查地面是否是可穿透瓦片
+                    if (groundResult.TileType != TileType.Penetrable)
+                    {
+                        _isOnGround = true;
+                    }
+                    else
+                    {
+                        _isOnGround = false;
+                    }
                 }
                 else
                 {
-                    _isOnGround = true;
+                    _isOnGround = false;
                 }
             }
         }

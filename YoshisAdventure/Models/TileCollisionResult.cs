@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.Tiled;
 using System;
-using YoshisAdventure.GameObjects;
+using System.Diagnostics;
+using YoshisAdventure.Enums;
 using YoshisAdventure.Systems;
 
 namespace YoshisAdventure.Models
@@ -16,12 +17,22 @@ namespace YoshisAdventure.Models
 
         public CollisionDirection Direction { get; set; }
 
-        public TileCollisionResult(TiledMapTile? tile, Rectangle intersection, Rectangle originalRect, Rectangle otherRect)
+        public TileType TileType { get; set; } = TileType.Penetrable;
+
+        public TileCollisionResult(TiledMapTile? tile, Rectangle intersection, Rectangle originalRect, Rectangle otherRect, TiledMap tiledMap)
         {
             CollidedTile = tile;
             Intersection = intersection;
             Direction = CalculateCollisionDirection(originalRect, otherRect, intersection);
             TileRectangle = otherRect;
+            TiledMapTileset tileset = tiledMap.GetTilesetByTileGlobalIdentifier(tile.Value.GlobalIdentifier);
+            if (tileset != null)
+            {
+                if(tileset.Tiles[tile.Value.GlobalIdentifier - 1].Properties.TryGetValue("TileType", out string tileTypeStr))
+                {
+                    TileType = Enum.Parse<TileType>(tileTypeStr);
+                }
+            }
         }
 
         private CollisionDirection CalculateCollisionDirection(Rectangle rectA, Rectangle rectB, Rectangle intersection)

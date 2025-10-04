@@ -8,6 +8,7 @@ namespace YoshisAdventure.Systems
 {
     public class InteractionSystem
     {
+        private bool _isGoal = false;
         public event Action<string> OnDialogue;
         public event Action OnGoal;
 
@@ -116,7 +117,11 @@ namespace YoshisAdventure.Systems
                     {
                         player.OnCollision(goal, collisionResult);
                         goal.OnCollision(player, collisionResult);
-                        OnGoal?.Invoke();
+                        if (!_isGoal)
+                        {
+                            OnGoal?.Invoke();
+                        }
+                        _isGoal = true;
                     }
                 }
             }

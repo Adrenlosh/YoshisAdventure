@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
 using System.Diagnostics;
+using YoshisAdventure.Enums;
 using YoshisAdventure.Interfaces;
 using YoshisAdventure.Models;
 
@@ -52,8 +53,7 @@ namespace YoshisAdventure.GameObjects
                         if (tile.HasValue && !tile.Value.IsBlank)
                         {
                             Rectangle rect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
-                            result = new TileCollisionResult(tile, Rectangle.Intersect(objectRect, rect), objectRect, rect);
-                            Debug.WriteLine(result.CollidedTile);
+                            result = new TileCollisionResult(tile, Rectangle.Intersect(objectRect, rect), objectRect, rect, _tilemap);
                             if (objectRect.Intersects(rect))
                                 return true;
                         }
@@ -61,6 +61,20 @@ namespace YoshisAdventure.GameObjects
                 }
             }
             return false;
+        }
+
+        protected bool IsCollidingWithTile(Rectangle objectRect, TileType tileType, out TileCollisionResult result)
+        {
+            var isCollided = IsCollidingWithTile(objectRect, out result);
+            if (result.TileType == tileType)
+            {
+                return isCollided;
+            }
+            else
+            {
+                result = new TileCollisionResult();
+                return false;
+            }
         }
 
         protected virtual Rectangle GetCollisionBox(Vector2 position)
