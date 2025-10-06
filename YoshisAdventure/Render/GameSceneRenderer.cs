@@ -147,6 +147,9 @@ namespace YoshisAdventure.Rendering
 
         public void Draw(IEnumerable<GameObject> gameObjects)
         {
+            _graphicsDevice.BlendState = BlendState.AlphaBlend;
+            _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            _graphicsDevice.RasterizerState = RasterizerState.CullNone;
             Matrix viewMatrix = _camera.GetViewMatrix();
             Matrix projectionMatrix = Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, 0f, -1f);
             _tilemapRenderer.Draw(ref viewMatrix, ref projectionMatrix);
@@ -185,7 +188,6 @@ namespace YoshisAdventure.Rendering
             else if(_fadeTimer > 2f && _fadeTimer <= 6f)
             {
                 _spriteBatch.FillRectangle(screenBounds, Color.Black);
-
                 FadeStatus = FadeStatus.Keep;
             }
             else if(_fadeTimer > 6f && _fadeTimer <= 8f)

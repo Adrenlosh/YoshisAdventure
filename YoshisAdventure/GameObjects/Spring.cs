@@ -44,7 +44,7 @@ namespace YoshisAdventure.GameObjects
         public Spring(SpriteSheet spriteSheet, TiledMap tilemap) : base(tilemap)
         {
             _sprite = new AnimatedSprite(spriteSheet);
-            _sprite.SetAnimation("Normal");
+            _sprite.SetAnimation("normal");
             Size = _normalCollisionBox;
             IsCapturable = true;
         }
@@ -64,9 +64,9 @@ namespace YoshisAdventure.GameObjects
             Status = SpringStatus.Compressing;
             _basePosition = Position;
             _keepTimer = KeepDuration;
-            if (_sprite.CurrentAnimation != "Compress")
+            if (_sprite.CurrentAnimation != "compress")
             {
-                _sprite.SetAnimation("Compress");
+                _sprite.SetAnimation("compress");
             }
         }
 
@@ -75,9 +75,9 @@ namespace YoshisAdventure.GameObjects
             if (Status == SpringStatus.CompressedToMax)
             {
                 Status = SpringStatus.Expanding;
-                if (_sprite.CurrentAnimation != "Expand")
+                if (_sprite.CurrentAnimation != "expand")
                 {
-                    _sprite.SetAnimation("Expand");
+                    _sprite.SetAnimation("expand");
                 }
             }
         }
@@ -228,8 +228,8 @@ namespace YoshisAdventure.GameObjects
                 Size = _normalCollisionBox;
                 Position = _basePosition;
                 Status = SpringStatus.Normal;
-                if(_sprite.CurrentAnimation != "Normal")
-                    _sprite.SetAnimation("Normal");
+                if(_sprite.CurrentAnimation != "normal")
+                    _sprite.SetAnimation("normal");
             }
             else
             {
@@ -242,7 +242,7 @@ namespace YoshisAdventure.GameObjects
             Status = SpringStatus.Normal;
             Size = _normalCollisionBox;
             Position = _basePosition;
-            _sprite.SetAnimation("Normal");
+            _sprite.SetAnimation("normal");
         }
     }
 }

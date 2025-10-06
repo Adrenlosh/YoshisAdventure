@@ -15,7 +15,7 @@ namespace YoshisAdventure.GameObjects
         public Goal(SpriteSheet sheet, TiledMap tilemap) : base(tilemap)
         {
             _sprite = new AnimatedSprite(sheet);
-            _sprite.SetAnimation("NormalGreenStar");
+            _sprite.SetAnimation("normal-green-star");
             Size = new Point(28, 134);
             IsCapturable = false;
         }

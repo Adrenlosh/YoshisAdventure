@@ -70,8 +70,18 @@ namespace YoshisAdventure.Language {
         }
         
         /// <summary>
+        ///   查找类似 Coin
+        ///x {0} 的本地化字符串。
+        /// </summary>
+        internal static string CoinOnHud {
+            get {
+                return ResourceManager.GetString("CoinOnHud", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Egg
-        /// x {0} 的本地化字符串。
+        ///x {0} 的本地化字符串。
         /// </summary>
         internal static string EggCountOnHud {
             get {
@@ -98,8 +108,17 @@ namespace YoshisAdventure.Language {
         }
         
         /// <summary>
+        ///   查找类似 Health: {0}/{1} 的本地化字符串。
+        /// </summary>
+        internal static string HealthOnHud {
+            get {
+                return ResourceManager.GetString("HealthOnHud", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Yoshi
-        /// x {0} 的本地化字符串。
+        ///x {0} 的本地化字符串。
         /// </summary>
         internal static string LifeLeftOnHud {
             get {
@@ -117,8 +136,17 @@ namespace YoshisAdventure.Language {
         }
         
         /// <summary>
+        ///   查找类似 Paused 的本地化字符串。
+        /// </summary>
+        internal static string Paused {
+            get {
+                return ResourceManager.GetString("Paused", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Score
-        /// {0} 的本地化字符串。
+        ///{0} 的本地化字符串。
         /// </summary>
         internal static string ScoreOnHud {
             get {

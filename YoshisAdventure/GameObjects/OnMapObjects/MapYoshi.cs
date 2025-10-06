@@ -34,7 +34,7 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
         public MapYoshi(SpriteSheet spriteSheet, TiledMap tilemap) : base(tilemap)
         {
             _sprite = new AnimatedSprite(spriteSheet);
-            _sprite.SetAnimation("Walk");
+            _sprite.SetAnimation("walk");
             Size = new Point(16, 16);
 
             TiledMapObjectLayer objectLayer = _tilemap.GetLayer<TiledMapObjectLayer>("Objects");
@@ -47,40 +47,40 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
             if (GameController.MoveUp())
             {
                 _velocity.Y = -MoveSpeed;
-                if (_sprite.CurrentAnimation != "WalkBack")
-                    _sprite.SetAnimation("WalkBack");
+                if (_sprite.CurrentAnimation != "walk-back")
+                    _sprite.SetAnimation("walk-back");
             }
             else if (GameController.MoveDown())
             {
                 _velocity.Y = MoveSpeed;
-                if (_sprite.CurrentAnimation != "Walk")
-                    _sprite.SetAnimation("Walk");
+                if (_sprite.CurrentAnimation != "walk")
+                    _sprite.SetAnimation("walk");
             }
             if (GameController.MoveLeft())
             {
                 _velocity.X = -MoveSpeed;
-                if (_sprite.CurrentAnimation != "WalkSide")
-                    _sprite.SetAnimation("WalkSide");
+                if (_sprite.CurrentAnimation != "walk-side")
+                    _sprite.SetAnimation("walk-side");
                 _sprite.Effect = SpriteEffects.FlipHorizontally;
             }
             else if (GameController.MoveRight())
             { 
                 _velocity.X = MoveSpeed;
-                if (_sprite.CurrentAnimation != "WalkSide")
-                    _sprite.SetAnimation("WalkSide");
+                if (_sprite.CurrentAnimation != "walk-side")
+                    _sprite.SetAnimation("walk-side");
                 _sprite.Effect = SpriteEffects.None;
             }
             else if (GameController.AttackPressed() && _stageName != string.Empty) 
             {
-                if (_sprite.CurrentAnimation != "Start")
-                    _sprite.SetAnimation("Start");
+                if (_sprite.CurrentAnimation != "start")
+                    _sprite.SetAnimation("start");
                 CanHandleInput = false;
                 _velocity = Vector2.Zero;
                 SFXSystem.Play("yoshi");
             }
-            if (_velocity == Vector2.Zero && _sprite.CurrentAnimation != "Walk" && _sprite.CurrentAnimation != "Start")
+            if (_velocity == Vector2.Zero && _sprite.CurrentAnimation != "walk" && _sprite.CurrentAnimation != "start")
             {
-                _sprite.SetAnimation("Walk");
+                _sprite.SetAnimation("walk");
             }
         }
 

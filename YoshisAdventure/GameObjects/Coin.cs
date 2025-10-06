@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
-using System;
-using YoshisAdventure.Interfaces;
 using YoshisAdventure.Models;
 using YoshisAdventure.Systems;
 
@@ -18,7 +16,7 @@ namespace YoshisAdventure.GameObjects
         public Coin(SpriteSheet spriteSheet, TiledMap tilemap) : base(tilemap)
         {
             _sprite = new AnimatedSprite(spriteSheet);
-            _sprite.SetAnimation("Normal");
+            _sprite.SetAnimation("normal");
             Size = new Point(16, 16);
         }
 

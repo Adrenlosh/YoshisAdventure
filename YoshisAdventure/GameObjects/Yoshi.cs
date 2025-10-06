@@ -143,6 +143,8 @@ namespace YoshisAdventure.GameObjects
 
         public int Health { get; private set; } = 4;
 
+        public int MaxHealth { get; private set; } = 4;
+
         public override Rectangle CollisionBox => GetCollisionBoxBottomCenter(Position, _yoshiSprite.Size);
 
         public event Action<Vector2> OnThrowEgg;
@@ -154,9 +156,9 @@ namespace YoshisAdventure.GameObjects
         public Yoshi(SpriteSheet yoshiSpriteSheet, SpriteSheet crosshairSpriteSheet, Texture2D tongueTexture, TiledMap tilemap) : base(tilemap)
         {
             _yoshiSprite = new AnimatedSprite(yoshiSpriteSheet);
-            SetYoshiAnimation("Stand", true);
+            SetYoshiAnimation("stand", true);
             _crosshairSprite = new AnimatedSprite(crosshairSpriteSheet);
-            _crosshairSprite.SetAnimation("Shine");
+            _crosshairSprite.SetAnimation("shine");
             _tongueSprite = new Sprite(tongueTexture);
             Size = _normalCollisionBox;
         }
@@ -434,9 +436,10 @@ namespace YoshisAdventure.GameObjects
             string animationName = name;
             if (!ignoreMouthingStatus && _isMouthing)
             {
-                animationName += "_Mouthing";
+                animationName += "-mouthing";
             }
 
+            Debug.WriteLine(animationName);
             _yoshiSprite.SetAnimation(animationName);
         }
 
@@ -447,7 +450,7 @@ namespace YoshisAdventure.GameObjects
                 string expectedName = name;
                 if (!ignoreMouthingStatus && _isMouthing)
                 {
-                    expectedName += "_Mouthing";
+                    expectedName += "-mouthing";
                 }
                 return _yoshiSprite.CurrentAnimation == expectedName;
             }
@@ -458,28 +461,28 @@ namespace YoshisAdventure.GameObjects
         {
             if (_isDie || _isHurt)
             {
-                SetYoshiAnimation("Die", true, true);
+                SetYoshiAnimation("die", true, true);
                 return;
             }
 
             if (_isTurning)
             {
-                SetYoshiAnimation("Turn");
+                SetYoshiAnimation("turn");
                 return;
             }
 
             if (_hasThrownEgg)
             {
-                SetYoshiAnimation("Throw");
+                SetYoshiAnimation("throw");
                 return;
             }
 
             if (_isSpitting)
             {
                 if (!_isLookingUp)
-                    SetYoshiAnimation("TongueOut", true, true);
+                    SetYoshiAnimation("tongue-out", true, true);
                 else
-                    SetYoshiAnimation("TongueOutUp", true, true);
+                    SetYoshiAnimation("tongue-out-up", true, true);
                 return;
             }
 
@@ -498,17 +501,17 @@ namespace YoshisAdventure.GameObjects
             {
                 // 坠落状态
                 if (_plummetStage == PlummetState.TurnAround)
-                    SetYoshiAnimation("Plummet1");
+                    SetYoshiAnimation("plummet1");
                 else if (_plummetStage == PlummetState.FastFall)
-                    SetYoshiAnimation("Plummet2");
+                    SetYoshiAnimation("plummet2");
             }
             else if (_isFloating)
             {
                 // 浮动状态
                 if (_floatTime >= 0.3f && _floatTime < 1.0f && !_isHoldingEgg)
-                    SetYoshiAnimation("Float");
+                    SetYoshiAnimation("float");
                 else if (!_isHoldingEgg)
-                    SetYoshiAnimation("Fall");
+                    SetYoshiAnimation("fall");
             }
             else if (_velocity.Y < 0)
             {
@@ -526,18 +529,18 @@ namespace YoshisAdventure.GameObjects
         {
             if (_isHoldingEgg)
             {
-                SetYoshiAnimation("HoldEggWalk");
+                SetYoshiAnimation("hold-egg-walk");
             }
             else if (_tongueState != TongueState.None)
             {
                 if (_isLookingUp)
-                    SetYoshiAnimation("TongueOutUp");
+                    SetYoshiAnimation("tongue-out-up");
                 else
-                    SetYoshiAnimation("TongueOutJump");
+                    SetYoshiAnimation("tongue-out-jump");
             }
             else
             {
-                SetYoshiAnimation("Jump");
+                SetYoshiAnimation("jump");
             }
         }
 
@@ -545,18 +548,18 @@ namespace YoshisAdventure.GameObjects
         {
             if (_isHoldingEgg)
             {
-                SetYoshiAnimation("HoldEggWalk");
+                SetYoshiAnimation("hold-egg-walk");
             }
             else if (_tongueState != TongueState.None)
             {
                 if (_isLookingUp)
-                    SetYoshiAnimation("TongueOutUp");
+                    SetYoshiAnimation("tongue-out-up");
                 else
-                    SetYoshiAnimation("TongueOutJump");
+                    SetYoshiAnimation("tongue-out-jump");
             }
             else
             {
-                SetYoshiAnimation("Fall");
+                SetYoshiAnimation("fall");
             }
         }
 
@@ -568,7 +571,7 @@ namespace YoshisAdventure.GameObjects
             }
             else if (_isSquatting)
             {
-                SetYoshiAnimation("Squat");
+                SetYoshiAnimation("squat");
             }
             else if (_isLookingUp)
             {
@@ -584,17 +587,17 @@ namespace YoshisAdventure.GameObjects
         {
             float absVelocityX = Math.Abs(_velocity.X);
             if (absVelocityX < WalkThreshold)
-                SetYoshiAnimation("HoldEgg");
+                SetYoshiAnimation("hold-egg");
             else
-                SetYoshiAnimation("HoldEggWalk");
+                SetYoshiAnimation("hold-egg-walk");
         }
 
         private void UpdateLookingUpAnimation()
         {
             if (_tongueState != TongueState.None)
-                SetYoshiAnimation("TongueOutUp");
+                SetYoshiAnimation("tongue-out-up");
             else if (!_isSpitting)
-                SetYoshiAnimation("LookUp");
+                SetYoshiAnimation("look-up");
         }
 
         private void UpdateMovementAnimation()
@@ -603,15 +606,15 @@ namespace YoshisAdventure.GameObjects
 
             if (absVelocityX < WalkThreshold)
             {
-                SetYoshiAnimation(_tongueState != TongueState.None ? "TongueOut" : "Stand");
+                SetYoshiAnimation(_tongueState != TongueState.None ? "tongue-out" : "stand");
             }
             else if (absVelocityX >= WalkThreshold && absVelocityX < RunThreshold)
             {
-                SetYoshiAnimation(_tongueState != TongueState.None ? "TongueOutWalk" : "Walk");
+                SetYoshiAnimation(_tongueState != TongueState.None ? "tongue-out-walk" : "walk");
             }
             else
             {
-                SetYoshiAnimation(_tongueState != TongueState.None ? "TongueOutRun" : "Run");
+                SetYoshiAnimation(_tongueState != TongueState.None ? "tongue-out-run" : "run");
             }
         }
         #endregion
@@ -625,8 +628,9 @@ namespace YoshisAdventure.GameObjects
 
             Vector2 newPosition = Position;
 
-            if(IsOutOfTilemapBottom(Position) && !_isDie)
+            if((IsOutOfTilemapBottom(Position) && !_isDie))
             {
+                Health = 0;
                 Die();
             }
 
@@ -777,47 +781,7 @@ namespace YoshisAdventure.GameObjects
                 if (_velocity.Y > MaxPlummetVelocity)
                     _velocity.Y = MaxPlummetVelocity;
 
-                if (_velocity.Y != 0)
-                {
-                    Vector2 verticalMove = new Vector2(0, _velocity.Y);
-                    Vector2 testPosition = newPosition + verticalMove;
-                    if (testPosition.Y < 0)
-                    {
-                        newPosition.Y = 0;
-                        _velocity.Y = 0;
-                        _isPlummeting = false;
-                        _plummetTimer = 0;
-                        _plummetStage = PlummetState.None;
-                        OnPlummeted?.Invoke(newPosition);
-                        SFXSystem.Play("plummet");
-                    }
-                    else
-                    {
-                        Rectangle testRect = GetCollisionBox(testPosition);
-
-                        if (IsCollidingWithTile(testRect, out TileCollisionResult result))
-                        {
-                            if (_velocity.Y > 0)
-                            {
-                                float spriteBottom = newPosition.Y + _yoshiSprite.Size.X;
-                                float tileTop = result.TileRectangle.Top;
-                                newPosition.Y = tileTop - _yoshiSprite.Size.Y;
-                                _velocity.Y = 0;
-                                _isOnGround = true;
-                                _isPlummeting = false;
-                                _plummetTimer = 0;
-                                _plummetStage = PlummetState.None;
-                                OnPlummeted?.Invoke(newPosition);
-                                SFXSystem.Play("plummet");
-                            }
-                        }
-                        else
-                        {
-                            newPosition += verticalMove;
-                            _isOnGround = false;
-                        }
-                    }
-                }
+                UpdateTileCollosion(ref newPosition);
             }
         }
 
@@ -878,6 +842,12 @@ namespace YoshisAdventure.GameObjects
                     _velocity.Y = MaxGravity;
             }
 
+            
+            UpdateTileCollosion(ref newPosition);
+        }
+
+        private void UpdateTileCollosion(ref Vector2 newPosition)
+        {
             if (_velocity.X != 0) //水平碰撞检测
             {
                 Vector2 horizontalMove = new Vector2(_velocity.X, 0);
@@ -935,13 +905,9 @@ namespace YoshisAdventure.GameObjects
                             if (_velocity.Y > 0)
                             {
                                 // 创建一个向下的测试矩形，检查穿透瓦片后下方是否有固体地面
-                                Rectangle groundTestRect = new Rectangle(penetratedRect.X,
-                                    penetratedRect.Y + penetratedRect.Height, // 从穿透位置下方开始
-                                    penetratedRect.Width,
-                                    (int)Math.Abs(_velocity.Y) + 1); // 检查下落距离+1像素
+                                Rectangle groundTestRect = new Rectangle(penetratedRect.X, penetratedRect.Y + penetratedRect.Height, penetratedRect.Width, (int)Math.Abs(_velocity.Y) + 1);
 
-                                willHitBlockingGround = IsCollidingWithTile(groundTestRect, out groundResult) &&
-                                                    groundResult.TileType != TileType.Penetrable;
+                                willHitBlockingGround = IsCollidingWithTile(groundTestRect, out groundResult) && groundResult.TileType != TileType.Penetrable;
                             }
 
                             if (willHitBlockingGround)
@@ -949,16 +915,19 @@ namespace YoshisAdventure.GameObjects
                                 // 如果穿透后会碰到固体地面，则停在固体地面上方
                                 float tileTop = groundResult.TileRectangle.Top;
                                 newPosition.Y = tileTop - _yoshiSprite.Size.Y;
-                                _velocity.Y = 0;
                                 _isOnGround = true;
-                                _isJumping = false;
                                 _isFloating = false;
-                                _jumpInitiated = false;
+                                ResetJumpStatus();
 
                                 if (_isHurt)
                                 {
                                     _isHurt = false;
                                     CanHandleInput = true;
+                                }
+
+                                if(_plummetStage == PlummetState.FastFall)
+                                {
+                                    HandlePlummetLand(newPosition);
                                 }
                             }
                             else
@@ -970,7 +939,7 @@ namespace YoshisAdventure.GameObjects
                         }
                         else // 对于不可穿透的瓦片，正常处理碰撞
                         {
-                            if (_velocity.Y > 0.5) // 向下碰撞（落地）
+                            if (_velocity.Y > 0.5) // 向下碰撞
                             {
                                 if (result.TileType == TileType.Platform)
                                 {
@@ -982,14 +951,17 @@ namespace YoshisAdventure.GameObjects
                                         float platformTop = result.TileRectangle.Top;
 
                                         // 只有当角色是从平台上方下落时才站在平台上
-                                        if (characterBottom <= platformTop + 5) // 添加一个小容差
+                                        if (characterBottom <= platformTop + 5)
                                         {
                                             newPosition.Y = platformTop - _yoshiSprite.Size.Y;
-                                            _velocity.Y = 0;
                                             _isOnGround = true;
-                                            _isJumping = false;
                                             _isFloating = false;
-                                            _jumpInitiated = false;
+                                            ResetJumpStatus();
+
+                                            if (_plummetStage == PlummetState.FastFall)
+                                            {
+                                                HandlePlummetLand(newPosition);
+                                            }
                                         }
                                         else
                                         {
@@ -998,15 +970,19 @@ namespace YoshisAdventure.GameObjects
                                             _isOnGround = false;
                                         }
                                     }
-                                    else // 其他固体瓦片
+                                    else
                                     {
                                         float tileTop = result.TileRectangle.Top;
                                         newPosition.Y = tileTop - _yoshiSprite.Size.Y;
                                         _velocity.Y = 0;
                                         _isOnGround = true;
-                                        _isJumping = false;
                                         _isFloating = false;
-                                        _jumpInitiated = false;
+                                        ResetJumpStatus();
+
+                                        if (_plummetStage == PlummetState.FastFall)
+                                        {
+                                            HandlePlummetLand(newPosition);
+                                        }
                                     }
                                 }
                                 else
@@ -1015,13 +991,15 @@ namespace YoshisAdventure.GameObjects
                                     newPosition.Y = tileTop - _yoshiSprite.Size.Y;
                                     _velocity.Y = 0;
                                     _isOnGround = true;
-                                    _isJumping = false;
-                                    _isFloating = false;
-                                    _jumpInitiated = false;
-                                    Debug.WriteLine(result.TileType);
+                                    ResetJumpStatus();
+
+                                    if (_plummetStage == PlummetState.FastFall)
+                                    {
+                                        HandlePlummetLand(newPosition);
+                                    }
                                 }
                             }
-                            else if (_velocity.Y < 0) // 向上碰撞（碰头）
+                            else if (_velocity.Y < 0) // 向上碰撞
                             {
                                 if (result.TileType == TileType.Platform)
                                 {
@@ -1033,10 +1011,7 @@ namespace YoshisAdventure.GameObjects
                                 {
                                     newPosition.Y = result.TileRectangle.Bottom;
                                     _velocity.Y = 0;
-                                    _isJumping = false;
-                                    _isFloating = false;
-                                    _jumpInitiated = false;
-                                    Debug.WriteLine(result.TileType);
+                                    ResetJumpStatus();
                                 }
                             }
 
@@ -1047,7 +1022,7 @@ namespace YoshisAdventure.GameObjects
                             }
                         }
                     }
-                    else // 没有碰撞到任何瓦片
+                    else 
                     {
                         newPosition += verticalMove;
                         _isOnGround = false;
@@ -1056,11 +1031,9 @@ namespace YoshisAdventure.GameObjects
             }
             else
             {
-                // 垂直速度为零时的地面检测
                 Rectangle collisionBox = GetCollisionBox(newPosition);
                 if (IsCollidingWithTile(new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 3), out TileCollisionResult groundResult))
                 {
-                    // 检查地面是否是可穿透瓦片
                     if (groundResult.TileType != TileType.Penetrable)
                     {
                         _isOnGround = true;
@@ -1209,6 +1182,23 @@ namespace YoshisAdventure.GameObjects
                 _plummetTimer = 0f;
                 _plummetStage = PlummetState.None;
             }
+        }
+
+        public void ResetJumpStatus()
+        {
+            _velocity.Y = 0;
+            _isJumping = false;
+            _isFloating = false;
+            _jumpInitiated = false;
+        }
+
+        private void HandlePlummetLand(Vector2 position)
+        {
+            _isPlummeting = false;
+            _plummetTimer = 0;
+            _plummetStage = PlummetState.None;
+            OnPlummeted?.Invoke(position);
+            SFXSystem.Play("plummet");
         }
     }
 }

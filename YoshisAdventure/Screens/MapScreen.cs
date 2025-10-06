@@ -53,7 +53,7 @@ namespace YoshisAdventure.Screens
                         GameObjectsSystem.AddGameObject(mapYoshi);
 
                         _animatedSprite = gameObjectFactory.CreateYoshiAnimatedSprite();
-                        _animatedSprite.SetAnimation("Walk");
+                        _animatedSprite.SetAnimation("walk");
                         break;
                     default:
                         break;
@@ -82,7 +82,7 @@ namespace YoshisAdventure.Screens
             {
                 Game.LoadScreen(new StageEnterScreen(Game, _stage), new FadeOutTransition(GraphicsDevice, Color.Black, 1.5f));
             }
-            else if(GameController.Pause())
+            else if(GameController.BackPressed())
             {
                 Game.LoadScreen(new TitleScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
             }

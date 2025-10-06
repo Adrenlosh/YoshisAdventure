@@ -2,9 +2,11 @@
 
 public interface IDamageable
 {
-    int Health { get; }
+    public int Health { get; }
 
-    void TakeDamage(int damage, GameObject source);
+    public int MaxHealth { get; }
 
-    void Die();
+    public void TakeDamage(int damage, GameObject source);
+
+    public void Die();
 }

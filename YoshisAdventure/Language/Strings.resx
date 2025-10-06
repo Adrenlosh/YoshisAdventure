@@ -128,15 +128,15 @@
   </data>
   <data name="EggCountOnHud" xml:space="preserve">
     <value>Egg
- x {0}</value>
+x {0}</value>
   </data>
   <data name="ScoreOnHud" xml:space="preserve">
     <value>Score
- {0}</value>
+{0}</value>
   </data>
   <data name="LifeLeftOnHud" xml:space="preserve">
     <value>Yoshi
- x {0}</value>
+x {0}</value>
   </data>
   <data name="NextPage" xml:space="preserve">
     <value>Next Page</value>
@@ -149,5 +149,15 @@
   </data>
   <data name="Goal" xml:space="preserve">
     <value>YOSHI Goal!</value>
+  </data>
+  <data name="CoinOnHud" xml:space="preserve">
+    <value>Coin
+x {0}</value>
+  </data>
+  <data name="HealthOnHud" xml:space="preserve">
+    <value>Health: {0}/{1}</value>
+  </data>
+  <data name="Paused" xml:space="preserve">
+    <value>Paused</value>
   </data>
 </root>

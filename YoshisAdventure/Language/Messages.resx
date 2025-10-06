@@ -118,6 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Message1" xml:space="preserve">
-    <value>Hello, world! The quick brown fox jumps over the lazy dog. 中国智造，惠及全球。</value>
+    <value>Hello, world! The quick brown fox jumps over the lazy dog.</value>
+  </data>
+  <data name="Message2" xml:space="preserve">
+    <value>Hold Jump to float. Running before a jump extends your float distance.</value>
+  </data>
+  <data name="Message3" xml:space="preserve">
+    <value>To break this block, plummet by pressing Down while jumping.</value>
   </data>
 </root>

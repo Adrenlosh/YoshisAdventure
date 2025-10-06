@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Tiled;
@@ -19,12 +20,12 @@ namespace YoshisAdventure.Screens
         private GameSceneRenderer _sceneRenderer;
         private InteractionSystem _interactionSystem;
         private GameObjectFactory _gameObjectFactory;
-        private GamingScreenUI _ui;
         private Stage _stage;
         private TiledMap _tilemap;
-        private bool _isPlayerDie = false;
+        private GamingScreenUI _ui;
         private Vector2 _cameraLockPosition;
         private bool _shouldMovePlayer = false;
+        private bool _isPlayerDie = false;
 
         public new GameMain Game => (GameMain)base.Game;
 
@@ -41,7 +42,7 @@ namespace YoshisAdventure.Screens
         public void InitializeUI()
         {
             GumService.Default.Root.Children.Clear();
-            _ui = new GamingScreenUI();
+            _ui = new GamingScreenUI(new SpriteBatch(GraphicsDevice), Content, _sceneRenderer.ViewportAdapter);
         }
 
         public override void LoadContent()
@@ -100,6 +101,7 @@ namespace YoshisAdventure.Screens
 
         private void Player_OnDie()
         {
+            _ui.HandlePause = false;
             _isPlayerDie = true;
             _cameraLockPosition = GameObjectsSystem.Player.Position;
         }
@@ -149,7 +151,7 @@ namespace YoshisAdventure.Screens
             {
                 GameObjectsSystem.Player.Velocity = new Vector2(1f, 1);
             }
-            if (!_ui.IsReadingMessage)
+            if (!_ui.IsReadingMessage && !_ui.IsPaused)
             {
                 if (!_isPlayerDie)
                 {
@@ -168,8 +170,10 @@ namespace YoshisAdventure.Screens
                     GameObjectsSystem.Player.Update(gameTime);
                     _sceneRenderer.Update(gameTime, _cameraLockPosition, true, GameObjectsSystem.Player.FaceDirection, Vector2.Zero);
                 }
-                if (GameController.Pause())
+                if (GameController.BackPressed())
+                {
                     Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+                }
             }
             _ui.Update(gameTime);
         }
@@ -178,7 +182,7 @@ namespace YoshisAdventure.Screens
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _sceneRenderer.Draw(GameObjectsSystem.GetAllActiveObjects());
-            _ui.Draw(_sceneRenderer.ViewportAdapter.GetScaleMatrix().M11);
+            _ui.Draw();
         }
     }
 }

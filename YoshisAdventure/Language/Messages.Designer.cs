@@ -61,11 +61,29 @@ namespace YoshisAdventure.Language {
         }
         
         /// <summary>
-        ///   查找类似 Hello, world! The quick brown fox jumps over the lazy dog. 中国智造，惠及全球。 的本地化字符串。
+        ///   查找类似 Hello, world! The quick brown fox jumps over the lazy dog. 的本地化字符串。
         /// </summary>
         internal static string Message1 {
             get {
                 return ResourceManager.GetString("Message1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Hold Jump to float. Running before a jump extends your float distance. 的本地化字符串。
+        /// </summary>
+        internal static string Message2 {
+            get {
+                return ResourceManager.GetString("Message2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 To break this block, plummet by pressing Down while jumping. 的本地化字符串。
+        /// </summary>
+        internal static string Message3 {
+            get {
+                return ResourceManager.GetString("Message3", resourceCulture);
             }
         }
     }

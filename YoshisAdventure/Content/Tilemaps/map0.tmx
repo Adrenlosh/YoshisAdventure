@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="1869">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="3178">
  <tileset firstgid="1" source="tileset.tsx"/>
  <imagelayer id="7" name="Background" offsetx="0" offsety="-152.5" parallaxx="0.8" parallaxy="0.8" repeatx="1" repeaty="1">
   <image source="background.png" width="609" height="450"/>
  </imagelayer>
  <layer id="1" name="Ground" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJztmN1OwzAMRgODwcbPzRi7Ge//msSqKlVRGyWdvzR2vyNFO+Vidlkdxw2BaHHZOgFCCBzWOSH+YZ0T4h/NOn+K6zmuQ1wvE0+vxV87joHAat7EB5p1/hHXMa5zXG8TT6/FvzqOgcBq3sQHmnX+GYbn9D0Mz+3o6bX4d8cxEFjNm/hAu5+fwvDMnieeXos/0s/RMRBYzZv4QKvOl+bPnNfOoS1iILCaN/GDVp0vzZ85r+1bLWIgsJo38YNWnS/NnzmvnUNbxEBgNe89cg/1Z69S/2t4Hyma/Xxu/sz5mn6OjoHAat575Brqz16lfmt4HykadS7z59o9rnQObREDgdW898pPqD97lfpvw/tAIP1q7R5X2rdaxEBgNe+9Iv289uxV6lv2cw1k/ly7x5XOoS1iILCa916Rfi51Of4Gmu6hn6/d42r6OToGAqt59wDqfVjOx/MU4tx+AuQ8927vDvr/PPodLX9Huh1HvQ/z5HNnhGsnudHpJY7qq9483R+3zodOr3HU+zA6nd6Py+dx8jc6ne7P/wECrzRQ
+   eJztmFtvgzAMhbNbt3aXl+7ysv3/v7lYCAkhAQnlGB9yPinqR19sWozjpNQW170TEELAUZ0LcXxU50IcH5Y6v8vrPq+HvB4HPr42fwocAwFr3sIPljp/zeuU1yWv54GPr83fA8dAwJq38IOlzt9S95y+pO657X18bf4ROAYC1ryFHyx1bj3rnLpn9jLw8bX5Lf0cHQMBa97CD4Y6n5o/57x2DvWIgYA1b+ELQ51PzZ9zXtu3PGIgYM1b+MJQ51Pz55zXzqEeMRCw5t0iv6l+71XqfwuxGep8av6c8zX9HB0DAWveLfKV6vdepf6zEDt6ndv8ufYdVzqHesRAwJp3q3ym+r1XqX873gcC61dr33GlfcsjBgLWvFvF+nnt3qvUl/p5dGz+XPuOK51DPWIgYM27VayfW132/8GWfoR+vvYdV9PP0TEQsOYdAdR52Jz3+ynEvv1ckMPSWd3W1Jw73vobe/6Pch5HnYdFdu+9PfLcUS4vcVRfjezee3vkuaNcXrrPtc+tz8Mi+x79PMq9y9t0+zwNvmvB9+jnUe5d3qb/AxMzMUc=
   </data>
  </layer>
  <layer id="3" name="Decorations" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt2skJwDAMBEC1FvdflL95eD8COybMwCJUgo4qAAB2eEIAAACAb6zmcvM6AAAnjZB61Qo9wJ+5qwMAAHC79BveCT1pv9oNAAAAAMDtJiotD1k=
+   eJzt2ssJQCEMBMC09uy/KK8e3Ivgh8cMLJISNqYKAIAdvhAAAADgjlkv19cBADiphdTwVpgB/sy/OgAAAK9Lt+G67Dlpv7oaAAAAAIDXdZIEDI4=
   </data>
  </layer>
  <objectgroup id="2" name="Objects">
@@ -19,5 +19,821 @@
    <point/>
   </object>
   <object id="35" name="Goal" x="3360" y="106" width="28" height="134"/>
+  <object id="1869" name="Spring" x="80" y="224">
+   <point/>
+  </object>
+  <object id="1870" name="Enemy" x="128" y="208">
+   <point/>
+  </object>
+  <object id="1871" name="Coin" x="176" y="208">
+   <point/>
+  </object>
+  <object id="1872" name="Sign" type="Dialogable" x="144" y="224">
+   <properties>
+    <property name="MessageID" value="Message1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="1873" name="Coin" x="192" y="208">
+   <point/>
+  </object>
+  <object id="1874" name="Coin" x="176" y="192">
+   <point/>
+  </object>
+  <object id="1875" name="Coin" x="192" y="192">
+   <point/>
+  </object>
+  <object id="1876" name="Coin" x="208" y="208">
+   <point/>
+  </object>
+  <object id="1877" name="Coin" x="224" y="208">
+   <point/>
+  </object>
+  <object id="1878" name="Coin" x="208" y="192">
+   <point/>
+  </object>
+  <object id="1879" name="Coin" x="224" y="192">
+   <point/>
+  </object>
+  <object id="2408" name="Coin" x="192" y="160">
+   <point/>
+  </object>
+  <object id="2409" name="Coin" x="208" y="160">
+   <point/>
+  </object>
+  <object id="2410" name="Coin" x="192" y="144">
+   <point/>
+  </object>
+  <object id="2411" name="Coin" x="208" y="144">
+   <point/>
+  </object>
+  <object id="2412" name="Coin" x="224" y="160">
+   <point/>
+  </object>
+  <object id="2413" name="Coin" x="240" y="160">
+   <point/>
+  </object>
+  <object id="2414" name="Coin" x="224" y="144">
+   <point/>
+  </object>
+  <object id="2415" name="Coin" x="240" y="144">
+   <point/>
+  </object>
+  <object id="2416" name="Coin" x="128" y="160">
+   <point/>
+  </object>
+  <object id="2417" name="Coin" x="144" y="160">
+   <point/>
+  </object>
+  <object id="2418" name="Coin" x="128" y="144">
+   <point/>
+  </object>
+  <object id="2419" name="Coin" x="144" y="144">
+   <point/>
+  </object>
+  <object id="2420" name="Coin" x="160" y="160">
+   <point/>
+  </object>
+  <object id="2421" name="Coin" x="176" y="160">
+   <point/>
+  </object>
+  <object id="2422" name="Coin" x="160" y="144">
+   <point/>
+  </object>
+  <object id="2423" name="Coin" x="176" y="144">
+   <point/>
+  </object>
+  <object id="2424" name="Coin" x="192" y="128">
+   <point/>
+  </object>
+  <object id="2425" name="Coin" x="208" y="128">
+   <point/>
+  </object>
+  <object id="2426" name="Coin" x="192" y="112">
+   <point/>
+  </object>
+  <object id="2427" name="Coin" x="208" y="112">
+   <point/>
+  </object>
+  <object id="2428" name="Coin" x="224" y="128">
+   <point/>
+  </object>
+  <object id="2429" name="Coin" x="240" y="128">
+   <point/>
+  </object>
+  <object id="2430" name="Coin" x="224" y="112">
+   <point/>
+  </object>
+  <object id="2431" name="Coin" x="240" y="112">
+   <point/>
+  </object>
+  <object id="2432" name="Coin" x="128" y="128">
+   <point/>
+  </object>
+  <object id="2433" name="Coin" x="144" y="128">
+   <point/>
+  </object>
+  <object id="2434" name="Coin" x="128" y="112">
+   <point/>
+  </object>
+  <object id="2435" name="Coin" x="144" y="112">
+   <point/>
+  </object>
+  <object id="2436" name="Coin" x="160" y="128">
+   <point/>
+  </object>
+  <object id="2437" name="Coin" x="176" y="128">
+   <point/>
+  </object>
+  <object id="2438" name="Coin" x="160" y="112">
+   <point/>
+  </object>
+  <object id="2439" name="Coin" x="176" y="112">
+   <point/>
+  </object>
+  <object id="2440" name="Coin" x="192" y="96">
+   <point/>
+  </object>
+  <object id="2441" name="Coin" x="208" y="96">
+   <point/>
+  </object>
+  <object id="2442" name="Coin" x="192" y="80">
+   <point/>
+  </object>
+  <object id="2443" name="Coin" x="208" y="80">
+   <point/>
+  </object>
+  <object id="2444" name="Coin" x="224" y="96">
+   <point/>
+  </object>
+  <object id="2445" name="Coin" x="240" y="96">
+   <point/>
+  </object>
+  <object id="2446" name="Coin" x="224" y="80">
+   <point/>
+  </object>
+  <object id="2447" name="Coin" x="240" y="80">
+   <point/>
+  </object>
+  <object id="2448" name="Coin" x="128" y="96">
+   <point/>
+  </object>
+  <object id="2449" name="Coin" x="144" y="96">
+   <point/>
+  </object>
+  <object id="2450" name="Coin" x="128" y="80">
+   <point/>
+  </object>
+  <object id="2451" name="Coin" x="144" y="80">
+   <point/>
+  </object>
+  <object id="2452" name="Coin" x="160" y="96">
+   <point/>
+  </object>
+  <object id="2453" name="Coin" x="176" y="96">
+   <point/>
+  </object>
+  <object id="2454" name="Coin" x="160" y="80">
+   <point/>
+  </object>
+  <object id="2455" name="Coin" x="176" y="80">
+   <point/>
+  </object>
+  <object id="2456" name="Coin" x="192" y="64">
+   <point/>
+  </object>
+  <object id="2457" name="Coin" x="208" y="64">
+   <point/>
+  </object>
+  <object id="2458" name="Coin" x="192" y="48">
+   <point/>
+  </object>
+  <object id="2459" name="Coin" x="208" y="48">
+   <point/>
+  </object>
+  <object id="2460" name="Coin" x="224" y="64">
+   <point/>
+  </object>
+  <object id="2461" name="Coin" x="240" y="64">
+   <point/>
+  </object>
+  <object id="2462" name="Coin" x="224" y="48">
+   <point/>
+  </object>
+  <object id="2463" name="Coin" x="240" y="48">
+   <point/>
+  </object>
+  <object id="2464" name="Coin" x="128" y="64">
+   <point/>
+  </object>
+  <object id="2465" name="Coin" x="144" y="64">
+   <point/>
+  </object>
+  <object id="2466" name="Coin" x="128" y="48">
+   <point/>
+  </object>
+  <object id="2467" name="Coin" x="144" y="48">
+   <point/>
+  </object>
+  <object id="2468" name="Coin" x="160" y="64">
+   <point/>
+  </object>
+  <object id="2469" name="Coin" x="176" y="64">
+   <point/>
+  </object>
+  <object id="2470" name="Coin" x="160" y="48">
+   <point/>
+  </object>
+  <object id="2471" name="Coin" x="176" y="48">
+   <point/>
+  </object>
+  <object id="2472" name="Coin" x="320" y="160">
+   <point/>
+  </object>
+  <object id="2473" name="Coin" x="336" y="160">
+   <point/>
+  </object>
+  <object id="2474" name="Coin" x="320" y="144">
+   <point/>
+  </object>
+  <object id="2475" name="Coin" x="336" y="144">
+   <point/>
+  </object>
+  <object id="2476" name="Coin" x="352" y="160">
+   <point/>
+  </object>
+  <object id="2477" name="Coin" x="368" y="160">
+   <point/>
+  </object>
+  <object id="2478" name="Coin" x="352" y="144">
+   <point/>
+  </object>
+  <object id="2479" name="Coin" x="368" y="144">
+   <point/>
+  </object>
+  <object id="2480" name="Coin" x="256" y="160">
+   <point/>
+  </object>
+  <object id="2481" name="Coin" x="272" y="160">
+   <point/>
+  </object>
+  <object id="2482" name="Coin" x="256" y="144">
+   <point/>
+  </object>
+  <object id="2483" name="Coin" x="272" y="144">
+   <point/>
+  </object>
+  <object id="2484" name="Coin" x="288" y="160">
+   <point/>
+  </object>
+  <object id="2485" name="Coin" x="304" y="160">
+   <point/>
+  </object>
+  <object id="2486" name="Coin" x="288" y="144">
+   <point/>
+  </object>
+  <object id="2487" name="Coin" x="304" y="144">
+   <point/>
+  </object>
+  <object id="2488" name="Coin" x="320" y="128">
+   <point/>
+  </object>
+  <object id="2489" name="Coin" x="336" y="128">
+   <point/>
+  </object>
+  <object id="2490" name="Coin" x="320" y="112">
+   <point/>
+  </object>
+  <object id="2491" name="Coin" x="336" y="112">
+   <point/>
+  </object>
+  <object id="2492" name="Coin" x="352" y="128">
+   <point/>
+  </object>
+  <object id="2493" name="Coin" x="368" y="128">
+   <point/>
+  </object>
+  <object id="2494" name="Coin" x="352" y="112">
+   <point/>
+  </object>
+  <object id="2495" name="Coin" x="368" y="112">
+   <point/>
+  </object>
+  <object id="2496" name="Coin" x="256" y="128">
+   <point/>
+  </object>
+  <object id="2497" name="Coin" x="272" y="128">
+   <point/>
+  </object>
+  <object id="2498" name="Coin" x="256" y="112">
+   <point/>
+  </object>
+  <object id="2499" name="Coin" x="272" y="112">
+   <point/>
+  </object>
+  <object id="2500" name="Coin" x="288" y="128">
+   <point/>
+  </object>
+  <object id="2501" name="Coin" x="304" y="128">
+   <point/>
+  </object>
+  <object id="2502" name="Coin" x="288" y="112">
+   <point/>
+  </object>
+  <object id="2503" name="Coin" x="304" y="112">
+   <point/>
+  </object>
+  <object id="2504" name="Coin" x="320" y="96">
+   <point/>
+  </object>
+  <object id="2505" name="Coin" x="336" y="96">
+   <point/>
+  </object>
+  <object id="2506" name="Coin" x="320" y="80">
+   <point/>
+  </object>
+  <object id="2507" name="Coin" x="336" y="80">
+   <point/>
+  </object>
+  <object id="2508" name="Coin" x="352" y="96">
+   <point/>
+  </object>
+  <object id="2509" name="Coin" x="368" y="96">
+   <point/>
+  </object>
+  <object id="2510" name="Coin" x="352" y="80">
+   <point/>
+  </object>
+  <object id="2511" name="Coin" x="368" y="80">
+   <point/>
+  </object>
+  <object id="2512" name="Coin" x="256" y="96">
+   <point/>
+  </object>
+  <object id="2513" name="Coin" x="272" y="96">
+   <point/>
+  </object>
+  <object id="2514" name="Coin" x="256" y="80">
+   <point/>
+  </object>
+  <object id="2515" name="Coin" x="272" y="80">
+   <point/>
+  </object>
+  <object id="2516" name="Coin" x="288" y="96">
+   <point/>
+  </object>
+  <object id="2517" name="Coin" x="304" y="96">
+   <point/>
+  </object>
+  <object id="2518" name="Coin" x="288" y="80">
+   <point/>
+  </object>
+  <object id="2519" name="Coin" x="304" y="80">
+   <point/>
+  </object>
+  <object id="2520" name="Coin" x="320" y="64">
+   <point/>
+  </object>
+  <object id="2521" name="Coin" x="336" y="64">
+   <point/>
+  </object>
+  <object id="2522" name="Coin" x="320" y="48">
+   <point/>
+  </object>
+  <object id="2523" name="Coin" x="336" y="48">
+   <point/>
+  </object>
+  <object id="2524" name="Coin" x="352" y="64">
+   <point/>
+  </object>
+  <object id="2525" name="Coin" x="368" y="64">
+   <point/>
+  </object>
+  <object id="2526" name="Coin" x="352" y="48">
+   <point/>
+  </object>
+  <object id="2527" name="Coin" x="368" y="48">
+   <point/>
+  </object>
+  <object id="2528" name="Coin" x="256" y="64">
+   <point/>
+  </object>
+  <object id="2529" name="Coin" x="272" y="64">
+   <point/>
+  </object>
+  <object id="2530" name="Coin" x="256" y="48">
+   <point/>
+  </object>
+  <object id="2531" name="Coin" x="272" y="48">
+   <point/>
+  </object>
+  <object id="2532" name="Coin" x="288" y="64">
+   <point/>
+  </object>
+  <object id="2533" name="Coin" x="304" y="64">
+   <point/>
+  </object>
+  <object id="2534" name="Coin" x="288" y="48">
+   <point/>
+  </object>
+  <object id="2535" name="Coin" x="304" y="48">
+   <point/>
+  </object>
+  <object id="2536" name="Coin" x="448" y="160">
+   <point/>
+  </object>
+  <object id="2537" name="Coin" x="464" y="160">
+   <point/>
+  </object>
+  <object id="2538" name="Coin" x="448" y="144">
+   <point/>
+  </object>
+  <object id="2539" name="Coin" x="464" y="144">
+   <point/>
+  </object>
+  <object id="2540" name="Coin" x="480" y="160">
+   <point/>
+  </object>
+  <object id="2541" name="Coin" x="496" y="160">
+   <point/>
+  </object>
+  <object id="2542" name="Coin" x="480" y="144">
+   <point/>
+  </object>
+  <object id="2543" name="Coin" x="496" y="144">
+   <point/>
+  </object>
+  <object id="2544" name="Coin" x="384" y="160">
+   <point/>
+  </object>
+  <object id="2545" name="Coin" x="400" y="160">
+   <point/>
+  </object>
+  <object id="2546" name="Coin" x="384" y="144">
+   <point/>
+  </object>
+  <object id="2547" name="Coin" x="400" y="144">
+   <point/>
+  </object>
+  <object id="2548" name="Coin" x="416" y="160">
+   <point/>
+  </object>
+  <object id="2549" name="Coin" x="432" y="160">
+   <point/>
+  </object>
+  <object id="2550" name="Coin" x="416" y="144">
+   <point/>
+  </object>
+  <object id="2551" name="Coin" x="432" y="144">
+   <point/>
+  </object>
+  <object id="2552" name="Coin" x="448" y="128">
+   <point/>
+  </object>
+  <object id="2553" name="Coin" x="464" y="128">
+   <point/>
+  </object>
+  <object id="2554" name="Coin" x="448" y="112">
+   <point/>
+  </object>
+  <object id="2555" name="Coin" x="464" y="112">
+   <point/>
+  </object>
+  <object id="2556" name="Coin" x="480" y="128">
+   <point/>
+  </object>
+  <object id="2557" name="Coin" x="496" y="128">
+   <point/>
+  </object>
+  <object id="2558" name="Coin" x="480" y="112">
+   <point/>
+  </object>
+  <object id="2559" name="Coin" x="496" y="112">
+   <point/>
+  </object>
+  <object id="2560" name="Coin" x="384" y="128">
+   <point/>
+  </object>
+  <object id="2561" name="Coin" x="400" y="128">
+   <point/>
+  </object>
+  <object id="2562" name="Coin" x="384" y="112">
+   <point/>
+  </object>
+  <object id="2563" name="Coin" x="400" y="112">
+   <point/>
+  </object>
+  <object id="2564" name="Coin" x="416" y="128">
+   <point/>
+  </object>
+  <object id="2565" name="Coin" x="432" y="128">
+   <point/>
+  </object>
+  <object id="2566" name="Coin" x="416" y="112">
+   <point/>
+  </object>
+  <object id="2567" name="Coin" x="432" y="112">
+   <point/>
+  </object>
+  <object id="2568" name="Coin" x="448" y="96">
+   <point/>
+  </object>
+  <object id="2569" name="Coin" x="464" y="96">
+   <point/>
+  </object>
+  <object id="2570" name="Coin" x="448" y="80">
+   <point/>
+  </object>
+  <object id="2571" name="Coin" x="464" y="80">
+   <point/>
+  </object>
+  <object id="2572" name="Coin" x="480" y="96">
+   <point/>
+  </object>
+  <object id="2573" name="Coin" x="496" y="96">
+   <point/>
+  </object>
+  <object id="2574" name="Coin" x="480" y="80">
+   <point/>
+  </object>
+  <object id="2575" name="Coin" x="496" y="80">
+   <point/>
+  </object>
+  <object id="2576" name="Coin" x="384" y="96">
+   <point/>
+  </object>
+  <object id="2577" name="Coin" x="400" y="96">
+   <point/>
+  </object>
+  <object id="2578" name="Coin" x="384" y="80">
+   <point/>
+  </object>
+  <object id="2579" name="Coin" x="400" y="80">
+   <point/>
+  </object>
+  <object id="2580" name="Coin" x="416" y="96">
+   <point/>
+  </object>
+  <object id="2581" name="Coin" x="432" y="96">
+   <point/>
+  </object>
+  <object id="2582" name="Coin" x="416" y="80">
+   <point/>
+  </object>
+  <object id="2583" name="Coin" x="432" y="80">
+   <point/>
+  </object>
+  <object id="2584" name="Coin" x="448" y="64">
+   <point/>
+  </object>
+  <object id="2585" name="Coin" x="464" y="64">
+   <point/>
+  </object>
+  <object id="2586" name="Coin" x="448" y="48">
+   <point/>
+  </object>
+  <object id="2587" name="Coin" x="464" y="48">
+   <point/>
+  </object>
+  <object id="2588" name="Coin" x="480" y="64">
+   <point/>
+  </object>
+  <object id="2589" name="Coin" x="496" y="64">
+   <point/>
+  </object>
+  <object id="2590" name="Coin" x="480" y="48">
+   <point/>
+  </object>
+  <object id="2591" name="Coin" x="496" y="48">
+   <point/>
+  </object>
+  <object id="2592" name="Coin" x="384" y="64">
+   <point/>
+  </object>
+  <object id="2593" name="Coin" x="400" y="64">
+   <point/>
+  </object>
+  <object id="2594" name="Coin" x="384" y="48">
+   <point/>
+  </object>
+  <object id="2595" name="Coin" x="400" y="48">
+   <point/>
+  </object>
+  <object id="2596" name="Coin" x="416" y="64">
+   <point/>
+  </object>
+  <object id="2597" name="Coin" x="432" y="64">
+   <point/>
+  </object>
+  <object id="2598" name="Coin" x="416" y="48">
+   <point/>
+  </object>
+  <object id="2599" name="Coin" x="432" y="48">
+   <point/>
+  </object>
+  <object id="2600" name="Coin" x="576" y="160">
+   <point/>
+  </object>
+  <object id="2601" name="Coin" x="592" y="160">
+   <point/>
+  </object>
+  <object id="2602" name="Coin" x="576" y="144">
+   <point/>
+  </object>
+  <object id="2603" name="Coin" x="592" y="144">
+   <point/>
+  </object>
+  <object id="2604" name="Coin" x="608" y="160">
+   <point/>
+  </object>
+  <object id="2605" name="Coin" x="624" y="160">
+   <point/>
+  </object>
+  <object id="2606" name="Coin" x="608" y="144">
+   <point/>
+  </object>
+  <object id="2607" name="Coin" x="624" y="144">
+   <point/>
+  </object>
+  <object id="2608" name="Coin" x="512" y="160">
+   <point/>
+  </object>
+  <object id="2609" name="Coin" x="528" y="160">
+   <point/>
+  </object>
+  <object id="2610" name="Coin" x="512" y="144">
+   <point/>
+  </object>
+  <object id="2611" name="Coin" x="528" y="144">
+   <point/>
+  </object>
+  <object id="2612" name="Coin" x="544" y="160">
+   <point/>
+  </object>
+  <object id="2613" name="Coin" x="560" y="160">
+   <point/>
+  </object>
+  <object id="2614" name="Coin" x="544" y="144">
+   <point/>
+  </object>
+  <object id="2615" name="Coin" x="560" y="144">
+   <point/>
+  </object>
+  <object id="2616" name="Coin" x="576" y="128">
+   <point/>
+  </object>
+  <object id="2617" name="Coin" x="592" y="128">
+   <point/>
+  </object>
+  <object id="2618" name="Coin" x="576" y="112">
+   <point/>
+  </object>
+  <object id="2619" name="Coin" x="592" y="112">
+   <point/>
+  </object>
+  <object id="2620" name="Coin" x="608" y="128">
+   <point/>
+  </object>
+  <object id="2621" name="Coin" x="624" y="128">
+   <point/>
+  </object>
+  <object id="2622" name="Coin" x="608" y="112">
+   <point/>
+  </object>
+  <object id="2623" name="Coin" x="624" y="112">
+   <point/>
+  </object>
+  <object id="2624" name="Coin" x="512" y="128">
+   <point/>
+  </object>
+  <object id="2625" name="Coin" x="528" y="128">
+   <point/>
+  </object>
+  <object id="2626" name="Coin" x="512" y="112">
+   <point/>
+  </object>
+  <object id="2627" name="Coin" x="528" y="112">
+   <point/>
+  </object>
+  <object id="2628" name="Coin" x="544" y="128">
+   <point/>
+  </object>
+  <object id="2629" name="Coin" x="560" y="128">
+   <point/>
+  </object>
+  <object id="2630" name="Coin" x="544" y="112">
+   <point/>
+  </object>
+  <object id="2631" name="Coin" x="560" y="112">
+   <point/>
+  </object>
+  <object id="2632" name="Coin" x="576" y="96">
+   <point/>
+  </object>
+  <object id="2633" name="Coin" x="592" y="96">
+   <point/>
+  </object>
+  <object id="2634" name="Coin" x="576" y="80">
+   <point/>
+  </object>
+  <object id="2635" name="Coin" x="592" y="80">
+   <point/>
+  </object>
+  <object id="2636" name="Coin" x="608" y="96">
+   <point/>
+  </object>
+  <object id="2637" name="Coin" x="624" y="96">
+   <point/>
+  </object>
+  <object id="2638" name="Coin" x="608" y="80">
+   <point/>
+  </object>
+  <object id="2639" name="Coin" x="624" y="80">
+   <point/>
+  </object>
+  <object id="2640" name="Coin" x="512" y="96">
+   <point/>
+  </object>
+  <object id="2641" name="Coin" x="528" y="96">
+   <point/>
+  </object>
+  <object id="2642" name="Coin" x="512" y="80">
+   <point/>
+  </object>
+  <object id="2643" name="Coin" x="528" y="80">
+   <point/>
+  </object>
+  <object id="2644" name="Coin" x="544" y="96">
+   <point/>
+  </object>
+  <object id="2645" name="Coin" x="560" y="96">
+   <point/>
+  </object>
+  <object id="2646" name="Coin" x="544" y="80">
+   <point/>
+  </object>
+  <object id="2647" name="Coin" x="560" y="80">
+   <point/>
+  </object>
+  <object id="2648" name="Coin" x="576" y="64">
+   <point/>
+  </object>
+  <object id="2649" name="Coin" x="592" y="64">
+   <point/>
+  </object>
+  <object id="2650" name="Coin" x="576" y="48">
+   <point/>
+  </object>
+  <object id="2651" name="Coin" x="592" y="48">
+   <point/>
+  </object>
+  <object id="2652" name="Coin" x="608" y="64">
+   <point/>
+  </object>
+  <object id="2653" name="Coin" x="624" y="64">
+   <point/>
+  </object>
+  <object id="2654" name="Coin" x="608" y="48">
+   <point/>
+  </object>
+  <object id="2655" name="Coin" x="624" y="48">
+   <point/>
+  </object>
+  <object id="2656" name="Coin" x="512" y="64">
+   <point/>
+  </object>
+  <object id="2657" name="Coin" x="528" y="64">
+   <point/>
+  </object>
+  <object id="2658" name="Coin" x="512" y="48">
+   <point/>
+  </object>
+  <object id="2659" name="Coin" x="528" y="48">
+   <point/>
+  </object>
+  <object id="2660" name="Coin" x="544" y="64">
+   <point/>
+  </object>
+  <object id="2661" name="Coin" x="560" y="64">
+   <point/>
+  </object>
+  <object id="2662" name="Coin" x="544" y="48">
+   <point/>
+  </object>
+  <object id="2663" name="Coin" x="560" y="48">
+   <point/>
+  </object>
+  <object id="3176" name="Sign" type="Dialogable" x="896" y="224">
+   <properties>
+    <property name="MessageID" value="Message3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="3177" name="Sign" type="Dialogable" x="976" y="224">
+   <properties>
+    <property name="MessageID" value="Message2"/>
+   </properties>
+   <point/>
+  </object>
  </objectgroup>
 </map>

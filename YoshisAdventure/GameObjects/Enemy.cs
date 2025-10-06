@@ -17,10 +17,12 @@ namespace YoshisAdventure.GameObjects
 
         public int Health => throw new NotImplementedException();
 
+        public int MaxHealth => throw new NotImplementedException();
+
         public Enemy(SpriteSheet spriteSheet, TiledMap tilemap) : base(tilemap)
         {
             _sprite = new AnimatedSprite(spriteSheet);
-            _sprite.SetAnimation("Normal");
+            _sprite.SetAnimation("normal");
             Size = new Point(16, 32);
         }
 

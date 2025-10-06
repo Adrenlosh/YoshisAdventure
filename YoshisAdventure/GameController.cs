@@ -88,9 +88,15 @@ public static class GameController
             GamePad.WasButtonJustPressed(Buttons.X);
     }
 
-    public static bool Pause()
+    public static bool StartPressed()
+    {
+        return Keyboard.WasKeyJustPressed(Keys.B) ||
+            GamePad.WasButtonJustPressed(Buttons.Start);
+    }
+
+    public static bool BackPressed()
     {
         return Keyboard.WasKeyJustPressed(Keys.Escape) ||
-               GamePad.WasButtonJustPressed(Buttons.Start);
+            GamePad.WasButtonJustPressed(Buttons.Back);
     }
 }

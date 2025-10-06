@@ -1,162 +1,271 @@
-using Microsoft.Xna.Framework;
-using MonoGameGum.GueDeriving;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.ViewportAdapters;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace YoshisAdventure.UI.CustomControls
 {
-    public class MessageBox : ColoredRectangleRuntime
+    enum MessageBoxStatus
     {
-        private TextRuntime _messageText = new TextRuntime();
-        private UIButton _nextButton = new UIButton();
+        Opening, Opened, Closing, Closed
+    }
 
-        private List<string> _pages = new List<string>();
-        private int _currentPage = 0;
-
-        private bool _isAnimating = false;
-        private bool _isOpening = false;
-        private float _animationProgress = 0f;
+    public class MessageBox
+    {
         private const float AnimationDuration = 0.3f;
-        private float _baseWidth = 190;
-        private float _baseHeight = 130;
+        private float _animationTimer = -1f;
+        private int _alpha = 0;
+        private int _currentPageIndex = 0;
+        private int _padding = 2;
+        private BitmapFont _bitmapFont;
+        private List<string> _pages = new List<string>();
+        private MessageBoxStatus _status = MessageBoxStatus.Closed;
+
+        public Point Position { get; set; } = new Point(1);
+
+        public Point Size { get; set; } = new Point(150, 100);
 
         public event Action OnClosed;
 
-        public MessageBox()
+        public MessageBox(BitmapFont font)
         {
-            Width = _baseWidth;
-            Height = _baseHeight;
-            Color = Color.Black;
-            Anchor(Gum.Wireframe.Anchor.Center);
-            Visible = false;
-
-            _messageText.UseCustomFont = true;
-            _messageText.CustomFontFile = "Fonts/ZFull-GB.fnt";
-            _messageText.Color = Color.White;
-            _messageText.Dock(Gum.Wireframe.Dock.Fill);
-            _messageText.HorizontalAlignment = RenderingLibrary.Graphics.HorizontalAlignment.Left;
-            _messageText.VerticalAlignment = RenderingLibrary.Graphics.VerticalAlignment.Top;
-            AddChild(_messageText);
-
-            _nextButton.Dock(Gum.Wireframe.Dock.Bottom);
-            _nextButton.Click += (s, e) => OnNextButtonClicked();
-            AddChild(_nextButton.Visual);
-
-            Alpha = 0;
-            _messageText.Alpha = 0;
-            _nextButton.Alpha = 0;
+            _bitmapFont = font;
         }
 
-        public void Show(string text, int maxCharsPerPage = 350)
+        public void HandleInput(GameTime gameTime)
         {
-            _pages = Paginate(text, maxCharsPerPage);
-            _currentPage = 0;
-            _messageText.Text = _pages[_currentPage];
-            Visible = true;
-            _isAnimating = true;
-            _isOpening = true;
-            _animationProgress = 0f;
-            Alpha = 0;
-            _messageText.Alpha = 0;
-            _nextButton.Alpha = 0;
-            if (_pages.Count == 1)
+            if (GameController.ActionPressed())
             {
-                _nextButton.Text = Language.Strings.Close;
-            }
-            else
-            {
-                _nextButton.Text = Language.Strings.NextPage;
-            }
-        }
-
-        private List<string> Paginate(string text, int maxChars)
-        {
-            if (string.IsNullOrEmpty(text)) return new List<string> { "" };
-
-            var pages = new List<string>();
-            var currentPage = "";
-
-            foreach (var word in text.Split(' '))
-            {
-                if ((currentPage + word).Length <= maxChars)
+                if (_status == MessageBoxStatus.Opened)
                 {
-                    currentPage += (currentPage == "" ? "" : " ") + word;
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(currentPage))
-                        pages.Add(currentPage);
-                    if (word.Length > maxChars)
+                    if (_currentPageIndex < _pages.Count - 1)
                     {
-                        for (int i = 0; i < word.Length; i += maxChars)
-                            pages.Add(word.Substring(i, Math.Min(maxChars, word.Length - i)));
-                        currentPage = "";
+                        _currentPageIndex++;
                     }
                     else
                     {
-                        currentPage = word;
+                        Close();
                     }
                 }
-            }
-
-            if (!string.IsNullOrEmpty(currentPage))
-                pages.Add(currentPage);
-
-            return pages.Count == 0 ? new List<string> { text } : pages;
-        }
-
-        private void OnNextButtonClicked()
-        {
-            if (_currentPage < _pages.Count - 1)
-            {
-                _currentPage++;
-                _messageText.Text = _pages[_currentPage];
-                if (_currentPage == _pages.Count - 1)
-                    _nextButton.Text = Language.Strings.Close;
-            }
-            else
-            {
-                _isAnimating = true;
-                _isOpening = false;
-                _animationProgress = 1f;
             }
         }
 
         public void Update(GameTime gameTime)
         {
-            if (_isAnimating)
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            HandleInput(gameTime);
+
+            if (_animationTimer >= 0f)
             {
-                float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (_isOpening)
+                _animationTimer += elapsedTime;
+
+                if (_animationTimer >= AnimationDuration)
                 {
-                    _animationProgress += elapsedTime / AnimationDuration;
-                    if (_animationProgress >= 1f)
+                    _animationTimer = -1f;
+
+                    if (_status == MessageBoxStatus.Opening)
                     {
-                        _animationProgress = 1f;
-                        _isAnimating = false;
+                        _status = MessageBoxStatus.Opened;
+                        _alpha = 255;
+                    }
+                    else if (_status == MessageBoxStatus.Closing)
+                    {
+                        _status = MessageBoxStatus.Closed;
+                        _alpha = 0;
+                        OnClosed?.Invoke();
                     }
                 }
                 else
                 {
-                    _animationProgress -= elapsedTime / AnimationDuration;
-                    if (_animationProgress <= 0f)
+                    float progress = _animationTimer / AnimationDuration;
+
+                    switch (_status)
                     {
-                        _animationProgress = 0f;
-                        _isAnimating = false;
-                        Visible = false;
-                        OnClosed?.Invoke();
+                        case MessageBoxStatus.Opening:
+                            _alpha = (int)(255 * progress);
+                            break;
+
+                        case MessageBoxStatus.Closing:
+                            _alpha = 255 - (int)(255 * progress);
+                            break;
                     }
                 }
-                byte alphaValue = (byte)(255 * _animationProgress);
-                Alpha = alphaValue;
-                _messageText.Alpha = alphaValue;
-                _nextButton.Alpha = alphaValue;
             }
-            else
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            if (_status != MessageBoxStatus.Closed && _alpha > 0)
             {
-                this.Alpha = 255;
-                _messageText.Alpha = 255;
-                _nextButton.Alpha = 255;
+                Color backgroundColor = new Color(Color.Black, _alpha);
+                Color textColor = new Color(Color.White, _alpha);
+                RectangleF rect = new RectangleF(Position.ToVector2(), Size.ToVector2());
+                spriteBatch.FillRectangle(rect, backgroundColor);
+                if (_pages.Count > 0 && _currentPageIndex < _pages.Count)
+                {
+                    string currentPageText = _pages[_currentPageIndex];
+
+                    if (_pages.Count > 1)
+                    {
+                        currentPageText += $"\n\n({_currentPageIndex + 1}/{_pages.Count})";
+                    }
+
+                    DrawWrappedText(spriteBatch, currentPageText,
+                        new Vector2(Position.X + _padding, Position.Y + _padding),
+                        Size.X - _padding * 2, textColor);
+                }
+            }
+        }
+
+        public void Show(string messageText)
+        {
+            _status = MessageBoxStatus.Opening;
+            _animationTimer = 0f;
+            _alpha = 0;
+            ProcessTextPages(messageText);
+            _currentPageIndex = 0;
+        }
+
+        public void Close()
+        {
+            if (_status == MessageBoxStatus.Opened || _status == MessageBoxStatus.Opening)
+            {
+                _status = MessageBoxStatus.Closing;
+                _animationTimer = 0f;
+            }
+        }
+
+        public void AutoSetPosition(ViewportAdapter viewportAdapter)
+        {
+            var boundingRect = viewportAdapter.BoundingRectangle;
+            Position = new Point(boundingRect.Center.X - Size.X / 2, boundingRect.Center.Y - Size.Y / 2);
+        }
+
+        /// <summary>
+        /// 处理文本分页
+        /// </summary>
+        private void ProcessTextPages(string text)
+        {
+            _pages.Clear();
+
+            // 计算每页可容纳的最大行数
+            int maxLinesPerPage = CalculateMaxLinesPerPage();
+
+            // 将文本分割成单词
+            string[] words = text.Split(' ');
+            List<string> lines = new List<string>();
+            StringBuilder currentLine = new StringBuilder();
+
+            // 构建行
+            foreach (string word in words)
+            {
+                // 测试添加这个词后行的宽度
+                string testLine = currentLine.Length > 0 ?
+                    currentLine.ToString() + " " + word : word;
+
+                Vector2 lineSize = _bitmapFont.MeasureString(testLine);
+
+                if (lineSize.X <= Size.X - _padding * 2)
+                {
+                    // 可以添加到当前行
+                    if (currentLine.Length > 0)
+                        currentLine.Append(" ");
+                    currentLine.Append(word);
+                }
+                else
+                {
+                    // 开始新行
+                    if (currentLine.Length > 0)
+                    {
+                        lines.Add(currentLine.ToString());
+                        currentLine.Clear();
+                    }
+
+                    // 如果单个词就超过宽度，强制分割
+                    Vector2 wordSize = _bitmapFont.MeasureString(word);
+                    if (wordSize.X > Size.X - _padding * 2)
+                    {
+                        // 长单词需要分割
+                        string remainingWord = word;
+                        while (remainingWord.Length > 0)
+                        {
+                            int charsThatFit = CalculateCharsThatFit(remainingWord, Size.X - _padding * 2);
+                            lines.Add(remainingWord.Substring(0, charsThatFit));
+                            remainingWord = remainingWord.Substring(charsThatFit);
+                        }
+                    }
+                    else
+                    {
+                        currentLine.Append(word);
+                    }
+                }
+            }
+
+            // 添加最后一行
+            if (currentLine.Length > 0)
+            {
+                lines.Add(currentLine.ToString());
+            }
+
+            // 将行分页
+            for (int i = 0; i < lines.Count; i += maxLinesPerPage)
+            {
+                int linesToTake = Math.Min(maxLinesPerPage, lines.Count - i);
+                string[] pageLines = new string[linesToTake];
+                Array.Copy(lines.ToArray(), i, pageLines, 0, linesToTake);
+                _pages.Add(string.Join("\n", pageLines));
+            }
+
+            // 如果没有内容，至少添加一个空页
+            if (_pages.Count == 0)
+            {
+                _pages.Add("");
+            }
+        }
+
+        /// <summary>
+        /// 计算每页最多可以容纳多少行文本
+        /// </summary>
+        private int CalculateMaxLinesPerPage()
+        {
+            float lineHeight = _bitmapFont.LineHeight;
+            float availableHeight = Size.Y - _padding * 2;
+            return (int)(availableHeight / lineHeight);
+        }
+
+        /// <summary>
+        /// 计算在给定宽度内可以容纳多少个字符
+        /// </summary>
+        private int CalculateCharsThatFit(string text, float maxWidth)
+        {
+            for (int i = 1; i <= text.Length; i++)
+            {
+                Vector2 size = _bitmapFont.MeasureString(text.Substring(0, i));
+                if (size.X > maxWidth)
+                {
+                    return i - 1;
+                }
+            }
+            return text.Length;
+        }
+
+        /// <summary>
+        /// 绘制自动换行的文本
+        /// </summary>
+        private void DrawWrappedText(SpriteBatch spriteBatch, string text, Vector2 position, float maxWidth, Color color)
+        {
+            string[] lines = text.Split('\n');
+            float lineHeight = _bitmapFont.LineHeight;
+            float y = position.Y;
+
+            foreach (string line in lines)
+            {
+                spriteBatch.DrawString(_bitmapFont, line, new Vector2(position.X, y), color);
+                y += lineHeight;
             }
         }
     }

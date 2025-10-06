@@ -1,66 +1,55 @@
-﻿using Gum.Forms.Controls;
+﻿using GameLibrary.Primitive2D;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.ViewportAdapters;
 using MonoGameGum;
 using MonoGameGum.GueDeriving;
 using System;
+using YoshisAdventure.Systems;
 using YoshisAdventure.UI.CustomControls;
 
 namespace YoshisAdventure.UI
 {
+    enum AnimationStatus
+    {
+        In, Out, None
+    }
+
     public class GamingScreenUI : ContainerRuntime
     {
-        TextRuntime LifeLeftText = new TextRuntime();
-
-        TextRuntime EggText = new TextRuntime();
-
-        TextRuntime ScoreText = new TextRuntime();
+        private const float AnimationDuration = 0.3f;
+        private float _animationTimer = -1f;
+        private int _alpha;
+        private AnimationStatus _animationStatus = AnimationStatus.None;
+        private SpriteBatch _spriteBatch;
+        private MessageBox _messageBox;
+        private ViewportAdapter _viewportAdapter;
+        private BitmapFont _bitmapFont;
 
         public bool IsReadingMessage { get; set; }
 
-        public event EventHandler OnMessageBoxClosed;
+        public bool IsPaused { get; set; } = false;
 
-        private Panel _titlePanel;
+        public bool HandlePause { get; set; } = true;
 
-        private MessageBox _messageBox;
+        public event Action OnMessageBoxClosed;
+        public event Action OnCancelPause;
 
-        public GamingScreenUI()
+        public GamingScreenUI(SpriteBatch spriteBatch, ContentManager content, ViewportAdapter viewportAdapter)
         {
-            Dock(Gum.Wireframe.Dock.Fill);
-            this.AddToRoot();
+            _spriteBatch = spriteBatch;
+            _viewportAdapter = viewportAdapter;
+            _bitmapFont = content.Load<BitmapFont>("Fonts/ZFull-GB");
 
-            LifeLeftText.Anchor(Gum.Wireframe.Anchor.TopLeft);
-            LifeLeftText.Text = Language.Strings.LifeLeftOnHud;
-            LifeLeftText.Color = Color.DarkGreen;
-            LifeLeftText.UseCustomFont = true;
-            LifeLeftText.CustomFontFile = "Fonts/ZFull-GB.fnt";
-            LifeLeftText.BindingContext = GameMain.PlayerStatus;
-
-            EggText.Text = Language.Strings.EggCountOnHud;
-            EggText.Color = Color.White;
-            EggText.UseCustomFont = true;
-            EggText.CustomFontFile = "Fonts/ZFull-GB.fnt";
-            EggText.Anchor(Gum.Wireframe.Anchor.Top);
-            EggText.BindingContext = GameMain.PlayerStatus;
-
-            ScoreText.Text = Language.Strings.ScoreOnHud;
-            ScoreText.Color = Color.White;
-            ScoreText.UseCustomFont = true;
-            ScoreText.CustomFontFile = "Fonts/ZFull-GB.fnt";
-            ScoreText.Anchor(Gum.Wireframe.Anchor.TopRight);
-
-            _titlePanel = new Panel();
-            _titlePanel.Dock(Gum.Wireframe.Dock.Fill);
-            _titlePanel.AddChild(LifeLeftText);
-            _titlePanel.AddChild(EggText);
-            _titlePanel.AddChild(ScoreText);
-            _titlePanel.AddToRoot();
-
-            _messageBox = new MessageBox();
-            _messageBox.OnClosed += () => { 
-                IsReadingMessage = false; 
-                OnMessageBoxClosed?.Invoke(this, EventArgs.Empty); 
+            _messageBox = new MessageBox(_bitmapFont);
+            _messageBox.AutoSetPosition(_viewportAdapter);
+            _messageBox.OnClosed += () => {
+                IsReadingMessage = false;
+                OnMessageBoxClosed?.Invoke();
             };
-            _titlePanel.AddChild(_messageBox);
         }
 
 
@@ -70,19 +59,99 @@ namespace YoshisAdventure.UI
             _messageBox.Show(Language.Messages.ResourceManager.GetString(messageID));
         }
 
+        public void Pause()
+        {
+            SFXSystem.Play("pause");
+            IsPaused = true;
+            _animationTimer = 0f;
+            _animationStatus = AnimationStatus.In;
+        }
+
+        public void Unpause()
+        {
+            SFXSystem.Play("pause");
+            IsPaused = false;
+            _animationTimer = 0f;
+            _animationStatus = AnimationStatus.Out;
+        }
+
         public void Update(GameTime gameTime)
         {
-            LifeLeftText.Text = string.Format(Language.Strings.LifeLeftOnHud, GameMain.PlayerStatus.LifeLeft);
-            EggText.Text = string.Format(Language.Strings.EggCountOnHud, GameMain.PlayerStatus.Egg);
-            ScoreText.Text = string.Format(Language.Strings.ScoreOnHud, GameMain.PlayerStatus.Score);
+            HandleInput();
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (_animationTimer >= 0f)
+            {
+                _animationTimer += elapsedTime;
+
+                if (_animationTimer >= AnimationDuration)
+                {
+                    _animationTimer = -1f;
+                    if (_animationStatus == AnimationStatus.Out)
+                    {
+                        _alpha = 0;
+                    }
+                    _animationStatus = AnimationStatus.None;
+                }
+                else
+                {
+                    float progress = _animationTimer / AnimationDuration;
+                    if (_animationStatus == AnimationStatus.In)
+                    {
+                        _alpha = (int)(230 * progress);
+                    }
+                    else if (_animationStatus == AnimationStatus.Out)
+                    {
+                        _alpha = (int)(230 * (1 - progress));
+                    }
+                }
+            }
             _messageBox.Update(gameTime);
             GumService.Default.Update(gameTime);
         }
 
-        public void Draw(float scaleFactor = 1f)
+        private void HandleInput()
         {
-            GumService.Default.Renderer.Camera.Zoom = scaleFactor;
-            GumService.Default.Draw();
+            if (GameController.StartPressed() && HandlePause && !IsReadingMessage)
+            {
+                if (IsPaused)
+                {
+                    Unpause();
+                }
+                else
+                {
+                    Pause();
+                }
+            }
+        }
+
+        public void Draw()
+        {
+            Matrix matrix = _viewportAdapter.GetScaleMatrix();
+            Rectangle boundingRect = _viewportAdapter.BoundingRectangle;
+            int denominator = 7;
+            int paddingY = 1;
+            int stepX = boundingRect.Width / denominator;
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: matrix);
+            if (IsPaused || _animationStatus != AnimationStatus.None)
+            {
+                _spriteBatch.FillRectangle(boundingRect, new Color(Color.Black, _alpha));
+                if (IsPaused && _animationStatus != AnimationStatus.Out)
+                {
+                    var pauseStrSize = _bitmapFont.MeasureString(Language.Strings.Paused);
+                    Color textColor = new Color(Color.MonoGameOrange, MathHelper.Clamp(_alpha / 230f, 0f, 1f));
+                    _spriteBatch.DrawString(_bitmapFont, Language.Strings.Paused, new Vector2(boundingRect.Center.X - pauseStrSize.Width / 2, boundingRect.Center.Y - pauseStrSize.Height / 2), textColor);
+                }
+            }
+
+            string healthStr = string.Format(Language.Strings.HealthOnHud, GameObjectsSystem.Player.Health, GameObjectsSystem.Player.MaxHealth);
+            var healthStrSize = _bitmapFont.MeasureString(healthStr);
+            _spriteBatch.DrawString(_bitmapFont, string.Format(Language.Strings.LifeLeftOnHud, GameMain.PlayerStatus.LifeLeft), new Vector2(1, paddingY), Color.Green);
+            _spriteBatch.DrawString(_bitmapFont, string.Format(Language.Strings.EggCountOnHud, GameMain.PlayerStatus.Egg), new Vector2(stepX * 2, paddingY), Color.White);
+            _spriteBatch.DrawString(_bitmapFont, string.Format(Language.Strings.CoinOnHud, GameMain.PlayerStatus.Coin), new Vector2(stepX * 4, paddingY), Color.White);
+            _spriteBatch.DrawString(_bitmapFont, string.Format(Language.Strings.ScoreOnHud, GameMain.PlayerStatus.Score), new Vector2(stepX * 6, paddingY), Color.White);
+            _spriteBatch.DrawString(_bitmapFont, healthStr, new Vector2(1, boundingRect.Height - 1 - healthStrSize.Height), GameObjectsSystem.Player.Health < 2 ? Color.Red : Color.Yellow);
+            _messageBox.Draw(_spriteBatch);
+            _spriteBatch.End();
         }
     }
 }
