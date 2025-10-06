@@ -17,7 +17,7 @@ namespace YoshisAdventure.GameObjects
             _sprite = new AnimatedSprite(sheet);
             _sprite.SetAnimation("NormalGreenStar");
             Size = new Point(28, 134);
-            IsEatable = false;
+            IsCapturable = false;
         }
 
         public override void OnCollision(GameObject other, ObjectCollisionResult collision)

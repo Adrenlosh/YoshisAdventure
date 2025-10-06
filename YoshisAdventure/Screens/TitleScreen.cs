@@ -47,6 +47,8 @@ namespace YoshisAdventure.Screens
 
         public override void Update(GameTime gameTime)
         {
+            GameObjectsSystem.InactivateObejcts(_sceneRenderer.GetScreenBounds());
+            GameObjectsSystem.ActivateObjects(_sceneRenderer.GetScreenBounds());
             GameObjectsSystem.Update(gameTime);
             _interactionSystem.Update(gameTime);
             _sceneRenderer.Update(gameTime, GameObjectsSystem.Player.Position, true, GameObjectsSystem.Player.FaceDirection, GameObjectsSystem.Player.Velocity);
@@ -56,12 +58,7 @@ namespace YoshisAdventure.Screens
         public override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
             _sceneRenderer.Draw(GameObjectsSystem.GetAllActiveObjects());
-
-
-
-
             Matrix matrix = _viewportAdapter.GetScaleMatrix();
             _spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: matrix);
             _spriteBatch.End();

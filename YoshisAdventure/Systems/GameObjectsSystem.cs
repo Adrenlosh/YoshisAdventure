@@ -86,7 +86,6 @@ namespace YoshisAdventure.Systems
             foreach (var gameObject in _gameObjects.Where(obj => obj.IsActive))
             {
                 gameObject.Update(gameTime);
-
             }
         }
 
@@ -98,9 +97,16 @@ namespace YoshisAdventure.Systems
             }
         }
 
-        public static List<T> GetObjectsOfType<T>() where T : GameObject
+        public static List<T> GetObjectsOfType<T>(bool activeObjectsOnly = true) where T : GameObject
         {
-            return _gameObjects.OfType<T>().ToList();
+            if (activeObjectsOnly)
+            {
+                return _gameObjects.OfType<T>().Where(obj => obj.IsActive == true).ToList();
+            }
+            else
+            {
+                return _gameObjects.OfType<T>().ToList();
+            }
         }
 
         public static T FindObjectOfType<T>() where T : GameObject
@@ -108,12 +114,22 @@ namespace YoshisAdventure.Systems
             return _gameObjects.OfType<T>().FirstOrDefault();
         }
 
-        public static List<TInterface> GetObjectsOfInterface<TInterface>()
+        public static List<TInterface> GetObjectsOfInterface<TInterface>(bool activeObjectsOnly = true)
         {
-            return GameObjects
-                .Where(obj => obj is TInterface)
-                .Cast<TInterface>()
-                .ToList();
+            if (activeObjectsOnly)
+            {
+                return GameObjects
+                    .Where(obj => obj is TInterface && obj.IsActive == true)
+                    .Cast<TInterface>()
+                    .ToList();
+            }
+            else
+            {
+                return GameObjects
+                    .Where(obj => obj is TInterface)
+                    .Cast<TInterface>()
+                    .ToList();
+            }
         }
 
         public static List<GameObject> GetObjectsInRange(Vector2 position, float range)
@@ -131,6 +147,11 @@ namespace YoshisAdventure.Systems
         public static List<GameObject> GetAllActiveObjects()
         {
             return _gameObjects.Where(obj => obj.IsActive).ToList();
+        }
+
+        public static List<GameObject> GetAllInactiveObjects()
+        {
+            return _gameObjects.Where(obj => !obj.IsActive).ToList();
         }
 
         public static GameObject FindObjectByName(string name)
@@ -174,6 +195,30 @@ namespace YoshisAdventure.Systems
                 return null;
             Rectangle intersection = Rectangle.Intersect(rectA, rectB);
             return new ObjectCollisionResult(objB, intersection, rectA, rectB);
+        }
+
+        public static void InactivateObejcts(Rectangle screenBounds)
+        {
+            screenBounds.Inflate(200, 200);
+            foreach(GameObject obj in GetAllActiveObjects())
+            {
+                if(!screenBounds.Contains(obj.CollisionBox) && !obj.IsCaptured)
+                {
+                    obj.IsActive = false;
+                }
+            }
+        }
+
+        public static void ActivateObjects(Rectangle screenBounds)
+        {
+            screenBounds.Inflate(200, 200);
+            foreach (GameObject obj in GetAllInactiveObjects())
+            {
+                if (screenBounds.Contains(obj.CollisionBox) && !obj.IsCaptured)
+                {
+                    obj.IsActive = true;
+                }
+            }
         }
     }
 }

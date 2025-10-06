@@ -46,7 +46,7 @@ namespace YoshisAdventure.GameObjects
             _sprite = new AnimatedSprite(spriteSheet);
             _sprite.SetAnimation("Normal");
             Size = _normalCollisionBox;
-            IsEatable = true;
+            IsCapturable = true;
         }
 
         public override void OnCollision(GameObject other, ObjectCollisionResult collision)
@@ -61,11 +61,13 @@ namespace YoshisAdventure.GameObjects
         public void Compress()
         {
             if (Status != SpringStatus.Normal) return;
-
-            _sprite.SetAnimation("Compress");
             Status = SpringStatus.Compressing;
             _basePosition = Position;
             _keepTimer = KeepDuration;
+            if (_sprite.CurrentAnimation != "Compress")
+            {
+                _sprite.SetAnimation("Compress");
+            }
         }
 
         public void Release()
@@ -73,7 +75,10 @@ namespace YoshisAdventure.GameObjects
             if (Status == SpringStatus.CompressedToMax)
             {
                 Status = SpringStatus.Expanding;
-                _sprite.SetAnimation("Expand");
+                if (_sprite.CurrentAnimation != "Expand")
+                {
+                    _sprite.SetAnimation("Expand");
+                }
             }
         }
 
@@ -223,7 +228,8 @@ namespace YoshisAdventure.GameObjects
                 Size = _normalCollisionBox;
                 Position = _basePosition;
                 Status = SpringStatus.Normal;
-                _sprite.SetAnimation("Normal");
+                if(_sprite.CurrentAnimation != "Normal")
+                    _sprite.SetAnimation("Normal");
             }
             else
             {

@@ -61,6 +61,11 @@ namespace YoshisAdventure.Systems
                         sfx.Volume = float.Parse(sfxNode.Attributes["volume"].Value);
                     }
 
+                    if (sfxNode.Attributes["singleInstance"] != null)
+                    {
+                        sfx.SingleInstance = bool.Parse(sfxNode.Attributes["singleInstance"].Value);
+                    }
+
                     if (!string.IsNullOrEmpty(sfx.Name))
                     {
                         _SFXs[sfx.Name] = sfx;
@@ -98,7 +103,7 @@ namespace YoshisAdventure.Systems
 
         public static void Play(string sfxName)
         {
-            if (_activeSfxPlayers.ContainsKey(sfxName))
+            if (_activeSfxPlayers.ContainsKey(sfxName) && _SFXs[sfxName].SingleInstance)
                 return;
             if (_SFXs.TryGetValue(sfxName, out SFX sfx))
             {

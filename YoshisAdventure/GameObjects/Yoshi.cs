@@ -163,7 +163,7 @@ namespace YoshisAdventure.GameObjects
 
         public override void OnCollision(GameObject other, ObjectCollisionResult collision)
         {
-            if (other == _capturedObject)
+            if (other == _capturedObject || other.IsCaptured)
                 return;
 
             base.OnCollision(other, collision);
@@ -215,6 +215,7 @@ namespace YoshisAdventure.GameObjects
                         _throwDirection = GetCurrentThrowDirection();
                         _hasThrownEgg = true;
                         OnThrowEgg?.Invoke(_throwDirection);
+                        SFXSystem.Stop("throw");
                         SFXSystem.Play("throw");
                     }
                     else
@@ -256,6 +257,7 @@ namespace YoshisAdventure.GameObjects
                             _capturedObject.Position = CenterPosition + new Vector2(_lastInputDirection == 1 ? _capturedObject.Size.X : -5 - _capturedObject.Size.X, 0);
                             _capturedObject.Velocity = new Vector2(4f * _lastInputDirection, 0);
                         }
+                        _capturedObject.IsCaptured = false;
                         _capturedObject.IsActive = true;
                         _capturedObject = null;
                         _isMouthing = false;
@@ -276,6 +278,7 @@ namespace YoshisAdventure.GameObjects
                     GameMain.PlayerStatus.Egg++;
                     _capturedObject = null;
                     _isMouthing = false;
+                    _isSquatting = false;
                 }
             }
             else
@@ -723,9 +726,11 @@ namespace YoshisAdventure.GameObjects
                     else if (_capturedObject == null)
                     {
                         GameObject hitObject = GameObjectsSystem.CheckObjectCollision(tongueRect).CollidedObject;
-                        if (hitObject != null && hitObject != this && hitObject.IsEatable)
+                        if (hitObject != null && hitObject != this && hitObject.IsCapturable)
                         {
                             _capturedObject = hitObject;
+                            //_capturedObject.IsCaptured = true;
+                            //_capturedObject.IsActive = false;
                             _tongueState = TongueState.Retracting;
                         }
                     }
@@ -744,6 +749,7 @@ namespace YoshisAdventure.GameObjects
                     _tongueState = TongueState.None;
                     if (_capturedObject != null)
                     {
+                        _capturedObject.IsCaptured = true;
                         _capturedObject.IsActive = false;
                         _isMouthing = true;
                     }

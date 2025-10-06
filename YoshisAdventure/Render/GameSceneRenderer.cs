@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Tiled;
@@ -78,6 +79,18 @@ namespace YoshisAdventure.Rendering
                 FadeStatus = FadeStatus.None;
                 OnFadeComplete?.Invoke();
             }
+
+            var state = Keyboard.GetState();
+            float zoomPerTick = 0.01f;
+            if (state.IsKeyDown(Keys.Z))
+            {
+                _camera.ZoomIn(zoomPerTick);
+            }
+            if (state.IsKeyDown(Keys.X))
+            {
+                _camera.ZoomOut(zoomPerTick);
+            }
+
             UpdateCamera(gameTime, cameraFocus, useFluentCamera, cameraDirection, velocity);
             _tilemapRenderer.Update(gameTime);
         }

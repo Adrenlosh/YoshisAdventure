@@ -7,7 +7,7 @@
 	<SoundEffects>
 		<SoundEffect name="tada" file="tada.wav"/>
 		<SoundEffect name="yoshi" file="yoshi.wav"/>
-		<SoundEffect name="yoshi-float" file="yoshi-float.wav"/>
+		<SoundEffect name="yoshi-float" file="yoshi-float.wav" singleInstance="true"/>
 		<SoundEffect name="yoshi-hurt" file="yoshi-hurt.wav"/>
 		<SoundEffect name="yoshi-jump" file="yoshi-jump.wav"/>
 		<SoundEffect name="yoshi-spit" file="yoshi-spit.wav"/>
@@ -17,5 +17,6 @@
 		<SoundEffect name="plummet" file="plummet.wav"/>
 		<SoundEffect name="pause" file="pause.wav"/>
 		<SoundEffect name="exit" file="exit.wav"/>
+		<SoundEffect name="coin" file="coin.wav"/>
 	</SoundEffects>
 </Audio>

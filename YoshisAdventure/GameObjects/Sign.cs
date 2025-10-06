@@ -15,15 +15,13 @@ namespace YoshisAdventure.GameObjects
 
         public override Rectangle CollisionBox => GetCollisionBox(Position);
 
-        public override Vector2 Velocity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public string MessageID { get; set; } = string.Empty;
 
         public Sign(Texture2D texture, TiledMap tilemap, string messageID) : base(tilemap)
         {
             _sprite = new Sprite(texture);
             Size = new Point(16, 16);
-            IsEatable = false;
+            IsCapturable = false;
             MessageID = messageID;
         }
 

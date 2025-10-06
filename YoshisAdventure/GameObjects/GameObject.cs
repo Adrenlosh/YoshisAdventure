@@ -22,7 +22,9 @@ namespace YoshisAdventure.GameObjects
 
         public bool IsActive { get; set; } = true;
 
-        public bool IsEatable { get; set; } = true;
+        public bool IsCaptured { get; set; } = false;
+
+        public bool IsCapturable { get; set; } = true;
 
         public string Name { get; set; } = string.Empty;
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="37">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="1869">
  <tileset firstgid="1" source="tileset.tsx"/>
  <imagelayer id="7" name="Background" offsetx="0" offsety="-152.5" parallaxx="0.8" parallaxy="0.8" repeatx="1" repeaty="1">
   <image source="background.png" width="609" height="450"/>
@@ -9,30 +9,15 @@
    eJztmN1OwzAMRgODwcbPzRi7Ge//msSqKlVRGyWdvzR2vyNFO+Vidlkdxw2BaHHZOgFCCBzWOSH+YZ0T4h/NOn+K6zmuQ1wvE0+vxV87joHAat7EB5p1/hHXMa5zXG8TT6/FvzqOgcBq3sQHmnX+GYbn9D0Mz+3o6bX4d8cxEFjNm/hAu5+fwvDMnieeXos/0s/RMRBYzZv4QKvOl+bPnNfOoS1iILCaN/GDVp0vzZ85r+1bLWIgsJo38YNWnS/NnzmvnUNbxEBgNe89cg/1Z69S/2t4Hyma/Xxu/sz5mn6OjoHAat575Brqz16lfmt4HykadS7z59o9rnQObREDgdW898pPqD97lfpvw/tAIP1q7R5X2rdaxEBgNe+9Iv289uxV6lv2cw1k/ly7x5XOoS1iILCa916Rfi51Of4Gmu6hn6/d42r6OToGAqt59wDqfVjOx/MU4tx+AuQ8927vDvr/PPodLX9Huh1HvQ/z5HNnhGsnudHpJY7qq9483R+3zodOr3HU+zA6nd6Py+dx8jc6ne7P/wECrzRQ
   </data>
  </layer>
- <layer id="3" name="Decorations" width="250" height="20" visible="0">
+ <layer id="3" name="Decorations" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt2skJACAMBMC0pv0X5deHARE8kBlYQkpYkggAAHYoSQAAAIA7Rr1cXwcA4KSaJLoZyQ7wM3d1AAAAXpf9hq8EAAAAAABmNCQJCjE=
+   eJzt2skJwDAMBEC1FvdflL95eD8COybMwCJUgo4qAAB2eEIAAACAb6zmcvM6AAAnjZB61Qo9wJ+5qwMAAHC79BveCT1pv9oNAAAAAMDtJiotD1k=
   </data>
  </layer>
  <objectgroup id="2" name="Objects">
   <object id="16" name="Player" x="48" y="208">
    <point/>
   </object>
-  <object id="30" name="Spring" x="16" y="208">
-   <point/>
-  </object>
-  <object id="31" name="Sign" x="432" y="224">
-   <properties>
-    <property name="MessageID" value="Message1"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="33" name="Enemy" x="128" y="208">
-   <point/>
-  </object>
   <object id="35" name="Goal" x="3360" y="106" width="28" height="134"/>
-  <object id="36" name="Spring" x="400" y="64">
-   <point/>
-  </object>
  </objectgroup>
 </map>

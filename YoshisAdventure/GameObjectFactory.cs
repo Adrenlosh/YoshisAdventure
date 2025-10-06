@@ -21,8 +21,8 @@ namespace YoshisAdventure
         public Yoshi CreateYoshi(Vector2 position, TiledMap tilemap)
         {
             Texture2D yoshiTexture = _contentManager.Load<Texture2D>("Atlas/yoshi");
-            Texture2DAtlas yoshiAtlas = Texture2DAtlas.Create("TextureAtlas//yoshi", yoshiTexture, 21, 31);
-            SpriteSheet yoshiSpriteSheet = new SpriteSheet("SpriteSheet//yoshi", yoshiAtlas);
+            Texture2DAtlas yoshiAtlas = Texture2DAtlas.Create("TextureAtlas/yoshi", yoshiTexture, 21, 31);
+            SpriteSheet yoshiSpriteSheet = new SpriteSheet("SpriteSheet/yoshi", yoshiAtlas);
             AddAnimationCycle(yoshiSpriteSheet, "Stand", [0, 0, 0, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 15, 15, 15, 14, 13, 0, 0, 0, 0, 0, 0, 0, 17, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
             AddAnimationCycle(yoshiSpriteSheet, "Walk", [7, 0, 8]);
             AddAnimationCycle(yoshiSpriteSheet, "Run", [10, 11, 12, 11], true, 0.05f);
@@ -60,8 +60,8 @@ namespace YoshisAdventure
             AddAnimationCycle(yoshiSpriteSheet, "Turn_Mouthing", [9], false);
 
             Texture2D corsshairTextute = _contentManager.Load<Texture2D>("Atlas/crosshair");
-            Texture2DAtlas crosshairAtlas = Texture2DAtlas.Create("TextureAtlas//corsshair", corsshairTextute, 16, 16);
-            SpriteSheet crosshairSpriteSheet = new SpriteSheet("SpriteSheet//crosshair", crosshairAtlas);
+            Texture2DAtlas crosshairAtlas = Texture2DAtlas.Create("TextureAtlas/corsshair", corsshairTextute, 16, 16);
+            SpriteSheet crosshairSpriteSheet = new SpriteSheet("SpriteSheet/crosshair", crosshairAtlas);
             AddAnimationCycle(crosshairSpriteSheet, "Shine", [0, 1], true, 0.005f);
             Texture2D tongueTexture = _contentManager.Load<Texture2D>("Atlas/tongue");
             Yoshi player = new Yoshi(yoshiSpriteSheet, crosshairSpriteSheet, tongueTexture, tilemap);
@@ -72,8 +72,8 @@ namespace YoshisAdventure
         public AnimatedSprite CreateYoshiAnimatedSprite()
         {
             Texture2D yoshiTexture = _contentManager.Load<Texture2D>("Atlas/yoshi");
-            Texture2DAtlas yoshiAtlas = Texture2DAtlas.Create("TextureAtlas//yoshi", yoshiTexture, 21, 31);
-            SpriteSheet yoshiSpriteSheet = new SpriteSheet("SpriteSheet//yoshi", yoshiAtlas);
+            Texture2DAtlas yoshiAtlas = Texture2DAtlas.Create("TextureAtlas/yoshi", yoshiTexture, 21, 31);
+            SpriteSheet yoshiSpriteSheet = new SpriteSheet("SpriteSheet/yoshi", yoshiAtlas);
             AddAnimationCycle(yoshiSpriteSheet, "Walk", [7, 0, 8]);
             return new AnimatedSprite(yoshiSpriteSheet);
         }
@@ -97,8 +97,8 @@ namespace YoshisAdventure
         public Spring CreateSpring(Vector2 position, TiledMap tilemap)
         {
             Texture2D texture = _contentManager.Load<Texture2D>("Atlas/spring");
-            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas//spring", texture, 16, 16);
-            SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet//spring", atlas);
+            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas/spring", texture, 16, 16);
+            SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet/spring", atlas);
             AddAnimationCycle(spriteSheet, "Compress", [0, 1, 2], false, 0.5f);
             AddAnimationCycle(spriteSheet, "Expand", [2, 3, 0], false, 0.5f);
             AddAnimationCycle(spriteSheet, "Normal", [0], false);
@@ -110,8 +110,8 @@ namespace YoshisAdventure
         public Goal CreateGoal(Vector2 position, TiledMap tilemap)
         {
             Texture2D texture = _contentManager.Load<Texture2D>("Atlas/goal");
-            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas//goal", texture, 28, 134);
-            SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet//goal", atlas);
+            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas/goal", texture, 28, 134);
+            SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet/goal", atlas);
             AddAnimationCycle(spriteSheet, "NormalGreenStar", [0, 1, 2, 3 , 2, 1], true, 0.15f);
             AddAnimationCycle(spriteSheet, "NormalWhite", [20, 21, 22, 23, 22 ,21], true, 0.15f);
             AddAnimationCycle(spriteSheet, "FlagLowering", [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39], false, 0.05f);
@@ -124,9 +124,9 @@ namespace YoshisAdventure
 
         public MapYoshi CreateMapYoshi(Vector2 position, TiledMap tilemap)
         {
-            Texture2D texture = _contentManager.Load<Texture2D>("Atlas/mapYoshi");
-            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas//mapYoshi", texture, 16, 16);
-            SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet//mapYoshi", atlas);
+            Texture2D texture = _contentManager.Load<Texture2D>("Atlas/map-yoshi");
+            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas/map-yoshi", texture, 16, 16);
+            SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet/map-yoshi", atlas);
             AddAnimationCycle(spriteSheet, "Walk", [1, 0, 1, 5], true, 0.2f);
             AddAnimationCycle(spriteSheet, "WalkSide", [2, 3, 2, 11], true, 0.2f);
             AddAnimationCycle(spriteSheet, "WalkBack", [8, 9, 8, 6], true, 0.2f);
@@ -139,12 +139,23 @@ namespace YoshisAdventure
         public Enemy CreateEnemy(Vector2 position, TiledMap tilemap)
         {
             Texture2D texture = _contentManager.Load<Texture2D>("Atlas/enemy");
-            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas//enemy", texture, 16, 32);
-            SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet//enemy", atlas);
+            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas/enemy", texture, 16, 32);
+            SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet/enemy", atlas);
             AddAnimationCycle(spriteSheet, "Normal", [0, 1, 0], true, 0.3f);
             Enemy enemy = new Enemy(spriteSheet, tilemap);
             enemy.Position = position;
             return enemy;
+        }
+
+        public Coin CreateCoin(Vector2 position, TiledMap tilemap)
+        {
+            Texture2D texture = _contentManager.Load<Texture2D>("Atlas/coin");
+            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas/coin", texture, 16, 16);
+            SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet/coin", atlas);
+            AddAnimationCycle(spriteSheet, "Normal", [0, 1, 2, 3], true);
+            Coin coin = new Coin(spriteSheet, tilemap);
+            coin.Position = position;
+            return coin;
         }
 
         private void AddAnimationCycle(SpriteSheet spriteSheet, string name, int[] frames, bool isLooping = true, float frameDuration = 0.15f)

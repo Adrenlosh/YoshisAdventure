@@ -11,6 +11,7 @@ using SoundFlow.Abstracts.Devices;
 using SoundFlow.Backends.MiniAudio;
 using SoundFlow.Structs;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using YoshisAdventure.Screens;
 using YoshisAdventure.Status;
@@ -35,9 +36,8 @@ namespace YoshisAdventure
             _graphicsDeviceManager.PreferredBackBufferWidth = GlobalConfig.VirtualResolution_Width;
             _graphicsDeviceManager.PreferredBackBufferHeight = GlobalConfig.VirtualResolution_Height;
             _graphicsDeviceManager.PreferHalfPixelOffset = false;
-            _graphicsDeviceManager.SynchronizeWithVerticalRetrace = true;
             _graphicsDeviceManager.ApplyChanges();
-
+            IsFixedTimeStep = true;
             Content.RootDirectory = "Content";
             Window.AllowUserResizing = true;
             Window.Title = Language.Strings.GameName;

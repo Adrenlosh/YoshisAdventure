@@ -61,18 +61,10 @@ namespace YoshisAdventure.Models
                         var enemy = gameObjectFactory.CreateEnemy(obj.Position, map); 
                         GameObjectsSystem.AddGameObject(enemy);
                         break;
-                    //case "CoinSpawn":
-                    //    var coin = gameObjectFactory.CreateCoin(obj.Position, map);
-                    //    GameObjectsSystem.AddGameObject(coin);
-                    //    break;
-                    //case "EnemySpawn":
-                    //    var enemy = gameObjectFactory.CreateEnemy(obj.Position, map);
-                    //    GameObjectsSystem.AddGameObject(enemy);
-                    //    break;
-                    //case "PlatformSpawn":
-                    //    var platform = gameObjectFactory.CreateMovingPlatform(obj.Position, map);
-                    //    GameObjectsSystem.AddGameObject(platform);
-                    //    break;
+                    case "Coin":
+                        var coin = gameObjectFactory.CreateCoin(obj.Position, map);
+                        GameObjectsSystem.AddGameObject(coin);
+                       break;
                     default:
                         break;
                 }

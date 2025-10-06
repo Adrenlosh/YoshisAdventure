@@ -15,6 +15,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Atlas/coin.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Atlas/coin.png
+
 #begin Atlas/crosshair.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -63,7 +75,7 @@
 /processorParam:TextureFormat=Color
 /build:Atlas/goal.png
 
-#begin Atlas/mapYoshi.png
+#begin Atlas/map-yoshi.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -73,7 +85,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Atlas/mapYoshi.png
+/build:Atlas/map-yoshi.png
 
 #begin Atlas/sign.png
 /importer:TextureImporter
@@ -126,41 +138,44 @@
 #begin Audio/Audio.xml
 /copy:Audio/Audio.xml
 
-#begin Audio/SFX/pause.wav
-/copy:Audio/SFX/pause.wav;Audio/SFX/pause.wav
+#begin Audio/SFX/coin.wav
+/copy:Audio/SFX/coin.wav
 
 #begin Audio/SFX/exit.wav
-/copy:Audio/SFX/exit.wav;Audio/SFX/exit.wav
+/copy:Audio/SFX/exit.wav
+
+#begin Audio/SFX/pause.wav
+/copy:Audio/SFX/pause.wav
 
 #begin Audio/SFX/plummet.wav
-/copy:Audio/SFX/plummet.wav;Audio/SFX/plummet.wav
+/copy:Audio/SFX/plummet.wav
 
 #begin Audio/SFX/tada.wav
 /copy:Audio/SFX/tada.wav
 
 #begin Audio/SFX/throw.wav
-/copy:Audio/SFX/throw.wav;Audio/SFX/throw.wav
+/copy:Audio/SFX/throw.wav
 
 #begin Audio/SFX/yoshi-died.wav
-/copy:Audio/SFX/yoshi-died.wav;Audio/SFX/yoshi-died.wav
+/copy:Audio/SFX/yoshi-died.wav
 
 #begin Audio/SFX/yoshi-float.wav
-/copy:Audio/SFX/yoshi-float.wav;Audio/SFX/yoshi-float.wav
+/copy:Audio/SFX/yoshi-float.wav
 
 #begin Audio/SFX/yoshi-hurt.wav
-/copy:Audio/SFX/yoshi-hurt.wav;Audio/SFX/yoshi-hurt.wav
+/copy:Audio/SFX/yoshi-hurt.wav
 
 #begin Audio/SFX/yoshi-jump.wav
-/copy:Audio/SFX/yoshi-jump.wav;Audio/SFX/yoshi-jump.wav
+/copy:Audio/SFX/yoshi-jump.wav
 
 #begin Audio/SFX/yoshi-spit.wav
-/copy:Audio/SFX/yoshi-spit.wav;Audio/SFX/yoshi-spit.wav
+/copy:Audio/SFX/yoshi-spit.wav
 
 #begin Audio/SFX/yoshi-tongue.wav
-/copy:Audio/SFX/yoshi-tongue.wav;Audio/SFX/yoshi-tongue.wav
+/copy:Audio/SFX/yoshi-tongue.wav
 
 #begin Audio/SFX/yoshi.wav
-/copy:Audio/SFX/yoshi.wav;Audio/SFX/yoshi.wav
+/copy:Audio/SFX/yoshi.wav
 
 #begin Audio/Song/goal.mp3
 /copy:Audio/Song/goal.mp3

@@ -86,10 +86,11 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
 
         public override void Update(GameTime gameTime)
         {
+            
             Vector2 newPosition = Position;
             if(CanHandleInput)
                 HandleInput(gameTime);
-            newPosition += _velocity;
+            newPosition += _velocity ;
 
             Rectangle rect = Rectangle.Empty;
             bool canMove = false;

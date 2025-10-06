@@ -153,6 +153,8 @@ namespace YoshisAdventure.Screens
             {
                 if (!_isPlayerDie)
                 {
+                    GameObjectsSystem.InactivateObejcts(_sceneRenderer.GetScreenBounds());
+                    GameObjectsSystem.ActivateObjects(_sceneRenderer.GetScreenBounds());
                     GameObjectsSystem.Update(gameTime);
                     _interactionSystem.Update(gameTime);
                     if (GameObjectsSystem.Player != null)

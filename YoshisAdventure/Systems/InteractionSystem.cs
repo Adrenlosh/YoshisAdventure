@@ -124,6 +124,16 @@ namespace YoshisAdventure.Systems
                         _isGoal = true;
                     }
                 }
+                else if(collidable is Coin coin)
+                {
+                    var collisionResult = GameObjectsSystem.CheckObjectCollision(coin.CollisionBox);
+                    if(collisionResult.CollidedObject != null && collisionResult.CollidedObject == player)
+                    {
+                        player.OnCollision(coin, collisionResult);
+                        coin.OnCollision(player, collisionResult);
+                        GameObjectsSystem.RemoveGameObject(coin);
+                    }
+                }
             }
         }
 

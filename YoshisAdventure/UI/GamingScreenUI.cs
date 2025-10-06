@@ -72,8 +72,9 @@ namespace YoshisAdventure.UI
 
         public void Update(GameTime gameTime)
         {
-            LifeLeftText.Text = string.Format(Language.Strings.LifeLeftOnHud, GameMain.PlayerStatus.LifeLeft.ToString());
-            EggText.Text = string.Format(Language.Strings.EggCountOnHud, GameMain.PlayerStatus.Egg.ToString());
+            LifeLeftText.Text = string.Format(Language.Strings.LifeLeftOnHud, GameMain.PlayerStatus.LifeLeft);
+            EggText.Text = string.Format(Language.Strings.EggCountOnHud, GameMain.PlayerStatus.Egg);
+            ScoreText.Text = string.Format(Language.Strings.ScoreOnHud, GameMain.PlayerStatus.Score);
             _messageBox.Update(gameTime);
             GumService.Default.Update(gameTime);
         }
