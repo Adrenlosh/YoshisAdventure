@@ -29,12 +29,12 @@ namespace YoshisAdventure.Models
             TileRectangle = otherRect;
             PositionInMap = new Point(tile.Value.X, tile.Value.Y);
             TiledMapTileset tileset = tileMap.GetTilesetByTileGlobalIdentifier(tile.Value.GlobalIdentifier);
-            Debug.WriteLine($"{tile.Value.GlobalIdentifier}, {tile.Value.GlobalTileIdentifierWithFlags}");
             if (tileset != null)
             {
                 if(tileset.Tiles[tile.Value.GlobalIdentifier - tileMap.GetTilesetFirstGlobalIdentifier(tileset)].Properties.TryGetValue("TileType", out string tileTypeStr))
                 {
-                    TileType = Enum.Parse<TileType>(tileTypeStr);
+                    Enum.TryParse(tileTypeStr, out TileType type);
+                    TileType = type;
                 }
             }
         }

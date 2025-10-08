@@ -224,7 +224,7 @@ namespace YoshisAdventure.Screens
         {
             if(_isSideExit)
             {
-                if(GameObjectsSystem.Player.IsoUtOfTilemapSide2())
+                if(GameObjectsSystem.Player.IsOutOfTilemapSide2())
                 {
                     _isSideExiting = true;
                     Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));

@@ -153,42 +153,42 @@
  </tile>
  <tile id="30" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Platform"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,SteepSlopeRight"/>
   </properties>
  </tile>
  <tile id="31" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Platform"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,SteepSlopeLeft"/>
   </properties>
  </tile>
  <tile id="32" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Platform"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,SteepSlopeRight"/>
   </properties>
  </tile>
  <tile id="33" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Platform"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,SteepSlopeLeft"/>
   </properties>
  </tile>
  <tile id="34" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Platform"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,SteepSlopeLeft"/>
   </properties>
  </tile>
  <tile id="35" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Platform"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,SteepSlopeRight"/>
   </properties>
  </tile>
  <tile id="36" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Platform"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,SteepSlopeRight"/>
   </properties>
  </tile>
  <tile id="37" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Platform"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,SteepSlopeLeft"/>
   </properties>
  </tile>
  <tile id="38" type="GameTile">
@@ -218,32 +218,32 @@
  </tile>
  <tile id="43" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Blocking"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,GentleSlopeRight"/>
   </properties>
  </tile>
  <tile id="44" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Blocking"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,GentleSlopeRight"/>
   </properties>
  </tile>
  <tile id="45" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Blocking"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,GentleSlopeRight"/>
   </properties>
  </tile>
  <tile id="46" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Blocking"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,GentleSlopeRight"/>
   </properties>
  </tile>
  <tile id="47" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Blocking"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,GentleSlopeRight"/>
   </properties>
  </tile>
  <tile id="48" type="GameTile">
   <properties>
-   <property name="TileType" propertytype="TileType" value="Blocking"/>
+   <property name="TileType" propertytype="TileType" value="Blocking,GentleSlopeRight"/>
   </properties>
  </tile>
  <tile id="49" type="GameTile">

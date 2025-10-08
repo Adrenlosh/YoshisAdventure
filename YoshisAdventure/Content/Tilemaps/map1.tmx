@@ -4,7 +4,7 @@
   <property name="SideExit" type="bool" value="true"/>
  </properties>
  <tileset firstgid="1" source="tileset.tsx"/>
- <imagelayer id="2" name="Background">
+ <imagelayer id="2" name="Background" repeatx="1" repeaty="1">
   <image source="background.png" width="609" height="450"/>
  </imagelayer>
  <layer id="1" name="Ground" width="16" height="14">

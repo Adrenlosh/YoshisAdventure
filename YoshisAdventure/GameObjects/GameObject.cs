@@ -147,7 +147,7 @@ namespace YoshisAdventure.GameObjects
                 return false;
         }
 
-        public virtual bool IsoUtOfTilemapSide2() => IsOutOfTilemapSide2(CollisionBox);
+        public virtual bool IsOutOfTilemapSide2() => IsOutOfTilemapSide2(CollisionBox);
 
         public bool IsOutOfScreenBounds()
         {

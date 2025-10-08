@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Timers;
@@ -106,6 +107,8 @@ namespace YoshisAdventure.GameObjects
         private Vector2 _throwDirection;
         private bool _hasThrownEgg = false;
         private float _throwingAnimationTimer = 0f;
+
+        private float dbgUse = 0;
 
         public Vector2 CenterBottomPosition
         {
@@ -275,7 +278,7 @@ namespace YoshisAdventure.GameObjects
                 _isSquatting = true;
                 Size = _squatCollisionBox;
 
-                if(_isMouthing == true && _capturedObject != null && _isOnGround == true)
+                if (_isMouthing == true && _capturedObject != null && _isOnGround == true)
                 {
                     GameObjectsSystem.RemoveGameObject(_capturedObject);
                     GameMain.PlayerStatus.Egg++;
@@ -627,13 +630,13 @@ namespace YoshisAdventure.GameObjects
 
             Vector2 newPosition = Position;
 
-            if((IsOutOfTilemapBottom() && !_isDie))
+            if ((IsOutOfTilemapBottom() && !_isDie))
             {
                 Health = 0;
                 Die();
             }
 
-            if(_isDie)
+            if (_isDie)
             {
                 UpdateDie(gameTime);
             }
@@ -701,7 +704,7 @@ namespace YoshisAdventure.GameObjects
             {
                 _dieTimer += elapsedTime;
             }
-            if(_dieTimer >= DieDuration)
+            if (_dieTimer >= DieDuration)
             {
                 _dieTimer = -1f;
                 OnDieComplete?.Invoke();
@@ -722,7 +725,7 @@ namespace YoshisAdventure.GameObjects
                 {
                     Vector2 tongueEnd = CenterPosition + _tongueDirection * _tongueLength;
                     Rectangle tongueRect = new Rectangle((int)(tongueEnd.X - 5), (int)(tongueEnd.Y - 5), 10, 10);
-                    if (IsCollidingWithTile(tongueRect, out TileCollisionResult result) && (result.TileType != TileType.Penetrable && result .TileType != TileType.Platform))
+                    if (IsCollidingWithTile(tongueRect, out TileCollisionResult result) && !result.TileType.HasFlag(TileType.Penetrable) && !result.TileType.HasFlag(TileType.Platform))
                     {
                         _tongueState = TongueState.Retracting;
                     }
@@ -839,7 +842,7 @@ namespace YoshisAdventure.GameObjects
                     _velocity.Y = MaxGravity;
             }
 
-            
+
             UpdateTileCollosion(ref newPosition);
         }
 
@@ -853,7 +856,7 @@ namespace YoshisAdventure.GameObjects
                 if (!IsOutOfTilemapSide(testRect))
                 {
                     bool isCollided = IsCollidingWithTile(testRect, out TileCollisionResult result);
-                    if (isCollided && result.TileType != TileType.Penetrable && result.TileType != TileType.Platform)
+                    if (isCollided && !result.TileType.HasFlag(TileType.Penetrable) && !result.TileType.HasFlag(TileType.Platform))
                     {
                         _velocity.X = 0;
                         if (_isHurt)
@@ -890,70 +893,97 @@ namespace YoshisAdventure.GameObjects
                     // 首先检查与任何瓦片的碰撞
                     if (IsCollidingWithTile(testRect, out TileCollisionResult result) && !_isDie)
                     {
-                        // 如果是可穿透瓦片，需要额外检查下方是否有固体地面
-                        if (result.TileType == TileType.Penetrable)
+                        if (IsOnSlope(result))
                         {
-                            // 计算穿透瓦片后的位置
-                            Vector2 penetratedPosition = newPosition + verticalMove;
-                            Rectangle penetratedRect = GetCollisionBox(penetratedPosition);
-
-                            // 检查穿透瓦片后是否会与固体地面碰撞
-                            bool willHitBlockingGround = false;
-                            TileCollisionResult groundResult = new TileCollisionResult();
-
-                            // 如果正在下落，检查下方
-                            if (_velocity.Y > 0)
-                            {
-                                // 创建一个向下的测试矩形，检查穿透瓦片后下方是否有固体地面
-                                Rectangle groundTestRect = new Rectangle(penetratedRect.X, penetratedRect.Y + penetratedRect.Height, penetratedRect.Width, (int)Math.Abs(_velocity.Y) + 1);
-
-                                willHitBlockingGround = IsCollidingWithTile(groundTestRect, out groundResult) && groundResult.TileType != TileType.Penetrable;
-                            }
-
-                            if (willHitBlockingGround)
-                            {
-                                // 如果穿透后会碰到固体地面，则停在固体地面上方
-                                float tileTop = groundResult.TileRectangle.Top;
-                                newPosition.Y = tileTop - _yoshiSprite.Size.Y;
-                                _isOnGround = true;
-                                _isFloating = false;
-                                ResetJumpStatus();
-
-                                if (_isHurt)
-                                {
-                                    _isHurt = false;
-                                    CanHandleInput = true;
-                                }
-
-                                if(_plummetStage == PlummetState.FastFall)
-                                {
-                                    HandlePlummetLand(newPosition, result);
-                                }
-                            }
-                            else
-                            {
-                                // 如果没有固体地面，允许穿过
-                                newPosition += verticalMove;
-                                _isOnGround = false;
-                            }
+                            UpdateSlopeMovement(ref newPosition, result);
                         }
-                        else // 对于不可穿透的瓦片，正常处理碰撞
+                        else
                         {
-                            if (_velocity.Y > 0.5) // 向下碰撞
+                            // 如果是可穿透瓦片，需要额外检查下方是否有固体地面
+                            if (result.TileType.HasFlag(TileType.Penetrable))
                             {
-                                if (result.TileType == TileType.Platform)
-                                {
-                                    // 平台瓦片：角色从上方下落时可以站上去
-                                    if (result.TileType == TileType.Platform)
-                                    {
-                                        // 检查角色是否从平台上方接近（脚部在平台顶部以上）
-                                        float characterBottom = newPosition.Y + _yoshiSprite.Size.Y;
-                                        float platformTop = result.TileRectangle.Top;
+                                // 计算穿透瓦片后的位置
+                                Vector2 penetratedPosition = newPosition + verticalMove;
+                                Rectangle penetratedRect = GetCollisionBox(penetratedPosition);
 
-                                        // 只有当角色是从平台上方下落时才站在平台上
-                                        if (characterBottom <= platformTop + 5)
+                                // 检查穿透瓦片后是否会与固体地面碰撞
+                                bool willHitBlockingGround = false;
+                                TileCollisionResult groundResult = new TileCollisionResult();
+
+                                // 如果正在下落，检查下方
+                                if (_velocity.Y > 0)
+                                {
+                                    // 创建一个向下的测试矩形，检查穿透瓦片后下方是否有固体地面
+                                    Rectangle groundTestRect = new Rectangle(penetratedRect.X, penetratedRect.Y + penetratedRect.Height, penetratedRect.Width, (int)Math.Abs(_velocity.Y) + 1);
+
+                                    willHitBlockingGround = IsCollidingWithTile(groundTestRect, out groundResult) && !groundResult.TileType.HasFlag(TileType.Penetrable);
+                                }
+
+                                if (willHitBlockingGround)
+                                {
+                                    // 如果穿透后会碰到固体地面，则停在固体地面上方
+                                    float tileTop = groundResult.TileRectangle.Top;
+                                    newPosition.Y = tileTop - _yoshiSprite.Size.Y;
+                                    _isOnGround = true;
+                                    _isFloating = false;
+                                    ResetJumpStatus();
+
+                                    if (_isHurt)
+                                    {
+                                        _isHurt = false;
+                                        CanHandleInput = true;
+                                    }
+
+                                    if (_plummetStage == PlummetState.FastFall)
+                                    {
+                                        HandlePlummetLand(newPosition, result);
+                                    }
+                                }
+                                else
+                                {
+                                    // 如果没有固体地面，允许穿过
+                                    newPosition += verticalMove;
+                                    _isOnGround = false;
+                                }
+                            }
+                            else // 对于不可穿透的瓦片，正常处理碰撞
+                            {
+                                if (_velocity.Y > 0.5) // 向下碰撞
+                                {
+                                    if (result.TileType.HasFlag(TileType.Platform))
+                                    {
+                                        // 平台瓦片：角色从上方下落时可以站上去
+                                        if (result.TileType.HasFlag(TileType.Platform))
                                         {
-                                            newPosition.Y = platformTop - _yoshiSprite.Size.Y;
+                                            // 检查角色是否从平台上方接近（脚部在平台顶部以上）
+                                            float characterBottom = newPosition.Y + _yoshiSprite.Size.Y;
+                                            float platformTop = result.TileRectangle.Top;
+
+                                            // 只有当角色是从平台上方下落时才站在平台上
+                                            if (characterBottom <= platformTop + 5)
+                                            {
+                                                newPosition.Y = platformTop - _yoshiSprite.Size.Y;
+                                                _isOnGround = true;
+                                                _isFloating = false;
+                                                ResetJumpStatus();
+
+                                                if (_plummetStage == PlummetState.FastFall)
+                                                {
+                                                    HandlePlummetLand(newPosition, result);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                // 从下方接近平台，允许穿过
+                                                newPosition += verticalMove;
+                                                _isOnGround = false;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            float tileTop = result.TileRectangle.Top;
+                                            newPosition.Y = tileTop - _yoshiSprite.Size.Y;
+                                            _velocity.Y = 0;
                                             _isOnGround = true;
                                             _isFloating = false;
                                             ResetJumpStatus();
@@ -963,12 +993,6 @@ namespace YoshisAdventure.GameObjects
                                                 HandlePlummetLand(newPosition, result);
                                             }
                                         }
-                                        else
-                                        {
-                                            // 从下方接近平台，允许穿过
-                                            newPosition += verticalMove;
-                                            _isOnGround = false;
-                                        }
                                     }
                                     else
                                     {
@@ -976,7 +1000,6 @@ namespace YoshisAdventure.GameObjects
                                         newPosition.Y = tileTop - _yoshiSprite.Size.Y;
                                         _velocity.Y = 0;
                                         _isOnGround = true;
-                                        _isFloating = false;
                                         ResetJumpStatus();
 
                                         if (_plummetStage == PlummetState.FastFall)
@@ -985,44 +1008,31 @@ namespace YoshisAdventure.GameObjects
                                         }
                                     }
                                 }
-                                else
+                                else if (_velocity.Y < 0) // 向上碰撞
                                 {
-                                    float tileTop = result.TileRectangle.Top;
-                                    newPosition.Y = tileTop - _yoshiSprite.Size.Y;
-                                    _velocity.Y = 0;
-                                    _isOnGround = true;
-                                    ResetJumpStatus();
-
-                                    if (_plummetStage == PlummetState.FastFall)
+                                    if (result.TileType.HasFlag(TileType.Platform))
                                     {
-                                        HandlePlummetLand(newPosition, result);
+                                        newPosition += verticalMove;
+                                        _isOnGround = false;
+
+                                    }
+                                    else
+                                    {
+                                        newPosition.Y = result.TileRectangle.Bottom;
+                                        _velocity.Y = 0;
+                                        ResetJumpStatus();
                                     }
                                 }
-                            }
-                            else if (_velocity.Y < 0) // 向上碰撞
-                            {
-                                if (result.TileType == TileType.Platform)
-                                {
-                                    newPosition += verticalMove;
-                                    _isOnGround = false;
-                                    
-                                }
-                                else
-                                {
-                                    newPosition.Y = result.TileRectangle.Bottom;
-                                    _velocity.Y = 0;
-                                    ResetJumpStatus();
-                                }
-                            }
 
-                            if (_isHurt)
-                            {
-                                _isHurt = false;
-                                CanHandleInput = true;
+                                if (_isHurt)
+                                {
+                                    _isHurt = false;
+                                    CanHandleInput = true;
+                                }
                             }
                         }
                     }
-                    else 
+                    else
                     {
                         newPosition += verticalMove;
                         _isOnGround = false;
@@ -1034,7 +1044,7 @@ namespace YoshisAdventure.GameObjects
                 Rectangle collisionBox = GetCollisionBox(newPosition);
                 if (IsCollidingWithTile(new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 3), out TileCollisionResult groundResult))
                 {
-                    if (groundResult.TileType != TileType.Penetrable)
+                    if (!groundResult.TileType.HasFlag(TileType.Penetrable))
                     {
                         _isOnGround = true;
                     }
@@ -1048,6 +1058,57 @@ namespace YoshisAdventure.GameObjects
                     _isOnGround = false;
                 }
             }
+        }
+
+        private void UpdateSlopeMovement(ref Vector2 position, TileCollisionResult result)
+        {
+            float slopeHeight;
+            float relativeX = CenterBottomPosition.X - result.TileRectangle.X;
+            float tileWidth = result.TileRectangle.Width;
+            if (result.TileType.HasFlag(TileType.SteepSlopeLeft))
+            {
+                slopeHeight = (relativeX / tileWidth) * result.TileRectangle.Height;
+                
+            }
+            else if (result.TileType.HasFlag(TileType.SteepSlopeRight))
+            {
+                slopeHeight = (1 - relativeX / tileWidth) * result.TileRectangle.Height;
+            }
+            else if (result.TileType.HasFlag(TileType.GentleSlopeLeft))
+            {
+                slopeHeight = (relativeX / tileWidth) * (result.TileRectangle.Height / 2);
+                
+            }
+            else if (result.TileType.HasFlag(TileType.GentleSlopeRight))
+            {
+                slopeHeight = (1 - relativeX / tileWidth) * (result.TileRectangle.Height / 2);
+                Debug.WriteLine(relativeX / tileWidth);
+            }
+            else
+            {
+                return;
+            }
+            float targetY = result.TileRectangle.Y + slopeHeight - Size.Y;
+            dbgUse = targetY;
+
+            position.Y = targetY;
+            _isOnGround = true;
+        }
+
+        private float GetSlopeAngle(TileCollisionResult result)
+        {
+            if (result.TileType.HasFlag(TileType.SteepSlopeLeft) ||
+                result.TileType.HasFlag(TileType.SteepSlopeRight))
+            {
+                return MathHelper.PiOver4;
+            }
+            else if (result.TileType.HasFlag(TileType.GentleSlopeLeft) ||
+                     result.TileType.HasFlag(TileType.GentleSlopeRight))
+            {
+                return MathHelper.PiOver4 / 2;
+            }
+
+            return 0f;
         }
 
         private void UpdateCrosshair(GameTime gameTime)
@@ -1107,11 +1168,13 @@ namespace YoshisAdventure.GameObjects
             {
                 _crosshairSprite.Draw(spriteBatch, _rotatingSpritePosition, 0, Vector2.One);
             }
+            _yoshiSprite.Draw(spriteBatch, Position, 0, Vector2.One);
+            spriteBatch.DrawRectangle(CollisionBox, Color.Orange);
             if (_tongueState != TongueState.None)
             {
                 DrawTongue(spriteBatch);
             }
-            _yoshiSprite.Draw(spriteBatch, Position, 0, Vector2.One);
+            spriteBatch.DrawLine(new Vector2(CenterBottomPosition.X, dbgUse), new Vector2(CenterBottomPosition.X, dbgUse + 100), Color.Red);
         }
 
         private void DrawTongue(SpriteBatch spriteBatch)
@@ -1204,6 +1267,19 @@ namespace YoshisAdventure.GameObjects
             _plummetTimer = 0;
             _plummetStage = PlummetState.None;
             OnPlummeted?.Invoke(position);
+        }
+
+        private bool IsOnSlope(TileCollisionResult result)
+        {
+            if (result.TileType.HasFlag(TileType.SteepSlopeLeft) ||
+                result.TileType.HasFlag(TileType.SteepSlopeRight) ||
+                result.TileType.HasFlag(TileType.GentleSlopeLeft) ||
+                result.TileType.HasFlag(TileType.GentleSlopeRight))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

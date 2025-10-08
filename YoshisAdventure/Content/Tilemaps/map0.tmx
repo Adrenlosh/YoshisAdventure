@@ -10,12 +10,12 @@
  </imagelayer>
  <layer id="11" name="Back" width="320" height="27">
   <data encoding="base64" compression="zlib">
-   eJzt1DERAEAIxEDc4N8hGr56htvtYiBVAAAAAAAAAAAAAAAAAAAAAAAAAAAA+/RjA1zhf0AyDwSSeSCQzAMBAAAAAAAA/ho7sQJK
+   eJzt1rENADAIAzC+of9f2B2pK1TCXsKYKSICAAAAAAAAAAAAAAAAAAAAAAAAAADgPzldAGCI/QM2e23gaW0BMCPL7S8ENsmSAAAAAAAAAPS6GcQBYQ==
   </data>
  </layer>
  <layer id="1" name="Ground" width="320" height="27">
   <data encoding="base64" compression="zlib">
-   eJztmttu2zAQRLfNtXHSlzTNm2C0QBMg6SX//3Ml4QqRWUkmaZHepc4BFhnCsXcEQ4P1QiIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAy3F/agOV+ODqo6szV+cDHZ69vlDcowRWfQPk0v37u5b827i6dHXj6mqgw7PXd4p7lMCqb4AcOllf/t3K7v69lt393Ovw7PVnxT1KYNU3QCqdrDP//IzzSXb38s1Ah2evj5n/SvcogVXfACl0Mp5/5yPVUi5O7bfmdOqeq0aPElj1De2wdfX9iHMMYfYdmv9ayr+p/dacTp1zavQogVXf0AZbV99cPbl6zjjHMJZ9Mb9/W8nAqf3WnE7dc9XoUQKrvsE+W3nPsqeMc0wGTmXf2ua/sf3WnM6Z/0r3KIFV32CfH7KfZannqQz02TWXe4fyr6Xs8/ut2L1WqGP3XDV6lMCqb2iHF9nPstTzWAbG5l8n/2ddSva9uvopu/ti+MzsL1e/Ez6nJH6+id1rhTp2zqnRowRWfUNbLJ2BMfnX/8+Q2Ozrc++P7D8r1j8z6/Wb6MhBv9+K3WuFOnbPVaNHCaz6hvZYMgNz8i8m+8Zyr98JDc99+Xvl1Dm4kfi9VqhT5r/SPUpg1TfoJWeXUlvnvGfu9ZTPWuoaavXT8H2h9WktPrT5y9mlWNePUpeHBTyj0cdoLT60+et/B+buVSzqr1KXLwt4RqOP0Vp8aPOXs0uxrk8x/2m5dvQ6tRYf2vz5uhyc16BPMf9puXb0OrUWH9r8/QUAt1Qf
+   eJztmltv1DAQhQdaWmiBF25vIVzLrbT9/38OW8Eia5ysnV17Z5Lvk0Y9VnczJ1r5yBlFBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOB4vDq1gUY8cvXY1Zmr85GO114/UdyjBlZ9Ayyl+/t3K/l37erC1ZWry5GO116/UNyjBlZ9Ayyhk+3l33MZ9u9TGfZz0PHa65eKe9TAqm+AUjrZZv75M84zGfby1UjHa68POf/V7lEDq75h23x29b7g852k8+88UWvKxan51pwunXO16FEDq75hPfSuPs2sU3x3dePqg+RlYJx9+85/a8q/qfnWnC4957ToUQOrvmEd9K4+ypBl3xLrFCH7Qu3LwFT25Tz/riUDp+Zbc7p0ztWiRw2s+gb79PIv624S61QGxtkX6stEj6ns29r5LzXfmtNLzn+1e9TAqm+wz1fZzbB4HWfgVPb9iK7rs2su9/bl35qyz8+3cudasc6dc7XoUQOrvsEWvUw/n/6U3SyL16Fys8+Tm3+d/J91Jdn3y9WtDPti/M7sb1d3BdepiT/f5M61Yp17zmnRowZWfYMdehmeaedmdPsysCT7PDn5Fz4Tfy+HkHv3svuuWHhn1usH0ZGDfr6VO9eKde6cq0WPGlj1DTboZXeetyQDS7PPsyT/crIvlXthJjReh/J75dQ5eC35c61Yl5z/aveogVXfoJcls5TWesl35v5fcq1j3UOrfhp+L7Q+rcWHNn9LZinW9Ttpy5sjeEajD9FafGjzNzczWat+K215fQTPaPQhWosPbf6WzFKs61Oc/7TcO3qbWosPbf58XYzWW9CnOP9puXf0NrUWH9r8/QE+5VOq
   </data>
  </layer>
  <layer id="3" name="Decorations" width="320" height="27">
@@ -24,33 +24,9 @@
   </data>
  </layer>
  <objectgroup id="2" name="Objects">
-  <object id="16" name="Player" x="96" y="320">
+  <object id="16" name="Player" x="16" y="320">
    <point/>
   </object>
   <object id="35" name="Goal" x="4320" y="144" width="28" height="134"/>
-  <object id="1869" name="Spring" x="80" y="320">
-   <point/>
-  </object>
-  <object id="1870" name="Enemy" x="64" y="320">
-   <point/>
-  </object>
-  <object id="1872" name="Sign" type="Dialogable" x="16" y="336">
-   <properties>
-    <property name="MessageID" value="Message1"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="3176" name="Sign" type="Dialogable" x="32" y="336">
-   <properties>
-    <property name="MessageID" value="Message3"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="3177" name="Sign" type="Dialogable" x="48" y="336">
-   <properties>
-    <property name="MessageID" value="Message2"/>
-   </properties>
-   <point/>
-  </object>
  </objectgroup>
 </map>
