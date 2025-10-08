@@ -3,6 +3,7 @@ using YoshisAdventure.GameObjects;
 using YoshisAdventure.Interfaces;
 using System.Linq;
 using System;
+using System.Diagnostics;
 
 namespace YoshisAdventure.Systems
 {
@@ -11,6 +12,7 @@ namespace YoshisAdventure.Systems
         private bool _isGoal = false;
         public event Action<string> OnDialogue;
         public event Action OnGoal;
+        public event Action<int> OnCollectACoin;
 
         public void Update(GameTime gameTime)
         {
@@ -30,7 +32,7 @@ namespace YoshisAdventure.Systems
             {
                 if (obj is Sign sign)
                 {
-                    var collisionResult = GameObjectsSystem.CheckObjectCollision(sign.CollisionBox);
+                    var collisionResult = GameObjectsSystem.CheckObjectCollision(sign);
                     if (GameController.MoveUp() && collisionResult.CollidedObject == player)
                     {
                         sign.ScreenBounds = GameObjectsSystem.Player.ScreenBounds;
@@ -58,7 +60,6 @@ namespace YoshisAdventure.Systems
             var collidables = GameObjectsSystem.GetObjectsOfInterface<ICollidable>();
             Yoshi player = GameObjectsSystem.Player;
             Rectangle playerRect = player.CollisionBox;
-
             foreach (var collidable in collidables)
             {
                 if (collidable is Spring spring && player.CapturedObject != spring)
@@ -103,8 +104,7 @@ namespace YoshisAdventure.Systems
                 }
                 else if (collidable is Enemy enemy && player.CapturedObject != enemy)
                 {
-                    Rectangle enemyRect = enemy.CollisionBox;
-                    var collisionResult = GameObjectsSystem.CheckObjectCollision(enemyRect);
+                    var collisionResult = GameObjectsSystem.CheckObjectCollision(enemy);
                     if (collisionResult.CollidedObject != null && collisionResult.CollidedObject == player)
                     {
                         player.TakeDamage(1, enemy);
@@ -112,7 +112,7 @@ namespace YoshisAdventure.Systems
                 } 
                 else if (collidable is Goal goal)
                 {
-                    var collisionResult = GameObjectsSystem.CheckObjectCollision(goal.CollisionBox);
+                    var collisionResult = GameObjectsSystem.CheckObjectCollision(goal);
                     if (collisionResult.CollidedObject != null && collisionResult.CollidedObject == player)
                     {
                         player.OnCollision(goal, collisionResult);
@@ -126,11 +126,12 @@ namespace YoshisAdventure.Systems
                 }
                 else if(collidable is Coin coin)
                 {
-                    var collisionResult = GameObjectsSystem.CheckObjectCollision(coin.CollisionBox);
+                    var collisionResult = GameObjectsSystem.CheckObjectCollision(coin);
                     if(collisionResult.CollidedObject != null && collisionResult.CollidedObject == player)
                     {
                         player.OnCollision(coin, collisionResult);
                         coin.OnCollision(player, collisionResult);
+                        OnCollectACoin?.Invoke(coin.Value);
                         GameObjectsSystem.RemoveGameObject(coin);
                     }
                 }
@@ -144,13 +145,27 @@ namespace YoshisAdventure.Systems
         private void HandleProjectileFlysAndHits()
         {
             var projectiles = GameObjectsSystem.GetObjectsOfInterface<IProjectile>();
-            var damageables = GameObjectsSystem.GetObjectsOfInterface<IDamageable>();
-
+            Yoshi player = GameObjectsSystem.Player;
             foreach (var projectile in projectiles)
             {
                 if (projectile is Egg egg)
                 {
                     egg.ScreenBounds = GameObjectsSystem.Player.ScreenBounds;
+                    var collisionResult = GameObjectsSystem.CheckObjectCollision(egg);
+                   if(collisionResult.CollidedObject != null && collisionResult.CollidedObject != player)
+                   {
+                        if(collisionResult.CollidedObject is Coin coin)
+                        {
+                            player.OnCollision(coin, collisionResult);
+                            coin.OnCollision(player, collisionResult);
+                            OnCollectACoin?.Invoke(coin.Value);
+                            GameObjectsSystem.RemoveGameObject(coin);
+                        }
+                        else if(collisionResult.CollidedObject is Enemy enemy)
+                        {
+                            GameObjectsSystem.RemoveGameObject(enemy);
+                        }
+                   }
                 }
             }
         }

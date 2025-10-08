@@ -48,6 +48,8 @@ namespace YoshisAdventure.Rendering
 
         public BoxingViewportAdapter ViewportAdapter => _viewportAdapter;
 
+        public OrthographicCamera Camera => _camera;
+
         public event Action OnFadeComplete;
 
         public GameSceneRenderer(GraphicsDevice graphicsDevice, GameWindow window, ContentManager content)
@@ -59,16 +61,24 @@ namespace YoshisAdventure.Rendering
             _content = content;
         }
 
-        public void LoadContent(TiledMap map)
+        public void LoadContent()
+        {
+            
+            _bitmapFont = _content.Load<BitmapFont>("Fonts/ZFull-GB");
+        }
+
+        public void LoadMap(TiledMap map)
         {
             _tilemap = map;
             _tilemapRenderer = new TiledMapRenderer(_graphicsDevice, _tilemap);
-            _bitmapFont = _content.Load<BitmapFont>("Fonts/ZFull-GB");
         }
 
         public void Update(GameTime gameTime, Vector2 cameraFocus, bool useFluentCamera = false, int cameraDirection = 1, Vector2 velocity = new Vector2())
         {
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            UpdateCamera(gameTime, cameraFocus, useFluentCamera, cameraDirection, velocity);
+            _tilemapRenderer.Update(gameTime);
+
             if (_fadeTimer >= 0f && _fadeTimer <= FadeDuration)
             {
                 _fadeTimer += elapsedTime;
@@ -91,8 +101,8 @@ namespace YoshisAdventure.Rendering
                 _camera.ZoomOut(zoomPerTick);
             }
 
-            UpdateCamera(gameTime, cameraFocus, useFluentCamera, cameraDirection, velocity);
-            _tilemapRenderer.Update(gameTime);
+            
+            
         }
 
         private void UpdateCamera(GameTime gameTime, Vector2 cameraFocus, bool useFluentCamera = false, int cameraDirection = 1, Vector2 velocity = new Vector2())

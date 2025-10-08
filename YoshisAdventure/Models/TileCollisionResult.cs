@@ -19,16 +19,20 @@ namespace YoshisAdventure.Models
 
         public TileType TileType { get; set; } = TileType.Penetrable;
 
-        public TileCollisionResult(TiledMapTile? tile, Rectangle intersection, Rectangle originalRect, Rectangle otherRect, TiledMap tiledMap)
+        public Point PositionInMap { get; set; } = Point.Zero;
+
+        public TileCollisionResult(TiledMapTile? tile, Rectangle intersection, Rectangle originalRect, Rectangle otherRect, TiledMap tileMap)
         {
             CollidedTile = tile;
             Intersection = intersection;
             Direction = CalculateCollisionDirection(originalRect, otherRect, intersection);
             TileRectangle = otherRect;
-            TiledMapTileset tileset = tiledMap.GetTilesetByTileGlobalIdentifier(tile.Value.GlobalIdentifier);
+            PositionInMap = new Point(tile.Value.X, tile.Value.Y);
+            TiledMapTileset tileset = tileMap.GetTilesetByTileGlobalIdentifier(tile.Value.GlobalIdentifier);
+            Debug.WriteLine($"{tile.Value.GlobalIdentifier}, {tile.Value.GlobalTileIdentifierWithFlags}");
             if (tileset != null)
             {
-                if(tileset.Tiles[tile.Value.GlobalIdentifier - 1].Properties.TryGetValue("TileType", out string tileTypeStr))
+                if(tileset.Tiles[tile.Value.GlobalIdentifier - tileMap.GetTilesetFirstGlobalIdentifier(tileset)].Properties.TryGetValue("TileType", out string tileTypeStr))
                 {
                     TileType = Enum.Parse<TileType>(tileTypeStr);
                 }

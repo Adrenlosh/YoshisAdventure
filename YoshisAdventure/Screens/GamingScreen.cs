@@ -1,12 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Tiled;
 using MonoGameGum;
-using System;
 using System.Linq;
-using System.Threading;
 using YoshisAdventure.GameObjects;
 using YoshisAdventure.Models;
 using YoshisAdventure.Rendering;
@@ -19,11 +16,15 @@ namespace YoshisAdventure.Screens
     {
         private GameSceneRenderer _sceneRenderer;
         private InteractionSystem _interactionSystem;
+        private ParticleSystem _particleSystem;
         private GameObjectFactory _gameObjectFactory;
+
         private Stage _stage;
         private TiledMap _tilemap;
         private GamingScreenUI _ui;
         private Vector2 _cameraLockPosition;
+        private bool _isSideExit = false;
+        private bool _isSideExiting = false;
         private bool _shouldMovePlayer = false;
         private bool _isPlayerDie = false;
 
@@ -50,10 +51,15 @@ namespace YoshisAdventure.Screens
             if(_stage != null)
             {
                 _tilemap = _stage.StartStage(Content);
+                if(_tilemap.Properties.TryGetValue("SideExit", out string sideExitStr))
+                {
+                    _isSideExit = bool.Parse(sideExitStr);
+                }
             }
             _gameObjectFactory = new GameObjectFactory(Content);
             _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content);
-            _sceneRenderer.LoadContent(_tilemap);
+            _sceneRenderer.LoadContent();
+            _sceneRenderer.LoadMap(_tilemap);
             _sceneRenderer.OnFadeComplete += _sceneRenderer_OnFadeComplete;
 
             Yoshi player = GameObjectsSystem.Player;
@@ -66,15 +72,36 @@ namespace YoshisAdventure.Screens
             _interactionSystem = new InteractionSystem();
             _interactionSystem.OnDialogue += _interactionSystem_OnDialogue;
             _interactionSystem.OnGoal += _interactionSystem_OnGoal;
+            _interactionSystem.OnCollectACoin += _interactionSystem_OnCollectACoin;
+
+            _particleSystem = new ParticleSystem(GraphicsDevice);
 
             InitializeUI();
+            
+            if(_tilemap.Properties.TryGetValue("Song", out string songName))
+            {
+                SongSystem.Play(songName);
+            }
+        }
+
+        private void _interactionSystem_OnCollectACoin(int value)
+        {
+            GameMain.PlayerStatus.Coin++;
+            GameMain.PlayerStatus.Score += value;
+            if(GameMain.PlayerStatus.Coin >= 100)
+            {
+                SFXSystem.Play("1up");
+                GameMain.PlayerStatus.Coin = 0;
+                GameMain.PlayerStatus.Score += value * 5;
+                GameMain.PlayerStatus.LifeLeft++;
+            }
         }
 
         private void _sceneRenderer_OnFadeComplete()
         {
+            SFXSystem.Play("exit");
             GameObjectsSystem.Player.CanHandleInput = true;
             Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
-            SFXSystem.Play("exit");
         }
 
         private void _interactionSystem_OnGoal()
@@ -101,6 +128,7 @@ namespace YoshisAdventure.Screens
 
         private void Player_OnDie()
         {
+            SongSystem.Stop();
             _ui.HandlePause = false;
             _isPlayerDie = true;
             _cameraLockPosition = GameObjectsSystem.Player.Position;
@@ -108,6 +136,7 @@ namespace YoshisAdventure.Screens
 
         private void OnPlummeted(Vector2 position)
         {
+            _sceneRenderer.LoadMap(_tilemap);
             _sceneRenderer.TriggerCameraShake();
         }
 
@@ -151,8 +180,9 @@ namespace YoshisAdventure.Screens
             {
                 GameObjectsSystem.Player.Velocity = new Vector2(1f, 1);
             }
-            if (!_ui.IsReadingMessage && !_ui.IsPaused)
+            if (!_ui.IsReadingMessage && !_ui.IsPaused && !_isSideExiting)
             {
+                UpdateSideExit();
                 if (!_isPlayerDie)
                 {
                     GameObjectsSystem.InactivateObejcts(_sceneRenderer.GetScreenBounds());
@@ -174,6 +204,9 @@ namespace YoshisAdventure.Screens
                 {
                     Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
                 }
+
+                _particleSystem.ParticleEffect.Trigger(GameObjectsSystem.Player.CenterBottomPosition);
+                _particleSystem.Update(gameTime);
             }
             _ui.Update(gameTime);
         }
@@ -181,8 +214,22 @@ namespace YoshisAdventure.Screens
         public override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            
             _sceneRenderer.Draw(GameObjectsSystem.GetAllActiveObjects());
+            _particleSystem.Draw(_sceneRenderer.Camera);
             _ui.Draw();
+        }
+
+        private void UpdateSideExit()
+        {
+            if(_isSideExit)
+            {
+                if(GameObjectsSystem.Player.IsoUtOfTilemapSide2())
+                {
+                    _isSideExiting = true;
+                    Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+                }
+            }
         }
     }
 }

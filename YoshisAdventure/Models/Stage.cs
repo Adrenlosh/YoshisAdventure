@@ -31,6 +31,7 @@ namespace YoshisAdventure.Models
 
         public TiledMap LoadMap(string mapName, ContentManager contentManager)
         {
+            contentManager.UnloadAsset($"Tilemaps/{mapName}");
             TiledMap map = contentManager.Load<TiledMap>($"Tilemaps/{mapName}");
             TiledMapObjectLayer objectLayer = map.GetLayer<TiledMapObjectLayer>("Objects");
             GameObjectsSystem.Initialize(map);

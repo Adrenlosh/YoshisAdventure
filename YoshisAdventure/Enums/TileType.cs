@@ -6,5 +6,6 @@
         Blocking = 1,
         Penetrable = 2,
         Interactive = 3,
+        Breakable = 4
     }
 }

@@ -6,6 +6,7 @@ using MonoGame.Extended.Timers;
 using System;
 using System.Diagnostics;
 using YoshisAdventure.Enums;
+using YoshisAdventure.Interfaces;
 using YoshisAdventure.Models;
 using YoshisAdventure.Systems;
 
@@ -438,8 +439,6 @@ namespace YoshisAdventure.GameObjects
             {
                 animationName += "-mouthing";
             }
-
-            Debug.WriteLine(animationName);
             _yoshiSprite.SetAnimation(animationName);
         }
 
@@ -628,7 +627,7 @@ namespace YoshisAdventure.GameObjects
 
             Vector2 newPosition = Position;
 
-            if((IsOutOfTilemapBottom(Position) && !_isDie))
+            if((IsOutOfTilemapBottom() && !_isDie))
             {
                 Health = 0;
                 Die();
@@ -733,8 +732,6 @@ namespace YoshisAdventure.GameObjects
                         if (hitObject != null && hitObject != this && hitObject.IsCapturable)
                         {
                             _capturedObject = hitObject;
-                            //_capturedObject.IsCaptured = true;
-                            //_capturedObject.IsActive = false;
                             _tongueState = TongueState.Retracting;
                         }
                     }
@@ -751,7 +748,7 @@ namespace YoshisAdventure.GameObjects
                 if (_tongueLength <= 0f)
                 {
                     _tongueState = TongueState.None;
-                    if (_capturedObject != null)
+                    if (_capturedObject != null && _capturedObject is not IValuable)
                     {
                         _capturedObject.IsCaptured = true;
                         _capturedObject.IsActive = false;
@@ -853,19 +850,22 @@ namespace YoshisAdventure.GameObjects
                 Vector2 horizontalMove = new Vector2(_velocity.X, 0);
                 Vector2 testPosition = newPosition + horizontalMove;
                 Rectangle testRect = GetCollisionBox(testPosition);
-                bool isCollided = IsCollidingWithTile(testRect, out TileCollisionResult result);
-                if (isCollided && result.TileType != TileType.Penetrable && result.TileType != TileType.Platform)
+                if (!IsOutOfTilemapSide(testRect))
                 {
-                    _velocity.X = 0;
-                    if (_isHurt)
+                    bool isCollided = IsCollidingWithTile(testRect, out TileCollisionResult result);
+                    if (isCollided && result.TileType != TileType.Penetrable && result.TileType != TileType.Platform)
                     {
-                        _isHurt = false;
-                        CanHandleInput = true;
+                        _velocity.X = 0;
+                        if (_isHurt)
+                        {
+                            _isHurt = false;
+                            CanHandleInput = true;
+                        }
                     }
-                }
-                else
-                {
-                    newPosition += horizontalMove;
+                    else
+                    {
+                        newPosition += horizontalMove;
+                    }
                 }
             }
 
@@ -927,7 +927,7 @@ namespace YoshisAdventure.GameObjects
 
                                 if(_plummetStage == PlummetState.FastFall)
                                 {
-                                    HandlePlummetLand(newPosition);
+                                    HandlePlummetLand(newPosition, result);
                                 }
                             }
                             else
@@ -960,7 +960,7 @@ namespace YoshisAdventure.GameObjects
 
                                             if (_plummetStage == PlummetState.FastFall)
                                             {
-                                                HandlePlummetLand(newPosition);
+                                                HandlePlummetLand(newPosition, result);
                                             }
                                         }
                                         else
@@ -981,7 +981,7 @@ namespace YoshisAdventure.GameObjects
 
                                         if (_plummetStage == PlummetState.FastFall)
                                         {
-                                            HandlePlummetLand(newPosition);
+                                            HandlePlummetLand(newPosition, result);
                                         }
                                     }
                                 }
@@ -995,7 +995,7 @@ namespace YoshisAdventure.GameObjects
 
                                     if (_plummetStage == PlummetState.FastFall)
                                     {
-                                        HandlePlummetLand(newPosition);
+                                        HandlePlummetLand(newPosition, result);
                                     }
                                 }
                             }
@@ -1192,13 +1192,18 @@ namespace YoshisAdventure.GameObjects
             _jumpInitiated = false;
         }
 
-        private void HandlePlummetLand(Vector2 position)
+        private void HandlePlummetLand(Vector2 position, TileCollisionResult result)
         {
+            if (result.TileType.HasFlag(TileType.Breakable) && result.Direction == CollisionDirection.Top)
+            {
+                TiledMapTileLayer layer = _tilemap.GetLayer<TiledMapTileLayer>("Ground");
+                layer.SetTile((ushort)result.PositionInMap.X, (ushort)result.PositionInMap.Y, 0u);
+            }
+            SFXSystem.Play("plummet");
             _isPlummeting = false;
             _plummetTimer = 0;
             _plummetStage = PlummetState.None;
             OnPlummeted?.Invoke(position);
-            SFXSystem.Play("plummet");
         }
     }
 }

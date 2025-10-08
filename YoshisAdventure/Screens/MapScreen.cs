@@ -36,7 +36,8 @@ namespace YoshisAdventure.Screens
             GumService.Default.Root.Children.Clear();
             _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content);
             _tilemap = Content.Load<TiledMap>("Tilemaps/map");
-            _sceneRenderer.LoadContent(_tilemap);
+            _sceneRenderer.LoadContent();
+            _sceneRenderer.LoadMap(_tilemap);
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _bitmapFont = Content.Load<BitmapFont>("Fonts/ZFull-GB");
             TiledMapObjectLayer objectLayer = _tilemap.GetLayer<TiledMapObjectLayer>("Objects");

@@ -98,7 +98,7 @@ namespace YoshisAdventure.GameObjects
             return new Rectangle(centerPosition.X, centerPosition.Y, collisionBox.Width, collisionBox.Height);
         }
 
-        protected virtual bool IsOutOfTilemap(Vector2 position)
+        public virtual bool IsOutOfTilemap(Vector2 position)
         {
             Rectangle worldRect = new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels);
             if (!worldRect.Contains(position))
@@ -107,7 +107,7 @@ namespace YoshisAdventure.GameObjects
                 return false;
         }
 
-        protected virtual bool IsOutOfTilemapBottom(Vector2 position)
+        public virtual bool IsOutOfTilemapBottom(Vector2 position)
         {
             Rectangle worldRect = new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels);
             if (position.Y > worldRect.Bottom)
@@ -115,6 +115,39 @@ namespace YoshisAdventure.GameObjects
             else
                 return false;
         }
+
+        public virtual bool IsOutOfTilemapBottom() => IsOutOfTilemapBottom(Position);
+
+        public virtual bool IsOutOfTilemapSide(Vector2 position)
+        {
+            Rectangle worldRect = new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels);
+            if (position.X < worldRect.Left || position.X > worldRect.Right)
+                return true;
+            else
+                return false;
+        }
+
+        public virtual bool IsOutOfTilemapSide() => IsOutOfTilemapSide(Position);
+
+        public virtual bool IsOutOfTilemapSide(Rectangle rect)
+        {
+            Rectangle worldRect = new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels);
+            if (rect.Left < worldRect.Left || rect.Right > worldRect.Right)
+                return true;
+            else
+                return false;
+        }
+
+        public virtual bool IsOutOfTilemapSide2(Rectangle rect)
+        {
+            Rectangle worldRect = new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels);
+            if (rect.Left <= worldRect.Left || rect.Right >= worldRect.Right)
+                return true;
+            else
+                return false;
+        }
+
+        public virtual bool IsoUtOfTilemapSide2() => IsOutOfTilemapSide2(CollisionBox);
 
         public bool IsOutOfScreenBounds()
         {

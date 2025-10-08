@@ -2,16 +2,19 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
+using YoshisAdventure.Interfaces;
 using YoshisAdventure.Models;
 using YoshisAdventure.Systems;
 
 namespace YoshisAdventure.GameObjects
 {
-    public class Coin : GameObject
+    public class Coin : GameObject, IValuable
     {
         private AnimatedSprite _sprite;
 
         public override Rectangle CollisionBox => GetCollisionBox(Position);
+
+        public int Value { get; } = 3;
 
         public Coin(SpriteSheet spriteSheet, TiledMap tilemap) : base(tilemap)
         {

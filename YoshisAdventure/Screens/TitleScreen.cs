@@ -37,8 +37,8 @@ namespace YoshisAdventure.Screens
 
             Stage stage = StageSystem.GetStageByName("grassland1");
             _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content);
-            _sceneRenderer.LoadContent(stage.StartStage(Content));
-
+            _sceneRenderer.LoadContent();
+            _sceneRenderer.LoadMap(stage.StartStage(Content));
             _interactionSystem = new InteractionSystem();
 
             InitializeUI();

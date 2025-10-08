@@ -52,7 +52,6 @@ namespace YoshisAdventure.UI
             };
         }
 
-
         public void ShowMessageBox(string messageID)
         {
             IsReadingMessage = true;
@@ -61,6 +60,7 @@ namespace YoshisAdventure.UI
 
         public void Pause()
         {
+            SongSystem.Pause();
             SFXSystem.Play("pause");
             IsPaused = true;
             _animationTimer = 0f;
@@ -69,6 +69,7 @@ namespace YoshisAdventure.UI
 
         public void Unpause()
         {
+            SongSystem.Resume();
             SFXSystem.Play("pause");
             IsPaused = false;
             _animationTimer = 0f;
