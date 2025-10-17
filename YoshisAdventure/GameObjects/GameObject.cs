@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
+using System;
 using System.Diagnostics;
 using YoshisAdventure.Enums;
 using YoshisAdventure.Interfaces;
@@ -118,7 +119,7 @@ namespace YoshisAdventure.GameObjects
 
         public virtual bool IsOutOfTilemapBottom() => IsOutOfTilemapBottom(Position);
 
-        public virtual bool IsOutOfTilemapSide(Vector2 position)
+        public virtual bool IsOutOfTilemapSidePosition(Vector2 position)
         {
             Rectangle worldRect = new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels);
             if (position.X < worldRect.Left || position.X > worldRect.Right)
@@ -126,10 +127,9 @@ namespace YoshisAdventure.GameObjects
             else
                 return false;
         }
+        public virtual bool IsOutOfTilemapSidePosition() => IsOutOfTilemapSidePosition(Position);
 
-        public virtual bool IsOutOfTilemapSide() => IsOutOfTilemapSide(Position);
-
-        public virtual bool IsOutOfTilemapSide(Rectangle rect)
+        public virtual bool IsOutOfTilemapSideBox(Rectangle rect)
         {
             Rectangle worldRect = new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels);
             if (rect.Left < worldRect.Left || rect.Right > worldRect.Right)
@@ -138,16 +138,7 @@ namespace YoshisAdventure.GameObjects
                 return false;
         }
 
-        public virtual bool IsOutOfTilemapSide2(Rectangle rect)
-        {
-            Rectangle worldRect = new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels);
-            if (rect.Left <= worldRect.Left || rect.Right >= worldRect.Right)
-                return true;
-            else
-                return false;
-        }
-
-        public virtual bool IsOutOfTilemapSide2() => IsOutOfTilemapSide2(CollisionBox);
+        public virtual bool IsOutOfTilemapSideBox() => IsOutOfTilemapSideBox(CollisionBox);
 
         public bool IsOutOfScreenBounds()
         {

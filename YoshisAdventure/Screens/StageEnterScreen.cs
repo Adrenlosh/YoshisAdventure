@@ -63,7 +63,7 @@ namespace YoshisAdventure.Screens
             if(_timer >= DisplayDuration)
             {
                 _timer = -1f;
-                Game.LoadScreen(new GamingScreen(Game, _stage), new FadeInTransition(GraphicsDevice, Color.Black, 1.5f));
+                Game.LoadScreen(new GamingScreen(Game, _stage), new FadeInOutTransition(GraphicsDevice, Color.Black, FadeType.In, 1.5f));
             }
         }
     }

@@ -81,7 +81,7 @@ namespace YoshisAdventure.Screens
         {
             if (GameController.AttackPressed() && _stage != null)
             {
-                Game.LoadScreen(new StageEnterScreen(Game, _stage), new FadeOutTransition(GraphicsDevice, Color.Black, 1.5f));
+                Game.LoadScreen(new StageEnterScreen(Game, _stage), new FadeInOutTransition(GraphicsDevice, Color.Black, FadeType.Out, 1.5f));
             }
             else if(GameController.BackPressed())
             {

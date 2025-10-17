@@ -15,7 +15,7 @@
  </layer>
  <layer id="1" name="Ground" width="320" height="27">
   <data encoding="base64" compression="zlib">
-   eJztmltv1DAQhQdaWmiBF25vIVzLrbT9/38OW8Eia5ysnV17Z5Lvk0Y9VnczJ1r5yBlFBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOB4vDq1gUY8cvXY1Zmr85GO114/UdyjBlZ9Ayyl+/t3K/l37erC1ZWry5GO116/UNyjBlZ9Ayyhk+3l33MZ9u9TGfZz0PHa65eKe9TAqm+AUjrZZv75M84zGfby1UjHa68POf/V7lEDq75h23x29b7g852k8+88UWvKxan51pwunXO16FEDq75hPfSuPs2sU3x3dePqg+RlYJx9+85/a8q/qfnWnC4957ToUQOrvmEd9K4+ypBl3xLrFCH7Qu3LwFT25Tz/riUDp+Zbc7p0ztWiRw2s+gb79PIv624S61QGxtkX6stEj6ns29r5LzXfmtNLzn+1e9TAqm+wz1fZzbB4HWfgVPb9iK7rs2su9/bl35qyz8+3cudasc6dc7XoUQOrvsEWvUw/n/6U3SyL16Fys8+Tm3+d/J91Jdn3y9WtDPti/M7sb1d3BdepiT/f5M61Yp17zmnRowZWfYMdehmeaedmdPsysCT7PDn5Fz4Tfy+HkHv3svuuWHhn1usH0ZGDfr6VO9eKde6cq0WPGlj1DTboZXeetyQDS7PPsyT/crIvlXthJjReh/J75dQ5eC35c61Yl5z/aveogVXfoJcls5TWesl35v5fcq1j3UOrfhp+L7Q+rcWHNn9LZinW9Ttpy5sjeEajD9FafGjzNzczWat+K215fQTPaPQhWosPbf6WzFKs61Oc/7TcO3qbWosPbf58XYzWW9CnOP9puXf0NrUWH9r8/QE+5VOq
+   eJztmu1u1DAQRQcoLbTAHwr8QYv5bPmG9385bAWrWStJHW/snVmfI416R+3u3GyVK+8oIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADb8fLYBhrxwNdDX498nY102gf9WPGMGlj1DVDK7v/PXvLvyte5r0tfFyOd9kE/VzyjBlZ9A5Swk/7y75kM9+8TGe7nqNM+6BeKZ9TAqm+Ateykz/wLZ5ynMtzLlyOd9kEfcv6rPaMGVn1D33zy9W7F3+9kOv/OJuqUcnFuv7Wk1+65WsyogVXfcDo4Xx8X+im++rrx9V7yMjDNvvvOf6eUf3P7rSW99pzTYkYNrPqG08D5+iBDlt1O9FPE7IuVm4G9MrffWtJr91wtZtTAqm+wj5O7rLuZ6KcyMM2+WJ9bGDbK3H5rSZec/2rPqIFV32CfL7KfYWmfZuBc9n1r6toWYb+Vu9dKde6eq8WMGlj1DbZwMv/99LvsZ1nax9KYfT98/ZThvhg/M/vL1++C93O+3s5UKeF8k7vXSnXuOafFjBpY9Q12cDJ8p13a0d2XgdqyL+beH9l/Viw+Mxv0X1mXg06Gz2lrwn4rd6+V6tw9V4sZNbDqG2zgZH+fV5KBmrJvKvfiTmjcxwr3Sk4OOrn7nLbmSvL3Wqlec/6rPaMGVn2DXkp2Ka11yWuWfr/mvba6hlbzNPy/0Pq0Fh/a/JXsUqzrN9KWVxt4RqMP0Vp8aPOX7kl60K+lLdcbeEajD9FafGjzV7JLsa6Pcf7Tcu3oPrUWH9r8hTof9T3oY5z/tFw7uk+txYc2f/8AtBJOEQ==
   </data>
  </layer>
  <layer id="3" name="Decorations" width="320" height="27">
@@ -27,6 +27,6 @@
   <object id="16" name="Player" x="16" y="320">
    <point/>
   </object>
-  <object id="35" name="Goal" x="4320" y="144" width="28" height="134"/>
+  <object id="35" name="Goal" x="572" y="204" width="28" height="134"/>
  </objectgroup>
 </map>

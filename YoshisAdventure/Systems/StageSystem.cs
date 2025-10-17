@@ -8,8 +8,6 @@ using YoshisAdventure.Models;
 
 namespace YoshisAdventure.Systems
 {
-
-
     public static class StageSystem
     {
         public const string StagesDirectory = "Stages";

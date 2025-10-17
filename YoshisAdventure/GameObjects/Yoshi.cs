@@ -108,8 +108,6 @@ namespace YoshisAdventure.GameObjects
         private bool _hasThrownEgg = false;
         private float _throwingAnimationTimer = 0f;
 
-        private float dbgUse = 0;
-
         public Vector2 CenterBottomPosition
         {
             get => new Vector2(Position.X + _yoshiSprite.Size.X / 2, Position.Y + _yoshiSprite.Size.Y);
@@ -853,7 +851,7 @@ namespace YoshisAdventure.GameObjects
                 Vector2 horizontalMove = new Vector2(_velocity.X, 0);
                 Vector2 testPosition = newPosition + horizontalMove;
                 Rectangle testRect = GetCollisionBox(testPosition);
-                if (!IsOutOfTilemapSide(testRect))
+                if (!IsOutOfTilemapSideBox(testRect))
                 {
                     bool isCollided = IsCollidingWithTile(testRect, out TileCollisionResult result);
                     if (isCollided && !result.TileType.HasFlag(TileType.Penetrable) && !result.TileType.HasFlag(TileType.Platform))
@@ -893,12 +891,12 @@ namespace YoshisAdventure.GameObjects
                     // 首先检查与任何瓦片的碰撞
                     if (IsCollidingWithTile(testRect, out TileCollisionResult result) && !_isDie)
                     {
-                        if (IsOnSlope(result))
-                        {
-                            UpdateSlopeMovement(ref newPosition, result);
-                        }
-                        else
-                        {
+                        //if (IsOnSlope(result))
+                        //{
+                         //   UpdateSlopeMovement(ref newPosition, result);
+                        //}
+                        //else
+                        //{
                             // 如果是可穿透瓦片，需要额外检查下方是否有固体地面
                             if (result.TileType.HasFlag(TileType.Penetrable))
                             {
@@ -1030,7 +1028,7 @@ namespace YoshisAdventure.GameObjects
                                     CanHandleInput = true;
                                 }
                             }
-                        }
+                        //}
                     }
                     else
                     {
@@ -1060,56 +1058,56 @@ namespace YoshisAdventure.GameObjects
             }
         }
 
-        private void UpdateSlopeMovement(ref Vector2 position, TileCollisionResult result)
-        {
-            float slopeHeight;
-            float relativeX = CenterBottomPosition.X - result.TileRectangle.X;
-            float tileWidth = result.TileRectangle.Width;
-            if (result.TileType.HasFlag(TileType.SteepSlopeLeft))
-            {
-                slopeHeight = (relativeX / tileWidth) * result.TileRectangle.Height;
+        //private void UpdateSlopeMovement(ref Vector2 position, TileCollisionResult result)
+        //{
+        //    float slopeHeight;
+        //    float relativeX = CenterBottomPosition.X - result.TileRectangle.X;
+        //    float tileWidth = result.TileRectangle.Width;
+        //    if (result.TileType.HasFlag(TileType.SteepSlopeLeft))
+        //    {
+        //        slopeHeight = (relativeX / tileWidth) * result.TileRectangle.Height;
                 
-            }
-            else if (result.TileType.HasFlag(TileType.SteepSlopeRight))
-            {
-                slopeHeight = (1 - relativeX / tileWidth) * result.TileRectangle.Height;
-            }
-            else if (result.TileType.HasFlag(TileType.GentleSlopeLeft))
-            {
-                slopeHeight = (relativeX / tileWidth) * (result.TileRectangle.Height / 2);
+        //    }
+        //    else if (result.TileType.HasFlag(TileType.SteepSlopeRight))
+        //    {
+        //        slopeHeight = (1 - relativeX / tileWidth) * result.TileRectangle.Height;
+        //    }
+        //    else if (result.TileType.HasFlag(TileType.GentleSlopeLeft))
+        //    {
+        //        slopeHeight = (relativeX / tileWidth) * (result.TileRectangle.Height / 2);
                 
-            }
-            else if (result.TileType.HasFlag(TileType.GentleSlopeRight))
-            {
-                slopeHeight = (1 - relativeX / tileWidth) * (result.TileRectangle.Height / 2);
-                Debug.WriteLine(relativeX / tileWidth);
-            }
-            else
-            {
-                return;
-            }
-            float targetY = result.TileRectangle.Y + slopeHeight - Size.Y;
-            dbgUse = targetY;
+        //    }
+        //    else if (result.TileType.HasFlag(TileType.GentleSlopeRight))
+        //    {
+        //        slopeHeight = (1 - relativeX / tileWidth) * (result.TileRectangle.Height / 2);
+        //        Debug.WriteLine(relativeX / tileWidth);
+        //    }
+        //    else
+        //    {
+        //        return;
+        //    }
+        //    float targetY = result.TileRectangle.Y + slopeHeight - Size.Y;
+        //    dbgUse = targetY;
 
-            position.Y = targetY;
-            _isOnGround = true;
-        }
+        //    position.Y = targetY;
+        //    _isOnGround = true;
+        //}
 
-        private float GetSlopeAngle(TileCollisionResult result)
-        {
-            if (result.TileType.HasFlag(TileType.SteepSlopeLeft) ||
-                result.TileType.HasFlag(TileType.SteepSlopeRight))
-            {
-                return MathHelper.PiOver4;
-            }
-            else if (result.TileType.HasFlag(TileType.GentleSlopeLeft) ||
-                     result.TileType.HasFlag(TileType.GentleSlopeRight))
-            {
-                return MathHelper.PiOver4 / 2;
-            }
+        //private float GetSlopeAngle(TileCollisionResult result)
+        //{
+        //    if (result.TileType.HasFlag(TileType.SteepSlopeLeft) ||
+        //        result.TileType.HasFlag(TileType.SteepSlopeRight))
+        //    {
+        //        return MathHelper.PiOver4;
+        //    }
+        //    else if (result.TileType.HasFlag(TileType.GentleSlopeLeft) ||
+        //             result.TileType.HasFlag(TileType.GentleSlopeRight))
+        //    {
+        //        return MathHelper.PiOver4 / 2;
+        //    }
 
-            return 0f;
-        }
+        //    return 0f;
+        //}
 
         private void UpdateCrosshair(GameTime gameTime)
         {
@@ -1174,7 +1172,6 @@ namespace YoshisAdventure.GameObjects
             {
                 DrawTongue(spriteBatch);
             }
-            spriteBatch.DrawLine(new Vector2(CenterBottomPosition.X, dbgUse), new Vector2(CenterBottomPosition.X, dbgUse + 100), Color.Red);
         }
 
         private void DrawTongue(SpriteBatch spriteBatch)
@@ -1269,17 +1266,17 @@ namespace YoshisAdventure.GameObjects
             OnPlummeted?.Invoke(position);
         }
 
-        private bool IsOnSlope(TileCollisionResult result)
-        {
-            if (result.TileType.HasFlag(TileType.SteepSlopeLeft) ||
-                result.TileType.HasFlag(TileType.SteepSlopeRight) ||
-                result.TileType.HasFlag(TileType.GentleSlopeLeft) ||
-                result.TileType.HasFlag(TileType.GentleSlopeRight))
-            {
-                return true;
-            }
+        //private bool IsOnSlope(TileCollisionResult result)
+        //{
+        //    if (result.TileType.HasFlag(TileType.SteepSlopeLeft) ||
+        //        result.TileType.HasFlag(TileType.SteepSlopeRight) ||
+        //        result.TileType.HasFlag(TileType.GentleSlopeLeft) ||
+        //        result.TileType.HasFlag(TileType.GentleSlopeRight))
+        //    {
+        //        return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
     }
 }
