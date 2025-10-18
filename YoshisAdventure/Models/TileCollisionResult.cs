@@ -21,6 +21,8 @@ namespace YoshisAdventure.Models
 
         public Point PositionInMap { get; set; } = Point.Zero;
 
+        public TiledMapProperties Properties { get; set; }
+
         public TileCollisionResult(TiledMapTile? tile, Rectangle intersection, Rectangle originalRect, Rectangle otherRect, TiledMap tileMap)
         {
             CollidedTile = tile;
@@ -28,10 +30,12 @@ namespace YoshisAdventure.Models
             Direction = CalculateCollisionDirection(originalRect, otherRect, intersection);
             TileRectangle = otherRect;
             PositionInMap = new Point(tile.Value.X, tile.Value.Y);
+            
             TiledMapTileset tileset = tileMap.GetTilesetByTileGlobalIdentifier(tile.Value.GlobalIdentifier);
             if (tileset != null)
             {
-                if(tileset.Tiles[tile.Value.GlobalIdentifier - tileMap.GetTilesetFirstGlobalIdentifier(tileset)].Properties.TryGetValue("TileType", out string tileTypeStr))
+                Properties = tileset.Tiles[tile.Value.GlobalIdentifier - tileMap.GetTilesetFirstGlobalIdentifier(tileset)].Properties;
+                if (Properties.TryGetValue("TileType", out string tileTypeStr))
                 {
                     Enum.TryParse(tileTypeStr, out TileType type);
                     TileType = type;

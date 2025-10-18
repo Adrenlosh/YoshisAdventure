@@ -145,6 +145,38 @@ namespace YoshisAdventure.GameObjects
             return !ScreenBounds.Intersects(GetCollisionBox(Position));
         }
 
+        public virtual bool IsOnSlope(TileCollisionResult result, out int slopeWidth, out int slopeHeight, out int topY, out int bottomY)
+        {
+            slopeHeight = 16;
+            slopeWidth = 16;
+            topY = 16;
+            bottomY = 0;
+            if ((result.TileType.HasFlag(TileType.SteepSlopeLeft) ||
+                result.TileType.HasFlag(TileType.SteepSlopeRight) ||
+                result.TileType.HasFlag(TileType.GentleSlopeLeft) ||
+                result.TileType.HasFlag(TileType.GentleSlopeRight)))
+            {
+                if (result.Properties.TryGetValue("Width", out string slopeWidthStr))
+                {
+                    slopeWidth = Convert.ToInt32(slopeWidthStr);
+                }
+                if (result.Properties.TryGetValue("Height", out string slopeHeightStr))
+                {
+                    slopeHeight = Convert.ToInt32(slopeHeightStr);
+                }
+                if (result.Properties.TryGetValue("TopY", out string topYStr))
+                {
+                    topY = Convert.ToInt32(topYStr);
+                }
+                if (result.Properties.TryGetValue("BottomY", out string bottomYStr))
+                {
+                    bottomY = Convert.ToInt32(bottomYStr);
+                }
+                return true;
+            }
+            return false;
+        }
+
         public abstract void Update(GameTime gameTime);
 
         public abstract void Draw(SpriteBatch spriteBatch);

@@ -138,11 +138,11 @@
 #begin Audio/Audio.xml
 /copy:Audio/Audio.xml
 
-#begin Audio/SFX/coin.wav
-/copy:Audio/SFX/coin.wav
-
 #begin Audio/SFX/1up.wav
 /copy:Audio/SFX/1up.wav
+
+#begin Audio/SFX/coin.wav
+/copy:Audio/SFX/coin.wav
 
 #begin Audio/SFX/exit.wav
 /copy:Audio/SFX/exit.wav
@@ -183,11 +183,11 @@
 #begin Audio/Song/goal.mp3
 /copy:Audio/Song/goal.mp3
 
-#begin Audio/Song/title.mp3
-/copy:Audio/Song/title.mp3
-
 #begin Audio/Song/song1.mp3
 /copy:Audio/Song/song1.mp3
+
+#begin Audio/Song/title.mp3
+/copy:Audio/Song/title.mp3
 
 #begin Fonts/ZFull-GB_0.png
 /importer:TextureImporter
@@ -229,6 +229,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/background-pattern.png
+
+#begin Images/mask.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/mask.png
 
 #begin Stages/stage0.xml
 /copy:Stages/stage0.xml

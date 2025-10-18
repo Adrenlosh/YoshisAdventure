@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.ViewportAdapters;
 using System;
 using YoshisAdventure.Models;
@@ -63,7 +64,7 @@ namespace YoshisAdventure.Screens
             if(_timer >= DisplayDuration)
             {
                 _timer = -1f;
-                Game.LoadScreen(new GamingScreen(Game, _stage), new FadeInOutTransition(GraphicsDevice, Color.Black, FadeType.In, 1.5f));
+                Game.LoadScreen(new GamingScreen(Game, _stage), new MaskTransition(GraphicsDevice, Content, FadeType.In, 1.8f));
             }
         }
     }
