@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
 using System;
@@ -107,7 +108,7 @@ namespace YoshisAdventure.GameObjects
         private bool _hasThrownEgg = false;
         private float _throwingAnimationTimer = 0f;
 
-        public Vector2 CenterBottomPosition
+        public override Vector2 CenterBottomPosition
         {
             get => new Vector2(Position.X + _yoshiSprite.Size.X / 2, Position.Y + _yoshiSprite.Size.Y);
             set => Position = new Vector2(value.X - _yoshiSprite.Size.X / 2, value.Y - _yoshiSprite.Size.Y);
@@ -631,7 +632,7 @@ namespace YoshisAdventure.GameObjects
 
             Vector2 newPosition = Position;
 
-            if ((IsOutOfTilemapBottom() && !_isDie))
+            if (IsOutOfTilemapBottom() && !_isDie)
             {
                 Health = 0;
                 Die();
@@ -882,7 +883,6 @@ namespace YoshisAdventure.GameObjects
                     }
                 }
             }
-            
             if (_velocity.Y != 0) //垂直碰撞检测
             {
                 Vector2 verticalMove = new Vector2(0, _velocity.Y);
@@ -900,7 +900,6 @@ namespace YoshisAdventure.GameObjects
                 else
                 {
                     Rectangle testRect = GetCollisionBox(testPosition);
-
                     // 首先检查与任何瓦片的碰撞
                     if (IsCollidingWithTile(testRect, out TileCollisionResult result) && !_isDie)
                     {
@@ -914,16 +913,10 @@ namespace YoshisAdventure.GameObjects
                             {
                                 _isOnGround = true;
                                 _isFloating = false;
-                                //ResetJumpStatus();
                             }
                         }
                         else
                         {
-                            //if (IsOnSlope(result, out slopeWidth, out slopeHeight, out topY, out bottomY) && result.Direction == CollisionDirection.Top)
-                            //{
-                            //    _isOnSlope = true;
-                            //    UpdateSlopeMovement(ref newPosition, result, slopeWidth, slopeHeight, topY, bottomY);
-                            //}
                             _isOnSlope = false;
                             // 如果是可穿透瓦片，需要额外检查下方是否有固体地面
                             if (result.TileType.HasFlag(TileType.Penetrable))
@@ -1084,41 +1077,12 @@ namespace YoshisAdventure.GameObjects
                     _isOnGround = false;
                 }
             }
-
-
         }
 
         private void UpdateSlopeMovement(ref Vector2 position, TileCollisionResult result, int slopeWidth, int slopeHeight, int topY, int bottomY)
         {
-            float onSlopeHeight = 0;
-            if (result.TileType.HasFlag(TileType.SteepSlopeRight))
-            {
-                onSlopeHeight = result.TileRectangle.Location.Y + (CenterBottomPosition.X - result.TileRectangle.Location.X) * (slopeHeight / slopeWidth);
-            }
-            else if (result.TileType.HasFlag(TileType.SteepSlopeLeft))
-            {
-                onSlopeHeight = result.TileRectangle.Location.Y + (slopeHeight - (CenterBottomPosition.X - result.TileRectangle.Location.X) * (slopeHeight / slopeWidth));
-            }
-            else if (result.TileType.HasFlag(TileType.GentleSlopeLeft))
-            {
-                onSlopeHeight = result.TileRectangle.Y + bottomY + (result.TileRectangle.X - CenterBottomPosition.X) * (topY - bottomY) / slopeWidth;
-            }
-            else if (result.TileType.HasFlag(TileType.GentleSlopeRight))
-            {
-                onSlopeHeight = result.TileRectangle.Y + topY + (result.TileRectangle.X - CenterBottomPosition.X) * (bottomY - topY) / slopeWidth;
-            }
-            else
-            {
-                return;
-            }
-
-            float targetY = onSlopeHeight - slopeHeight;
-            float minY = result.TileRectangle.Bottom - Size.Y;
-            if (targetY < minY)
-            {
-                targetY = minY;
-            }
-            position.Y = targetY - _yoshiSprite.Size.Y / 2; //转换为基于左上角的坐标
+            float targetY = GetOnSlopeHeight(position, result, slopeWidth, slopeHeight, topY, bottomY);
+            position.Y = targetY - _yoshiSprite.Size.Y / 2;
             _isOnGround = true;
         }
 
@@ -1159,20 +1123,7 @@ namespace YoshisAdventure.GameObjects
         }
         #endregion
 
-        protected override Rectangle GetCollisionBox(Vector2 position)
-        {
-            int X = (int)(position.X + _yoshiSprite.Size.X / 2 - Size.X / 2);
-            int Y = (int)(position.Y + _yoshiSprite.Size.Y - Size.Y);
-            return new Rectangle(X, Y, Size.X, Size.Y);
-        }
-
-        private Vector2 GetCurrentThrowDirection()
-        {
-            Vector2 direction = new Vector2((float)Math.Sin(_currentAngle), -(float)Math.Cos(_currentAngle));
-            direction.Normalize();
-            return direction;
-        }
-
+        #region Draw        
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (_isHoldingEgg)
@@ -1180,6 +1131,7 @@ namespace YoshisAdventure.GameObjects
                 _crosshairSprite.Draw(spriteBatch, _rotatingSpritePosition, 0, Vector2.One);
             }
             _yoshiSprite.Draw(spriteBatch, Position, 0, Vector2.One);
+            spriteBatch.DrawRectangle(CollisionBox, Color.Red);
             if (_tongueState != TongueState.None)
             {
                 DrawTongue(spriteBatch);
@@ -1233,6 +1185,35 @@ namespace YoshisAdventure.GameObjects
                 spriteBatch.Draw(_tongueSprite.TextureRegion.Texture, tipPosition, tipSource, Color.White, rotation, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
             }
         }
+        #endregion
+
+        #region Misc
+        protected override Rectangle GetCollisionBox(Vector2 position)
+        {
+            int X = (int)(position.X + _yoshiSprite.Size.X / 2 - Size.X / 2);
+            int Y = (int)(position.Y + _yoshiSprite.Size.Y - Size.Y);
+            return new Rectangle(X, Y, Size.X, Size.Y);
+        }
+
+        private Vector2 GetCurrentThrowDirection()
+        {
+            Vector2 direction = new Vector2((float)Math.Sin(_currentAngle), -(float)Math.Cos(_currentAngle));
+            direction.Normalize();
+            return direction;
+        }
+        private void HandlePlummetLand(Vector2 position, TileCollisionResult result)
+        {
+            if (result.TileType.HasFlag(TileType.Breakable) && result.Direction == CollisionDirection.Top)
+            {
+                TiledMapTileLayer layer = _tilemap.GetLayer<TiledMapTileLayer>("Ground");
+                layer.SetTile((ushort)result.PositionInMap.X, (ushort)result.PositionInMap.Y, 0u);
+            }
+            SFXSystem.Play("plummet");
+            _isPlummeting = false;
+            _plummetTimer = 0;
+            _plummetStage = PlummetState.None;
+            OnPlummeted?.Invoke(position);
+        }
 
         public void Bounce()
         {
@@ -1264,19 +1245,6 @@ namespace YoshisAdventure.GameObjects
             _jumpInitiated = false;
             _isOnSlope = false;
         }
-
-        private void HandlePlummetLand(Vector2 position, TileCollisionResult result)
-        {
-            if (result.TileType.HasFlag(TileType.Breakable) && result.Direction == CollisionDirection.Top)
-            {
-                TiledMapTileLayer layer = _tilemap.GetLayer<TiledMapTileLayer>("Ground");
-                layer.SetTile((ushort)result.PositionInMap.X, (ushort)result.PositionInMap.Y, 0u);
-            }
-            SFXSystem.Play("plummet");
-            _isPlummeting = false;
-            _plummetTimer = 0;
-            _plummetStage = PlummetState.None;
-            OnPlummeted?.Invoke(position);
-        }
+        #endregion
     }
 }

@@ -17,6 +17,7 @@ namespace YoshisAdventure.Transitions
         private readonly SpriteBatch _spriteBatch;
 
         public Color Color { get; }
+
         public FadeType Type { get; }
 
         public FadeInOutTransition(GraphicsDevice graphicsDevice, Color color, FadeType type, float duration = 1f)

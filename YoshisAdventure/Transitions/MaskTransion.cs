@@ -35,6 +35,9 @@ public class MaskTransition : Transition
         {
             if (Value < 0.98)
             {
+                float screenDiagonal = new Vector2(_graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height).Length();
+                float maskDiagonal = new Vector2(_mask.Width, _mask.Height).Length();
+                float maxScale = screenDiagonal / maskDiagonal * 60f;
                 _spriteBatch.Draw(_mask,
                     new Vector2(_graphicsDevice.Viewport.Width / 2,
                     _graphicsDevice.Viewport.Height / 2),
@@ -42,7 +45,7 @@ public class MaskTransition : Transition
                     Color.White,
                     0f,
                     new Vector2(_mask.Width, _mask.Height) / 2,
-                    (1 - base.Value) * 50,
+                    (1 - base.Value) * maxScale,
                     SpriteEffects.None,
                     0);
             }
