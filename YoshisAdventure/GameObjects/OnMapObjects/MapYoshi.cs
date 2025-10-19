@@ -80,7 +80,8 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
             }
             if (_velocity == Vector2.Zero && _sprite.CurrentAnimation != "walk" && _sprite.CurrentAnimation != "start")
             {
-                _sprite.SetAnimation("walk");
+                if (_sprite.CurrentAnimation != "walk")
+                    _sprite.SetAnimation("walk");
             }
         }
 
@@ -143,22 +144,22 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle rect;
-            foreach (var obj in _objects)
-            {
-                if (obj is TiledMapRectangleObject rectangle)
-                {
-                    rect = new Rectangle((int)rectangle.Position.X, (int)rectangle.Position.Y, (int)rectangle.Size.Width, (int)rectangle.Size.Height);
-                    spriteBatch.DrawRectangle(rect, Color.Red);
-                }
-                else if (obj is TiledMapEllipseObject ellipse)
-                {
-                    rect = new Rectangle((int)ellipse.Position.X, (int)ellipse.Position.Y, (int)ellipse.Size.Width, (int)ellipse.Size.Height);
-                    spriteBatch.DrawRectangle(rect, Color.Gold);
-                }
-            }
+            //Rectangle rect;
+            //foreach (var obj in _objects)
+            //{
+            //    if (obj is TiledMapRectangleObject rectangle)
+            //    {
+            //        rect = new Rectangle((int)rectangle.Position.X, (int)rectangle.Position.Y, (int)rectangle.Size.Width, (int)rectangle.Size.Height);
+            //        spriteBatch.DrawRectangle(rect, Color.Red);
+            //    }
+            //    else if (obj is TiledMapEllipseObject ellipse)
+            //    {
+            //        rect = new Rectangle((int)ellipse.Position.X, (int)ellipse.Position.Y, (int)ellipse.Size.Width, (int)ellipse.Size.Height);
+            //        spriteBatch.DrawRectangle(rect, Color.Gold);
+            //    }
+            //}
             _sprite.Draw(spriteBatch, Position, 0, Vector2.One);
-            spriteBatch.DrawRectangle(CollisionBox, Color.BlueViolet);
+            //spriteBatch.DrawRectangle(CollisionBox, Color.BlueViolet);
         }
     }
 }

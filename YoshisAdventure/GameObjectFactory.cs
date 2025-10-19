@@ -127,10 +127,10 @@ namespace YoshisAdventure
             Texture2D texture = _contentManager.Load<Texture2D>("Atlas/map-yoshi");
             Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas/map-yoshi", texture, 16, 16);
             SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet/map-yoshi", atlas);
-            AddAnimationCycle(spriteSheet, "walk", [1, 0, 1, 5], true, 0.2f);
-            AddAnimationCycle(spriteSheet, "walk-side", [2, 3, 2, 11], true, 0.2f);
-            AddAnimationCycle(spriteSheet, "walk-back", [8, 9, 8, 6], true, 0.2f);
-            AddAnimationCycle(spriteSheet, "start", [4, 1], false, 0.2f);
+            AddAnimationCycle(spriteSheet, "walk", [6, 7, 6, 8], true, 0.2f);
+            AddAnimationCycle(spriteSheet, "walk-side", [1, 0, 1, 2], true, 0.2f);
+            AddAnimationCycle(spriteSheet, "walk-back", [3, 4, 3, 5], true, 0.2f);
+            AddAnimationCycle(spriteSheet, "start", [9, 6], false, 0.2f);
             MapYoshi mapYoshi = new MapYoshi(spriteSheet, tilemap);
             mapYoshi.Position = position;
             return mapYoshi;

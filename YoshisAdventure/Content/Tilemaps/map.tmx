@@ -8,7 +8,7 @@
  </layer>
  <layer id="1" name="Ground" width="50" height="50">
   <data encoding="base64" compression="zlib">
-   eJztz80NglAQReGhFAWxDvCHQtDCdAGFIH1534IYDfBcSBzN+ZK7mdUcMwAAAAAAAAAAgId1YpZFliff/nJeaEi1fWQb5y2rNxqGbelYHB2+0OELHb78e0dmz/PeUei3XaQh7KB75bjjot/Kl5axjqPureOO4Kr/au00sbPWOG8YdPrzNrH+RxqAT7sDfRwyCg==
+   eJzt0c0JwkAUReGXUtSodfibhWUkFqYLLUQFS3FjD94BgzgwxoWSl3A+uIvM6h1iBgAAAAAAAAAA8DLMzPKGTbK2r/wsNIy0ZcPGzlsGXzTUm9Lxd33s2Oj7Gq2LHTfrx/+go310+JLqyO193jtmum0RdcQNYSu9F447drpt/my5W7pjrfej445gr/tKrUpsqx2cN9ROuvOc2KUjDcCvPQCgcTk5
   </data>
  </layer>
  <objectgroup id="2" name="Objects">
