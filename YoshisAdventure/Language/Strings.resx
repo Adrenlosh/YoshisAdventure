@@ -160,4 +160,8 @@ x {0}</value>
   <data name="Paused" xml:space="preserve">
     <value>Paused</value>
   </data>
+  <data name="TimeOnHud" xml:space="preserve">
+    <value>Time 
+{0}</value>
+  </data>
 </root>

@@ -23,6 +23,7 @@ namespace YoshisAdventure.UI
         private const float AnimationDuration = 0.3f;
         private float _animationTimer = -1f;
         private int _alpha;
+        private TimeSpan? _remainingTime;
         private AnimationStatus _animationStatus = AnimationStatus.None;
         private SpriteBatch _spriteBatch;
         private MessageBox _messageBox;
@@ -76,9 +77,10 @@ namespace YoshisAdventure.UI
             _animationStatus = AnimationStatus.Out;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, TimeSpan? remainingTime = null)
         {
             HandleInput();
+            _remainingTime = remainingTime;
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (_animationTimer >= 0f)
             {
@@ -129,7 +131,7 @@ namespace YoshisAdventure.UI
         {
             Matrix matrix = _viewportAdapter.GetScaleMatrix();
             Rectangle boundingRect = _viewportAdapter.BoundingRectangle;
-            int denominator = 7;
+            int denominator = 9;
             int paddingY = 1;
             int stepX = boundingRect.Width / denominator;
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: matrix);
@@ -146,11 +148,15 @@ namespace YoshisAdventure.UI
 
             string healthStr = string.Format(Language.Strings.HealthOnHud, GameObjectsSystem.Player.Health, GameObjectsSystem.Player.MaxHealth);
             var healthStrSize = _bitmapFont.MeasureString(healthStr);
-            _spriteBatch.DrawString(_bitmapFont, string.Format(Language.Strings.LifeLeftOnHud, GameMain.PlayerStatus.LifeLeft), new Vector2(1, paddingY), Color.Green);
+            _spriteBatch.DrawString(_bitmapFont, string.Format(Language.Strings.LifeLeftOnHud, GameMain.PlayerStatus.LifeLeft), new Vector2(1, paddingY), Color.OrangeRed);
             _spriteBatch.DrawString(_bitmapFont, string.Format(Language.Strings.EggCountOnHud, GameMain.PlayerStatus.Egg), new Vector2(stepX * 2, paddingY), Color.White);
             _spriteBatch.DrawString(_bitmapFont, string.Format(Language.Strings.CoinOnHud, GameMain.PlayerStatus.Coin), new Vector2(stepX * 4, paddingY), Color.White);
             _spriteBatch.DrawString(_bitmapFont, string.Format(Language.Strings.ScoreOnHud, GameMain.PlayerStatus.Score), new Vector2(stepX * 6, paddingY), Color.White);
             _spriteBatch.DrawString(_bitmapFont, healthStr, new Vector2(1, boundingRect.Height - 1 - healthStrSize.Height), GameObjectsSystem.Player.Health < 2 ? Color.Red : Color.Yellow);
+            if(_remainingTime != null)
+            {
+                _spriteBatch.DrawString(_bitmapFont, string.Format(Language.Strings.TimeOnHud, ((int)(_remainingTime.Value.TotalSeconds)).ToString().PadLeft(3, '0')), new Vector2(stepX * 8, paddingY), _remainingTime.Value.TotalSeconds <= 100 ? Color.Red : Color.Yellow);
+            }
             _messageBox.Draw(_spriteBatch);
             _spriteBatch.End();
         }

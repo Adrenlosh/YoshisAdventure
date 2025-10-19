@@ -5,6 +5,7 @@ using MonoGame.Extended.Tiled;
 using YoshisAdventure.Interfaces;
 using System;
 using YoshisAdventure.Models;
+using YoshisAdventure.Enums;
 
 namespace YoshisAdventure.GameObjects
 {
@@ -54,13 +55,13 @@ namespace YoshisAdventure.GameObjects
             penetrationDepth = 0;
             if (IsCollidingWithTile(rect, out result))
             {
-                CalculateCollisionDetails(rect, result.TileRectangle, out normal, out penetrationDepth);
+                GetCollisionDetails(rect, result.TileRectangle, out normal, out penetrationDepth);
                 return true;
             }
             return false;
         }
 
-        private void CalculateCollisionDetails(Rectangle rect, Rectangle tileRect, out Vector2 normal, out float penetrationDepth)
+        private void GetCollisionDetails(Rectangle rect, Rectangle tileRect, out Vector2 normal, out float penetrationDepth)
         {
             normal = Vector2.Zero;
             penetrationDepth = 0;
@@ -113,7 +114,7 @@ namespace YoshisAdventure.GameObjects
                 try
                 {
                     Rectangle collisionBox = GetCollisionBox(newPosition);
-                    if (IsCollidingWithTileDetailed(collisionBox, out _, out Vector2 normal, out float penetrationDepth))
+                    if (IsCollidingWithTileDetailed(collisionBox, out TileCollisionResult result, out Vector2 normal, out float penetrationDepth) && !result.TileType.HasFlag(TileType.Penetrable))
                     {
                         Bounce(normal, penetrationDepth);
                     }

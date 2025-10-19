@@ -220,7 +220,7 @@
   <properties>
    <property name="BottomY" type="int" value="0"/>
    <property name="Height" type="int" value="0"/>
-   <property name="TileType" propertytype="TileType" value="Blocking,GentleSlopeLeft"/>
+   <property name="TileType" propertytype="TileType" value="Platform,GentleSlopeLeft"/>
    <property name="TopY" type="int" value="8"/>
    <property name="Width" type="int" value="16"/>
   </properties>
@@ -229,7 +229,7 @@
   <properties>
    <property name="BottomY" type="int" value="8"/>
    <property name="Height" type="int" value="16"/>
-   <property name="TileType" propertytype="TileType" value="Blocking,GentleSlopeLeft"/>
+   <property name="TileType" propertytype="TileType" value="Platform,GentleSlopeLeft"/>
    <property name="TopY" type="int" value="16"/>
    <property name="Width" type="int" value="16"/>
   </properties>
@@ -238,7 +238,7 @@
   <properties>
    <property name="BottomY" type="int" value="8"/>
    <property name="Height" type="int" value="32"/>
-   <property name="TileType" propertytype="TileType" value="Blocking,GentleSlopeRight"/>
+   <property name="TileType" propertytype="TileType" value="Platform,GentleSlopeRight"/>
    <property name="TopY" type="int" value="16"/>
    <property name="Width" type="int" value="16"/>
   </properties>
@@ -247,7 +247,7 @@
   <properties>
    <property name="BottomY" type="int" value="0"/>
    <property name="Height" type="int" value="16"/>
-   <property name="TileType" propertytype="TileType" value="Blocking,GentleSlopeRight"/>
+   <property name="TileType" propertytype="TileType" value="Platform,GentleSlopeRight"/>
    <property name="TopY" type="int" value="8"/>
    <property name="Width" type="int" value="16"/>
   </properties>

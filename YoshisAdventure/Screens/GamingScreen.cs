@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Tiled;
 using MonoGameGum;
+using System;
 using System.Linq;
 using YoshisAdventure.GameObjects;
 using YoshisAdventure.Models;
@@ -12,7 +14,7 @@ using YoshisAdventure.UI;
 
 namespace YoshisAdventure.Screens
 {
-    public class GamingScreen : MonoGame.Extended.Screens.GameScreen
+    public class GamingScreen : GameScreen
     {
         private GameSceneRenderer _sceneRenderer;
         private InteractionSystem _interactionSystem;
@@ -23,6 +25,7 @@ namespace YoshisAdventure.Screens
         private TiledMap _tilemap;
         private GamingScreenUI _ui;
         private Vector2 _cameraLockPosition;
+        private TimeSpan _remainingTime = TimeSpan.FromSeconds(400);
         private bool _isSideExit = false;
         private bool _isSideExiting = false;
         private bool _shouldMovePlayer = false;
@@ -182,6 +185,7 @@ namespace YoshisAdventure.Screens
             }
             if (!_ui.IsReadingMessage && !_ui.IsPaused && !_isSideExiting)
             {
+                UpdateTimer(gameTime);
                 UpdateSideExit();
                 if (!_isPlayerDie)
                 {
@@ -208,7 +212,7 @@ namespace YoshisAdventure.Screens
                 _particleSystem.ParticleEffect.Trigger(GameObjectsSystem.Player.CenterBottomPosition);
                 _particleSystem.Update(gameTime);
             }
-            _ui.Update(gameTime);
+            _ui.Update(gameTime, _remainingTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -228,6 +232,23 @@ namespace YoshisAdventure.Screens
                 {
                     _isSideExiting = true;
                     Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+                }
+            }
+        }
+
+        private void UpdateTimer(GameTime gameTime)
+        {
+            if (!_ui.IsReadingMessage && !_ui.IsPaused && !_isSideExiting && !_isPlayerDie)
+            {
+                _remainingTime -= gameTime.ElapsedGameTime;
+                if (_remainingTime <= TimeSpan.Zero)
+                {
+                    _remainingTime = TimeSpan.Zero;
+
+                    if (GameObjectsSystem.Player != null)
+                    {
+                        GameObjectsSystem.Player.Die(true);
+                    }
                 }
             }
         }

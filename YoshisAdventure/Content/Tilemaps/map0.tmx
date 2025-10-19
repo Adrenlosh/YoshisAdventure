@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="320" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="3178">
+<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="320" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="3180">
  <properties>
   <property name="SideExit" type="bool" value="false"/>
   <property name="Song" value=""/>
@@ -10,23 +10,29 @@
  </imagelayer>
  <layer id="11" name="Back" width="320" height="27">
   <data encoding="base64" compression="zlib">
-   eJzt1rENADAIAzC+of9f2B2pK1TCXsKYKSICAAAAAAAAAAAAAAAAAAAAAAAAAADgPzldAGCI/QM2e23gaW0BMCPL7S8ENsmSAAAAAAAAAPS6GcQBYQ==
+   eJzt1LENgEAIQNHbRK3cf0M3IJp4HMp7LRSE4o8BAAAAAAAAAAAAAAAAAAAAAAAAVHUGsz3rCIBkUfue7AB8zd22aSDwRxoIdKaBQGcaCHSmgXUcwWxLuwJ60cD1ot/6O8ylgetoH6yngfm0D+rQwDzaB/Vo4Hzax1suZWoFaA==
   </data>
  </layer>
  <layer id="1" name="Ground" width="320" height="27">
   <data encoding="base64" compression="zlib">
-   eJztm1tT3DAMhVVoaUsvL7TlsaE3eoHS/v8/hzXBQ1ZjR97g2FJyvhlNjpdlo4iMfCKACAAAAAAAAAAAAAAAAEBtbkLchvgb4q5zLgAA0ILY9/6FOAvxJsR/Qh8EAGyX2Pc00AcBAFtB+j0N+EEAgHdK/Z4G+iAAwAvH+j0N+EEA9sGzECchTkM8n2i5Zv2iU445avk9jVp90GutveYNgAZ7HfZM5yFeTrRcs37XKUdJbb+nUcsPeqw14zVvADTe0njfvqLxPo5arlm/75RjpJXf01jaBz3VeorXvAHQ4L39NY338PlEyzXrXnt7a7+nsdQPeqh1Cq95g33zLcTnma/n5jpzuuV8x4rf0yjpg9ZrncNr3mA7DCG+zqxT/ApxHeKK8j0wN9eZ0y32d2t+T6PED1qttYbXvME2GEJ8obGX/UysU8TeFyPXA3NznTm95nzHi9/TSPVBa7UuxWvewD8DPfa668Q61QNl74vxPfH5ubnOnF5jb/fm9zRSftBKrY/Fa97ADwOl/dkPOuxhci17YK73/U6ch+c6pfMcqWvNd7bi9zRiH+xZ6yVYuEfAthlo9HS5Z9Q/dNjL5DqG1vtoch6G9/XSeY7UT93ft+b3NKQfbFnrp9DzHgHbZ6DD59mlPbCk99HkdYbnOqXzHKmXzndi3ztNxJb/10zWOl7rmrWuQY97BOyHi0ykyPXA0t43PR/De3vpPEfq1N4+UP73zNLvpaL0b+puxPFWHOnhM6bHO3Fsjay1vNZja92K2vcIACcPx7n5yUXm9VZ6yffEZ+vU14/5rFrX0Op8vX5G0La1lTys5RfnXUvnKlZ19J2p91xSWz4W5gwNvZa2koe1/DiIls9VrOr4bJ16zydqy4fCnKGh19JW8rCWH89GmKVzFY+6h/+zcu3Q+9RW8rCWHwdN1mc70D38n5Vrh96ntpKHtfzuAW+UW/I=
+   eJztlstu3DAMRYm0zWSyLdAuq/Sd9P//rx4gRoJkRiZlXsEenQMQ0EK8JCjzwmbnObwJAIBRwP8AYFTwPwAYFfwPAEYF/wOAUcH/AGBU8D8AGBX8DwBGBf8DgFHB/wBgVPA/ABgV/A8ARqXF/8oUP4J1euUo6tW0WuoA9KJY373bG1H/K1N8n+LPFH+dNXrlKOrVtNb0CKCmWN+92yMR/yv2Mps5lmbUK0dRr6blqfN5RQCsoVjfvdsrXv8r9n42SzPqlaOot6TV2iOAmmJ9927PePyv2OXZXJpRrxxFPa9WtEcANcU0e3etePzvt9Vnc26uvXIU9SJaeCBsCdXeXSse/zvxz+Jz7ZWjqBfRUnrgzym+Ce4qtL16WX3WdDJ7Uc1V9baKvbtWvP53Ag/s64GPzxoPtvztR+4qtL16WX3WdDJ7Uc1V+bYnsvfuWon43wk8sI8Hzt/8HJ4d9dxVaHv1svqs6WT2opqr8m1fk7kHe+dmig9TfHScPy1o4YFaD3z7zUd2NLp7a7W9ell91nQye1HNVfm258jagxuLecjW7t9PcTfFreP8teNcFTmKer088NI3P8evxrsKba9eVp81ncxeVHNVvm2NjD24t5iHbO3+8Tk85y8d56rKUdRTe+DSN//UeFeh7dXL6nON90V6Uc1V+bYe1u7B0WIesrX7s2feOs6e/7+suSpzFPVUHoj34X0tM4uwZg/uLOYhW7t/sJf/waWz9/8vY67qHEW9bA/E+/C+lpm10LoHB4t5yNbuz154dJwj/39r59ojR1EvywPxPryvZWZraNmDqIds7f5/vAk43w==
   </data>
  </layer>
  <layer id="3" name="Decorations" width="320" height="27">
   <data encoding="base64" compression="zlib">
-   eJztwzENAAAIAzCsgX9RSNgDX5u0CgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACADvk3xwEAAAAAAIBsAY4HBzE=
+   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPBohwAAAQ==
   </data>
  </layer>
  <objectgroup id="2" name="Objects">
-  <object id="16" name="Player" x="160" y="320">
+  <object id="16" name="Player" x="32" y="304">
    <point/>
   </object>
-  <object id="35" name="Goal" x="3857.33" y="216.667" width="28" height="134"/>
+  <object id="35" name="Goal" x="4448" y="202" width="28" height="134"/>
+  <object id="3178" name="Spring" x="64" y="320">
+   <point/>
+  </object>
+  <object id="3179" name="Enemy" x="80" y="304">
+   <point/>
+  </object>
  </objectgroup>
 </map>

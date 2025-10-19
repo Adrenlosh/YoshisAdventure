@@ -180,5 +180,15 @@ namespace YoshisAdventure.Language {
                 return ResourceManager.GetString("Start", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查找类似 Time 
+        ///{0} 的本地化字符串。
+        /// </summary>
+        internal static string TimeOnHud {
+            get {
+                return ResourceManager.GetString("TimeOnHud", resourceCulture);
+            }
+        }
     }
 }

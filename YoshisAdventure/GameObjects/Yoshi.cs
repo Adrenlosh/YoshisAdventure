@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
 using System;
@@ -47,6 +46,7 @@ namespace YoshisAdventure.GameObjects
         private const float RunThreshold = 3.8f;
         private const float ThrowAnimationDuration = 0.5f;
         private const float SpitAnimationDuration = 0.2f;
+        private const float SteepSlopeSlideSpeed = 0.5f;
 
         private const float TongueSpeed = 300f;
         private const float MaxTongueLength = 50f;
@@ -192,15 +192,20 @@ namespace YoshisAdventure.GameObjects
             }
         }
 
-        private void Hurt()
+        public void Hurt()
         {
             CanHandleInput = false;
             _isHurt = true;
             SFXSystem.Play("yoshi-hurt");
         }
 
-        public void Die()
+        public void Die(bool clearHealth = false)
         {
+            if (clearHealth)
+            {
+                Velocity = new Vector2(2 * -_lastInputDirection, -10);
+                Health = 0;
+            }
             OnDie?.Invoke();
             SFXSystem.Play("yoshi-died");
             CanHandleInput = false;
@@ -351,6 +356,7 @@ namespace YoshisAdventure.GameObjects
                 _velocity.Y = BaseJumpForce;
                 _isOnGround = false;
                 _canJump = false;
+                _isOnSlope = false;
                 SFXSystem.Play("yoshi-jump");
             }
 
@@ -850,6 +856,21 @@ namespace YoshisAdventure.GameObjects
 
         private void UpdateTileCollosion(ref Vector2 newPosition)
         {
+            if(_isOnSlope)
+            {
+                IsCollidingWithTile(CollisionBox, out TileCollisionResult result);
+                if (!(GameController.MoveLeft() || GameController.MoveRight()))
+                {
+                    if (result.TileType.HasFlag(TileType.SteepSlopeLeft))
+                    {
+                        _velocity.X -= SteepSlopeSlideSpeed;
+                    }
+                    else if (result.TileType.HasFlag(TileType.SteepSlopeRight))
+                    {
+                        _velocity.X += SteepSlopeSlideSpeed;
+                    }
+                }
+            }
             if (_velocity.X != 0) //水平碰撞检测
             {
                 Vector2 horizontalMove = new Vector2(_velocity.X, 0);
@@ -1037,6 +1058,7 @@ namespace YoshisAdventure.GameObjects
                                     }
                                     else
                                     {
+                                        Debug.WriteLine(result.TileType);
                                         newPosition.Y = result.TileRectangle.Bottom;
                                         _velocity.Y = 0;
                                         ResetJumpStatus();
@@ -1082,7 +1104,12 @@ namespace YoshisAdventure.GameObjects
         private void UpdateSlopeMovement(ref Vector2 position, TileCollisionResult result, int slopeWidth, int slopeHeight, int topY, int bottomY)
         {
             float targetY = GetOnSlopeHeight(position, result, slopeWidth, slopeHeight, topY, bottomY);
-            position.Y = targetY - _yoshiSprite.Size.Y / 2;
+            float minY = result.TileRectangle.Bottom - Size.Y;
+            if (targetY < minY)
+            {
+                targetY = minY;
+            }
+            position.Y = targetY - _yoshiSprite.Size.Y / 2; //转换为基于左上角的坐标
             _isOnGround = true;
         }
 
@@ -1131,7 +1158,6 @@ namespace YoshisAdventure.GameObjects
                 _crosshairSprite.Draw(spriteBatch, _rotatingSpritePosition, 0, Vector2.One);
             }
             _yoshiSprite.Draw(spriteBatch, Position, 0, Vector2.One);
-            spriteBatch.DrawRectangle(CollisionBox, Color.Red);
             if (_tongueState != TongueState.None)
             {
                 DrawTongue(spriteBatch);
@@ -1141,18 +1167,15 @@ namespace YoshisAdventure.GameObjects
         private void DrawTongue(SpriteBatch spriteBatch)
         {
             Vector2 tongueStart;
-            Vector2 tongueEnd;
             if (_lastInputDirection == 1)
             {
                 if (_isLookingUp)
                 {
                     tongueStart = CenterPosition + new Vector2(1, -1);
-                    tongueEnd = tongueStart + _tongueDirection * _tongueLength;
                 }
                 else
                 {
                     tongueStart = CenterPosition + new Vector2(2, -2);
-                    tongueEnd = tongueStart + _tongueDirection * _tongueLength;
                 }
             }
             else
@@ -1160,12 +1183,10 @@ namespace YoshisAdventure.GameObjects
                 if (_isLookingUp)
                 {
                     tongueStart = CenterPosition + new Vector2(-6, -1);
-                    tongueEnd = tongueStart + _tongueDirection * _tongueLength;
                 }
                 else
                 {
                     tongueStart = CenterPosition + new Vector2(-2, 4);
-                    tongueEnd = tongueStart + _tongueDirection * _tongueLength;
                 }
             }
 
@@ -1217,7 +1238,7 @@ namespace YoshisAdventure.GameObjects
 
         public void Bounce()
         {
-            _velocity = new Vector2(_velocity.X, BaseJumpForce * 1.6f);
+            _velocity = new Vector2(_velocity.X, BaseJumpForce * 1.9f);
         }
 
         public void ResetVelocity(bool resetAllMovement = false)

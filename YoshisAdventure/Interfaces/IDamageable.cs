@@ -8,5 +8,5 @@ public interface IDamageable
 
     public void TakeDamage(int damage, GameObject source);
 
-    public void Die();
+    public void Die(bool ClearHealth);
 }

@@ -47,7 +47,7 @@ namespace YoshisAdventure.Screens
                 SizeF line1Size = _bitmapFont.MeasureString(Language.Strings.StageStart);
                 SizeF line2Size = _bitmapFont.MeasureString(_stage.Description);
                 
-                _spriteBatch.DrawString(_bitmapFont, Language.Strings.StageStart, new Vector2(_viewportAdapter.VirtualWidth / 2 - line1Size.Width / 2, _viewportAdapter.VirtualHeight / 2 - line1Size.Height / 2), Color.Green, _viewportAdapter.BoundingRectangle);
+                _spriteBatch.DrawString(_bitmapFont, Language.Strings.StageStart, new Vector2(_viewportAdapter.VirtualWidth / 2 - line1Size.Width / 2, _viewportAdapter.VirtualHeight / 2 - line1Size.Height / 2), Color.OrangeRed, _viewportAdapter.BoundingRectangle);
                 _spriteBatch.DrawString(_bitmapFont, _stage.Description, new Vector2(_viewportAdapter.VirtualWidth / 2 - line2Size.Width / 2, (_viewportAdapter.VirtualHeight / 2 - line2Size.Height / 2) + line1Size.Height + 2), Color.White, _viewportAdapter.BoundingRectangle);
             }
             _spriteBatch.End();

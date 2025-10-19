@@ -26,7 +26,7 @@ namespace YoshisAdventure.GameObjects
             Size = new Point(16, 32);
         }
 
-        public void Die()
+        public void Die(bool ClearHealth)
         {
 
         }
