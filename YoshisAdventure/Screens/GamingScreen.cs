@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Tiled;
-using MonoGameGum;
 using System;
 using System.Linq;
 using YoshisAdventure.GameObjects;
@@ -45,7 +44,7 @@ namespace YoshisAdventure.Screens
 
         public void InitializeUI()
         {
-            GumService.Default.Root.Children.Clear();
+
             _ui = new GamingScreenUI(new SpriteBatch(GraphicsDevice), Content, _sceneRenderer.ViewportAdapter);
         }
 
@@ -217,8 +216,7 @@ namespace YoshisAdventure.Screens
 
         public override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            
+            GraphicsDevice.Clear(Color.Black);
             _sceneRenderer.Draw(GameObjectsSystem.GetAllActiveObjects());
             _particleSystem.Draw(_sceneRenderer.Camera);
             _ui.Draw();

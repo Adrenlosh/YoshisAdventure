@@ -1,17 +1,17 @@
 ﻿using GameLibrary.Input;
-using Gum.Forms.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
+using MLEM.Extended.Font;
+using MLEM.Ui;
+using MLEM.Ui.Style;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.ViewportAdapters;
-using MonoGameGum;
 using SoundFlow.Abstracts.Devices;
 using SoundFlow.Backends.MiniAudio;
 using SoundFlow.Structs;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using YoshisAdventure.Screens;
 using YoshisAdventure.Status;
@@ -23,8 +23,11 @@ namespace YoshisAdventure
     {
         private GraphicsDeviceManager _graphicsDeviceManager;
         private ScreenManager _screenManager;
+        private SpriteBatch _spriteBatch;
 
-        public ViewportAdapter ViewportAdapter { get; private set; }
+        public static UiSystem UiSystem { get; set; }
+
+        public static ViewportAdapter ViewportAdapter { get; private set; }
 
         public static PlayerStatus PlayerStatus { get; set; } = new PlayerStatus();
 
@@ -32,60 +35,63 @@ namespace YoshisAdventure
 
         public GameMain()
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this);
-            _graphicsDeviceManager.PreferredBackBufferWidth = GlobalConfig.VirtualResolution_Width;
-            _graphicsDeviceManager.PreferredBackBufferHeight = GlobalConfig.VirtualResolution_Height;
-            _graphicsDeviceManager.PreferHalfPixelOffset = false;
+            _graphicsDeviceManager = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = GlobalConfig.VirtualResolution_Width,
+                PreferredBackBufferHeight = GlobalConfig.VirtualResolution_Height,
+                PreferHalfPixelOffset = false
+            };
             _graphicsDeviceManager.ApplyChanges();
-            IsFixedTimeStep = true;
+            IsFixedTimeStep = false;
+            IsMouseVisible = true;
             Content.RootDirectory = "Content";
             Window.AllowUserResizing = true;
             Window.Title = Language.Strings.GameName;
-            IsMouseVisible = true;
-            
+
             _screenManager = new ScreenManager();
             Components.Add(_screenManager);
         }
 
         protected override void Initialize()
         {
-
             base.Initialize();
         }
 
-        private void InitializeGum()
+        private void InitializeUi()
         {
-            GumService.Default.Initialize(this);
-            FrameworkElement.KeyboardsForUiControl.Add(GumService.Default.Keyboard);
-            FrameworkElement.GamePadsForUiControl.AddRange(GumService.Default.Gamepads);
-            FrameworkElement.TabReverseKeyCombos.Add(new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Up });
-            FrameworkElement.TabKeyCombos.Add(new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Down });
-            GumService.Default.ContentLoader.XnaContentManager = Content;
+            var uiStyle = new UntexturedStyle(_spriteBatch)
+            {
+                Font = new GenericBitmapFont(Content.Load<BitmapFont>("Fonts/ZFull-GB")),
+            };
+            UiSystem = new UiSystem(this, uiStyle, null, false);
+            UiSystem.Viewport = ViewportAdapter.BoundingRectangle;
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            GumService.Default.Draw();
+            GraphicsDevice.Clear(Color.Black);
             base.Draw(gameTime);
         }
 
         protected override void Update(GameTime gameTime)
         {
+            UiSystem.GlobalScale = GetUIScale(ViewportAdapter);
             Input.Update(gameTime);
             SFXSystem.Update(gameTime);
-            GumService.Default.Update(gameTime);
+            UiSystem.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void LoadContent()
         {
             ViewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, GlobalConfig.VirtualResolution_Width, GlobalConfig.VirtualResolution_Height);
-            InitializeGum();
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            InitializeUi();
             InitializeAudio(out MiniAudioEngine engine, out AudioPlaybackDevice playbackDevice);
             StageSystem.Initialize(Content);
             SFXSystem.Initialize(Content, engine, playbackDevice);
             SongSystem.Initialize(Content, engine, playbackDevice);
+            
 #if !DEBUG
             LoadScreen(new LogoScreen(this));
 #else
@@ -119,6 +125,15 @@ namespace YoshisAdventure
             {
                 _screenManager.LoadScreen(screen);
             }
+        }
+
+        public float GetUIScale(ViewportAdapter viewportAdapter)
+        {
+            var virtualWidth = GlobalConfig.VirtualResolution_Width;
+            var virtualHeight = GlobalConfig.VirtualResolution_Height;
+            var scaleX = (float)viewportAdapter.Viewport.Width / virtualWidth;
+            var scaleY = (float)viewportAdapter.Viewport.Height / virtualHeight;
+            return Math.Min(scaleX, scaleY);
         }
     }
 }

@@ -5,7 +5,7 @@
   <property name="Song" value=""/>
  </properties>
  <tileset firstgid="1" source="tileset.tsx"/>
- <imagelayer id="7" name="Background" visible="0" offsetx="0" offsety="-40.5" parallaxx="0.8" parallaxy="0.8" repeatx="1" repeaty="1">
+ <imagelayer id="7" name="Background" visible="0" offsetx="0" offsety="-40.5" parallaxx="0.8" repeatx="1" repeaty="1">
   <image source="background.png" width="609" height="450"/>
  </imagelayer>
  <layer id="11" name="Back" width="320" height="27">

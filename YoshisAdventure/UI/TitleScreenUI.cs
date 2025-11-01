@@ -1,61 +1,54 @@
-﻿using Gum.DataTypes;
-using Gum.Forms.Controls;
-using Microsoft.Xna.Framework;
-using MonoGameGum;
-using MonoGameGum.GueDeriving;
+﻿using Microsoft.Xna.Framework;
+using MLEM.Ui.Elements;
 using System;
-using YoshisAdventure.UI.CustomControls;
 
 namespace YoshisAdventure.UI
 {
-    public class TitleScreenUI : ContainerRuntime
+    public class TitleScreenUI : Panel
     {
         public event EventHandler StartButtonClicked;
 
-        private readonly Panel _titlePanel;
-
-        public TitleScreenUI()
+        public TitleScreenUI() : base(MLEM.Ui.Anchor.TopLeft, new Vector2(GlobalConfig.VirtualResolution_Width, GlobalConfig.VirtualResolution_Height))
         {
-            Dock(Gum.Wireframe.Dock.Fill);
-            this.AddToRoot();
+            Texture = null;
+            Button button = new Button(MLEM.Ui.Anchor.BottomCenter, new Vector2(1, 20), Language.Strings.Start)
+            {
+                OnPressed = (b) => StartButtonClicked?.Invoke(this, EventArgs.Empty)
+            };
+            AddChild(button);
 
-            TextRuntime titleText = new TextRuntime();
-            titleText.Anchor(Gum.Wireframe.Anchor.Center);
-            titleText.WidthUnits = DimensionUnitType.RelativeToChildren;
-            titleText.Text = Language.Strings.GameName;
-            titleText.Color = Color.Yellow;
-            titleText.UseCustomFont = true;
-            titleText.CustomFontFile = "Fonts/ZFull-GB.fnt";
-            titleText.FontScale = 1f;
+            Paragraph title = new Paragraph(MLEM.Ui.Anchor.Center, Size.X, Language.Strings.GameName, false);
+            title.Alignment = new MLEM.Ui.Style.StyleProp<MLEM.Formatting.TextAlignment>(MLEM.Formatting.TextAlignment.Center);
+            AddChild(title);
+            //Dock(Gum.Wireframe.Dock.Fill);
+            //this.AddToRoot();
 
-            UIButton startButton = new UIButton();
-            startButton.Text = Language.Strings.Start;
-            startButton.Dock(Gum.Wireframe.Dock.Bottom);
-            startButton.Click += (s, e) => StartButtonClicked?.Invoke(this, EventArgs.Empty);
+            //TextRuntime titleText = new TextRuntime();
+            //titleText.Anchor(Gum.Wireframe.Anchor.Center);
+            //titleText.WidthUnits = DimensionUnitType.RelativeToChildren;
+            //titleText.Text = Language.Strings.GameName;
+            //titleText.Color = Color.Yellow;
+            //titleText.UseCustomFont = true;
+            //titleText.CustomFontFile = "Fonts/ZFull-GB.fnt";
+            //titleText.FontScale = 1f;
 
-            UIButton startButton1 = new UIButton();
-            startButton1.Text = Language.Strings.Settings;
-            startButton1.Dock(Gum.Wireframe.Dock.Top);
+            //UIButton startButton = new UIButton();
+            //startButton.Text = Language.Strings.Start;
+            //startButton.Dock(Gum.Wireframe.Dock.Bottom);
+            //startButton.Click += (s, e) => StartButtonClicked?.Invoke(this, EventArgs.Empty);
 
-            _titlePanel = new Panel();
-            _titlePanel.Dock(Gum.Wireframe.Dock.Fill);
-            _titlePanel.AddChild(startButton);
-            _titlePanel.AddChild(startButton1);
-            _titlePanel.AddChild(titleText);
-            _titlePanel.AddToRoot();
+            //UIButton startButton1 = new UIButton();
+            //startButton1.Text = Language.Strings.Settings;
+            //startButton1.Dock(Gum.Wireframe.Dock.Top);
 
-            startButton.IsFocused = true;
-        }
+            //_titlePanel = new Panel();
+            //_titlePanel.Dock(Gum.Wireframe.Dock.Fill);
+            //_titlePanel.AddChild(startButton);
+            //_titlePanel.AddChild(startButton1);
+            //_titlePanel.AddChild(titleText);
+            //_titlePanel.AddToRoot();
 
-        public void Update(GameTime gameTime)
-        {
-            GumService.Default.Update(gameTime);
-        }
-
-        public void Draw(float scaleFactor = 1f)
-        {
-            GumService.Default.Renderer.Camera.Zoom = scaleFactor;
-            GumService.Default.Draw();
+            //startButton.IsFocused = true;
         }
     }
 }

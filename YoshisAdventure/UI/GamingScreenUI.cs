@@ -5,8 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.ViewportAdapters;
-using MonoGameGum;
-using MonoGameGum.GueDeriving;
 using System;
 using YoshisAdventure.Systems;
 using YoshisAdventure.UI.CustomControls;
@@ -18,7 +16,7 @@ namespace YoshisAdventure.UI
         In, Out, None
     }
 
-    public class GamingScreenUI : ContainerRuntime
+    public class GamingScreenUI
     {
         private const float AnimationDuration = 0.3f;
         private float _animationTimer = -1f;
@@ -109,7 +107,6 @@ namespace YoshisAdventure.UI
                 }
             }
             _messageBox.Update(gameTime);
-            GumService.Default.Update(gameTime);
         }
 
         private void HandleInput()

@@ -21,17 +21,26 @@ namespace YoshisAdventure.Systems
         private static MiniAudioEngine engine;
         private static AudioPlaybackDevice playbackDevice;
         private static Dictionary<string, SFX> _SFXs;
-        private static float previousVolume = 1.0f;
+        private static Dictionary<string, byte[]> _SFXCache;
+        private static float previousVolume =1.0f;
         private static bool isMute = false;
 
-        private static Dictionary<string, SoundPlayer> _activeSfxPlayers;
+        private class PlaybackInstance
+        {
+            public SoundPlayer Player { get; set; }
+            public StreamDataProvider Provider { get; set; }
+            public Stream Stream { get; set; }
+        }
+
+        private static Dictionary<string, PlaybackInstance> _activeSfxPlayers;
         private static List<SoundPlayer> _sfxPlayersPool;
 
         public static void Initialize(ContentManager content, MiniAudioEngine engine, AudioPlaybackDevice playbackDevice)
         {
             _content = content;
             _SFXs = new Dictionary<string, SFX>();
-            _activeSfxPlayers = new Dictionary<string, SoundPlayer>();
+            _SFXCache = new Dictionary<string, byte[]>();
+            _activeSfxPlayers = new Dictionary<string, PlaybackInstance>();
             _sfxPlayersPool = new List<SoundPlayer>();
             SFXSystem.engine = engine;
             SFXSystem.playbackDevice = playbackDevice;
@@ -85,7 +94,7 @@ namespace YoshisAdventure.Systems
 
             foreach (var kvp in _activeSfxPlayers)
             {
-                if (kvp.Value.State == PlaybackState.Stopped)
+                if (kvp.Value.Player.State == PlaybackState.Stopped)
                 {
                     finishedPlayers.Add(kvp.Key);
                 }
@@ -93,28 +102,62 @@ namespace YoshisAdventure.Systems
 
             foreach (var key in finishedPlayers)
             {
-                var player = _activeSfxPlayers[key];
-                player.Stop();
-                player.Dispose();
+                var instance = _activeSfxPlayers[key];
+                try
+                {
+                    instance.Player.Stop();
+                }
+                catch { }
+                try
+                {
+                    playbackDevice.MasterMixer.RemoveComponent(instance.Player);
+                }
+                catch { }
+                instance.Player.Dispose();
+                instance.Provider?.Dispose();
+                instance.Stream?.Dispose();
                 _activeSfxPlayers.Remove(key);
-                playbackDevice.MasterMixer.RemoveComponent(player);
             }
         }
 
         public static void Play(string sfxName)
         {
-            if (_activeSfxPlayers.ContainsKey(sfxName) && _SFXs[sfxName].SingleInstance)
+            if (_SFXs.ContainsKey(sfxName) && _SFXs[sfxName].SingleInstance && _activeSfxPlayers.ContainsKey(sfxName))
                 return;
+
             if (_SFXs.TryGetValue(sfxName, out SFX sfx))
             {
-                Stop(sfxName);
-                string soundPath = Path.Combine(_content.RootDirectory, "Audio", "SFX", sfx.File);
-                var streamProvider = new StreamDataProvider(engine, AudioFormat.Dvd, File.OpenRead(soundPath));
+                if (sfx.SingleInstance)
+                {
+                    Stop(sfxName);
+                }
+
+                if (!_SFXCache.ContainsKey(sfxName))
+                {
+                    string sfxPath = Path.Combine(_content.RootDirectory, "Audio", "SFX", sfx.File);
+                    using Stream stream = TitleContainer.OpenStream(sfxPath);
+                    using var ms = new MemoryStream();
+                    stream.CopyTo(ms);
+                    _SFXCache.Add(sfxName, ms.ToArray());
+                }
+
+                var buffer = _SFXCache[sfxName];
+                var playbackStream = new MemoryStream(buffer, writable: false);
+                var streamProvider = new StreamDataProvider(engine, AudioFormat.Dvd, playbackStream);
                 var sfxPlayer = new SoundPlayer(engine, AudioFormat.Dvd, streamProvider);
+
                 playbackDevice.MasterMixer.AddComponent(sfxPlayer);
                 sfxPlayer.Volume = sfx.Volume;
                 sfxPlayer.Play();
-                _activeSfxPlayers[sfxName] = sfxPlayer;
+
+                var instance = new PlaybackInstance
+                {
+                    Player = sfxPlayer,
+                    Provider = streamProvider,
+                    Stream = playbackStream
+                };
+
+                _activeSfxPlayers[sfxName] = instance;
             }
             else
             {
@@ -124,29 +167,51 @@ namespace YoshisAdventure.Systems
 
         public static void Stop(string sfxName)
         {
-            if (_activeSfxPlayers.TryGetValue(sfxName, out SoundPlayer player))
+            if (_activeSfxPlayers.TryGetValue(sfxName, out PlaybackInstance instance))
             {
-                player.Stop();
-                player.Dispose();
+                try
+                {
+                    instance.Player.Stop();
+                }
+                catch { }
+                try
+                {
+                    playbackDevice.MasterMixer.RemoveComponent(instance.Player);
+                }
+                catch { }
+                instance.Player.Dispose();
+                instance.Provider?.Dispose();
+                instance.Stream?.Dispose();
                 _activeSfxPlayers.Remove(sfxName);
             }
         }
 
         public static void StopAll()
         {
-            foreach (var player in _activeSfxPlayers.Values)
+            foreach (var instance in _activeSfxPlayers.Values)
             {
-                player.Stop();
-                player.Dispose();
+                try
+                {
+                    instance.Player.Stop();
+                }
+                catch { }
+                try
+                {
+                    playbackDevice.MasterMixer.RemoveComponent(instance.Player);
+                }
+                catch { }
+                instance.Player.Dispose();
+                instance.Provider?.Dispose();
+                instance.Stream?.Dispose();
             }
             _activeSfxPlayers.Clear();
         }
 
         public static void SetVolume(float volume)
         {
-            foreach (var player in _activeSfxPlayers.Values)
+            foreach (var instance in _activeSfxPlayers.Values)
             {
-                player.Volume = volume;
+                instance.Player.Volume = volume;
             }
         }
 
@@ -154,7 +219,7 @@ namespace YoshisAdventure.Systems
         {
             if (!isMute)
             {
-                previousVolume = _activeSfxPlayers.Values.FirstOrDefault()?.Volume ?? 1.0f;
+                previousVolume = _activeSfxPlayers.Values.FirstOrDefault()?.Player.Volume ??1.0f;
                 SetVolume(0f);
                 isMute = true;
             }
@@ -183,8 +248,8 @@ namespace YoshisAdventure.Systems
 
         public static bool IsPlaying(string sfxName)
         {
-            return _activeSfxPlayers.ContainsKey(sfxName) && _activeSfxPlayers[sfxName].State == PlaybackState.Playing;
-        }   
+            return _activeSfxPlayers.ContainsKey(sfxName) && _activeSfxPlayers[sfxName].Player.State == PlaybackState.Playing;
+        }
 
         public static void Dispose()
         {
@@ -194,6 +259,7 @@ namespace YoshisAdventure.Systems
             _activeSfxPlayers?.Clear();
             _sfxPlayersPool?.Clear();
             _SFXs?.Clear();
+            _SFXCache?.Clear();
         }
     }
 }

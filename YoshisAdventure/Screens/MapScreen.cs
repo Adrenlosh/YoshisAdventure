@@ -6,7 +6,6 @@ using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Tiled;
-using MonoGameGum;
 using System.Linq;
 using YoshisAdventure.GameObjects.OnMapObjects;
 using YoshisAdventure.Models;
@@ -29,11 +28,17 @@ namespace YoshisAdventure.Screens
 
         public MapScreen(Game game) : base(game)
         {
+            
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            GameMain.UiSystem.Remove("Root");
         }
 
         public override void LoadContent()
         {
-            GumService.Default.Root.Children.Clear();
             _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content);
             _tilemap = Content.Load<TiledMap>("Tilemaps/map");
             _sceneRenderer.LoadContent();
