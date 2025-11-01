@@ -3,8 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
+using System.Diagnostics;
 using YoshisAdventure;
+using YoshisAdventure.Enums;
 using YoshisAdventure.GameObjects;
+using YoshisAdventure.Models;
 using YoshisAdventure.Systems;
 
 namespace YoshisAdventure.GameObjects.OnMapObjects
@@ -64,13 +67,13 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
                 _sprite.Effect = SpriteEffects.FlipHorizontally;
             }
             else if (GameController.MoveRight())
-            { 
+            {
                 _velocity.X = MoveSpeed;
                 if (_sprite.CurrentAnimation != "walk-side")
                     _sprite.SetAnimation("walk-side");
                 _sprite.Effect = SpriteEffects.None;
             }
-            else if (GameController.AttackPressed() && _stageName != string.Empty) 
+            else if (GameController.AttackPressed() && _stageName != string.Empty)
             {
                 if (_sprite.CurrentAnimation != "start")
                     _sprite.SetAnimation("start");
@@ -87,24 +90,21 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
 
         public override void Update(GameTime gameTime)
         {
-            
             Vector2 newPosition = Position;
-            if(CanHandleInput)
+            if (CanHandleInput)
                 HandleInput(gameTime);
-            newPosition += _velocity ;
 
+            newPosition += _velocity;
+
+            Rectangle newCollisionBox = GetCollisionBoxCenter(newPosition, _sprite.Size);
+            bool canMove = IsCollidingWithTile(newCollisionBox, out TileCollisionResult result, "Road");
             Rectangle rect = Rectangle.Empty;
-            bool canMove = false;
             bool isOnStagePoint = false;
             string currentStageName = null;
 
             foreach (var obj in _objects)
             {
-                if (obj is TiledMapRectangleObject rectangle)
-                {
-                    rect = new Rectangle((int)rectangle.Position.X, (int)rectangle.Position.Y, (int)rectangle.Size.Width, (int)rectangle.Size.Height);
-                }
-                else if (obj is TiledMapEllipseObject ellipse)
+                if (obj is TiledMapEllipseObject ellipse)
                 {
                     rect = new Rectangle((int)ellipse.Position.X, (int)ellipse.Position.Y, (int)ellipse.Size.Width, (int)ellipse.Size.Height);
                     if (ellipse.Name == "StagePoint" && rect.Intersects(GetCollisionBoxCenter(newPosition, _sprite.Size)))
@@ -116,14 +116,7 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
                         }
                     }
                 }
-
-                if (rect.Intersects(GetCollisionBoxCenter(newPosition, _sprite.Size)))
-                {
-                    canMove = true;
-                    break;
-                }
             }
-
             if (isOnStagePoint && !_wasOnStagePoint)
             {
                 _stageName = currentStageName;
@@ -132,34 +125,18 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
             {
                 _stageName = string.Empty;
             }
-
             _wasOnStagePoint = isOnStagePoint;
-
             if (canMove)
             {
                 Position = newPosition;
             }
+
             _sprite.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //Rectangle rect;
-            //foreach (var obj in _objects)
-            //{
-            //    if (obj is TiledMapRectangleObject rectangle)
-            //    {
-            //        rect = new Rectangle((int)rectangle.Position.X, (int)rectangle.Position.Y, (int)rectangle.Size.Width, (int)rectangle.Size.Height);
-            //        spriteBatch.DrawRectangle(rect, Color.Red);
-            //    }
-            //    else if (obj is TiledMapEllipseObject ellipse)
-            //    {
-            //        rect = new Rectangle((int)ellipse.Position.X, (int)ellipse.Position.Y, (int)ellipse.Size.Width, (int)ellipse.Size.Height);
-            //        spriteBatch.DrawRectangle(rect, Color.Gold);
-            //    }
-            //}
             _sprite.Draw(spriteBatch, Position, 0, Vector2.One);
-            //spriteBatch.DrawRectangle(CollisionBox, Color.BlueViolet);
         }
     }
 }

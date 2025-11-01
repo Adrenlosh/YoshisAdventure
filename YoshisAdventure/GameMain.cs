@@ -42,12 +42,10 @@ namespace YoshisAdventure
                 PreferHalfPixelOffset = false
             };
             _graphicsDeviceManager.ApplyChanges();
-            IsFixedTimeStep = false;
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
             Window.AllowUserResizing = true;
             Window.Title = Language.Strings.GameName;
-
             _screenManager = new ScreenManager();
             Components.Add(_screenManager);
         }

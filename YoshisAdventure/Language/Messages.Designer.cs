@@ -61,7 +61,7 @@ namespace YoshisAdventure.Language {
         }
         
         /// <summary>
-        ///   查找类似 Hello, world! The quick brown fox jumps over the lazy dog. 的本地化字符串。
+        ///   查找类似 Hello, world! The quick brown fox jumps over the lazy dog.我只是测试。Hello, world! The quick brown fox jumps over the lazy dog.我只是测试。Hello, world! The quick brown fox jumps over the lazy dog.我只是测试。Hello, world! The quick brown fox jumps over the lazy dog.我只是测试。Hello, world! The quick brown fox jumps over the lazy dog.我只是测试。Hello, world! The quick brown fox jumps over the lazy dog.我只是测试。Hello, world! The quick brown fox jumps over the lazy dog.我只是测试。Hello, world! The quick brown fox jumps over the lazy dog.我只是测试。 [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Message1 {
             get {

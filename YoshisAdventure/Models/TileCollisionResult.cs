@@ -2,6 +2,7 @@
 using MonoGame.Extended.Tiled;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using YoshisAdventure.Enums;
 using YoshisAdventure.Systems;
 
@@ -34,11 +35,19 @@ namespace YoshisAdventure.Models
             TiledMapTileset tileset = tileMap.GetTilesetByTileGlobalIdentifier(tile.Value.GlobalIdentifier);
             if (tileset != null)
             {
-                Properties = tileset.Tiles[tile.Value.GlobalIdentifier - tileMap.GetTilesetFirstGlobalIdentifier(tileset)].Properties;
-                if (Properties.TryGetValue("TileType", out string tileTypeStr))
+                int localId = tile.Value.GlobalIdentifier - tileMap.GetTilesetFirstGlobalIdentifier(tileset);
+                if (localId >= 0)
                 {
-                    Enum.TryParse(tileTypeStr, out TileType type);
-                    TileType = type;
+                    var tsTile = tileset.Tiles.FirstOrDefault(t => t.LocalTileIdentifier == localId);
+                    if (tsTile != null)
+                    {
+                        Properties = tsTile.Properties;
+                        if (Properties.TryGetValue("TileType", out string tileTypeStr))
+                        {
+                            Enum.TryParse(tileTypeStr, out TileType type);
+                            TileType = type;
+                        }
+                    }
                 }
             }
         }

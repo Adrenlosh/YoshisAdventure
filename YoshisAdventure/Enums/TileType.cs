@@ -14,6 +14,7 @@ namespace YoshisAdventure.Enums
         SteepSlopeLeft = 1 << 5,  // 32
         SteepSlopeRight = 1 << 6, // 64
         GentleSlopeLeft = 1 << 7, // 128
-        GentleSlopeRight = 1 << 8 // 256
+        GentleSlopeRight = 1 << 8, // 256
+        MapPathway = 1 << 9    // 512
     }
 }

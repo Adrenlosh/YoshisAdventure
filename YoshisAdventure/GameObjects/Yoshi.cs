@@ -1220,6 +1220,7 @@ namespace YoshisAdventure.GameObjects
         {
             Vector2 direction = new Vector2((float)Math.Sin(_currentAngle), -(float)Math.Cos(_currentAngle));
             direction.Normalize();
+            
             return direction;
         }
         private void HandlePlummetLand(Vector2 position, TileCollisionResult result)

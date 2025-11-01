@@ -41,9 +41,9 @@ namespace YoshisAdventure.GameObjects
 
         public virtual void OnCollision(GameObject other, ObjectCollisionResult collision) { }
 
-        protected bool IsCollidingWithTile(Rectangle objectRect, out TileCollisionResult result)
+        protected bool IsCollidingWithTile(Rectangle objectRect, out TileCollisionResult result, string layerName = "Ground")
         {
-            TiledMapTileLayer tileLayer = _tilemap.GetLayer<TiledMapTileLayer>("Ground");
+            TiledMapTileLayer tileLayer = _tilemap.GetLayer<TiledMapTileLayer>(layerName);
             int tileSize = _tilemap.TileWidth;
             int left = objectRect.Left / tileSize;
             int right = objectRect.Right / tileSize;
@@ -67,20 +67,6 @@ namespace YoshisAdventure.GameObjects
                 }
             }
             return false;
-        }
-
-        protected bool IsCollidingWithTile(Rectangle objectRect, TileType tileType, out TileCollisionResult result)
-        {
-            var isCollided = IsCollidingWithTile(objectRect, out result);
-            if (result.TileType == tileType)
-            {
-                return isCollided;
-            }
-            else
-            {
-                result = new TileCollisionResult();
-                return false;
-            }
         }
 
         protected virtual Rectangle GetCollisionBox(Vector2 position)

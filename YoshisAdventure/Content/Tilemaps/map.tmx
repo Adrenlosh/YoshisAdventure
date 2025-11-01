@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="14">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="14">
  <tileset firstgid="1" source="maptileset.tsx"/>
  <layer id="3" name="Water" width="50" height="50">
   <data encoding="base64" compression="zlib">
@@ -8,7 +8,12 @@
  </layer>
  <layer id="1" name="Ground" width="50" height="50">
   <data encoding="base64" compression="zlib">
-   eJzt0c0JwkAUReGXUtSodfibhWUkFqYLLUQFS3FjD94BgzgwxoWSl3A+uIvM6h1iBgAAAAAAAAAA8DLMzPKGTbK2r/wsNIy0ZcPGzlsGXzTUm9Lxd33s2Oj7Gq2LHTfrx/+go310+JLqyO193jtmum0RdcQNYSu9F447drpt/my5W7pjrfej445gr/tKrUpsqx2cN9ROuvOc2KUjDcCvPQCgcTk5
+   eJztz80NglAQReGhFAWxDvCHQtDCdAGFIH1534IYDfBcSBzN+ZK7mdUcMwAAAAAAAAAAgId1YpZFliff/nJeaEi1fWQb5y2rNxqGbelYHB2+0OELHb78e0dmz/PeUei3XaQh7KB75bjjot/Kl5axjqPureOO4Kr/au00sbPWOG8YdPrzNrH+RxqAT7sDfRwyCg==
+  </data>
+ </layer>
+ <layer id="4" name="Road" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJzt0MENwCAMBEH6S+Ohk5SRFAAfhGTjzEj397o1AAAAAACA/3miD9hERy6ndVzf7sF65FELTvv7jI5cdOSiI5cqHUBNL+a/D90=
   </data>
  </layer>
  <objectgroup id="2" name="Objects">
@@ -21,15 +26,12 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="8" name="Path" x="48" y="656" width="16" height="64"/>
-  <object id="10" name="Path" x="64" y="576" width="48" height="16"/>
   <object id="11" name="StagePoint" x="48" y="576" width="16" height="16">
    <properties>
     <property name="StageName" value="grassland2"/>
    </properties>
    <ellipse/>
   </object>
-  <object id="12" name="Path" x="48" y="592" width="16" height="48"/>
   <object id="13" name="StagePoint" x="112" y="576" width="16" height="16">
    <properties>
     <property name="StageName" value="grassland3"/>
