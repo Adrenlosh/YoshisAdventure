@@ -22,6 +22,7 @@
     <None Include="UI\MapScreenUI.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="DeepCloner" Version="0.10.4" />
     <PackageReference Include="MLEM.Extended" Version="8.0.0" />
     <PackageReference Include="MLEM.Ui" Version="8.0.0" />
     <!--<PackageReference Include="MonoGame.Extended" Version="5.2.0" />

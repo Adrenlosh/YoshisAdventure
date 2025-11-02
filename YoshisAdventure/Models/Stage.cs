@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Force.DeepCloner;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Tiled;
 using System;
@@ -24,6 +25,8 @@ namespace YoshisAdventure.Models
         public Dictionary<string, TiledMap> Tilemaps { get; set; } = new Dictionary<string, TiledMap>();
         
         public Dictionary<string, SpawnPoint[]> SpawnPoints { get; set; } = new Dictionary<string, SpawnPoint[]>(); // Key: MapName, Value: Array of SpawnPoints
+
+        public Dictionary<string, List<GameObject>> MapObjectsBackup { get; set; } = new Dictionary<string, List<GameObject>>();
 
         public string EntryMap { get; set; }
 
@@ -54,52 +57,65 @@ namespace YoshisAdventure.Models
 
         public TiledMap LoadMap(string mapName)
         {
-            TiledMap map = Tilemaps[mapName];
-            TiledMapObjectLayer objectLayer = map.GetLayer<TiledMapObjectLayer>("Objects");
-            GameObjectsSystem.Initialize(map);
-            var gameObjectFactory = new GameObjectFactory(_contentManager);
-            var objects = objectLayer.Objects.ToList();
-            foreach (var obj in objects)
-            {
-                switch (obj.Name)
+            //if(!string.IsNullOrEmpty(CurrentMap))
+            //{
+            //    MapObjectsBackup.TryAdd(CurrentMap, GameObjectsSystem.GameObjects.DeepClone());
+            //}
+
+            //if (MapObjectsBackup.ContainsKey(mapName))
+            //{ 
+            //    GameObjectsSystem.Initialize(Tilemaps[mapName]);
+            //    GameObjectsSystem.AddGameObjects(MapObjectsBackup[mapName]);
+            //}
+            //else
+            //{
+                TiledMap map = Tilemaps[mapName];
+                TiledMapObjectLayer objectLayer = map.GetLayer<TiledMapObjectLayer>("Objects");
+                GameObjectsSystem.Initialize(map);
+                var gameObjectFactory = new GameObjectFactory(_contentManager);
+                var objects = objectLayer.Objects.ToList();
+                foreach (var obj in objects)
                 {
-                    case "Player":
-                        var player = gameObjectFactory.CreateYoshi(obj.Position, map);
-                        GameObjectsSystem.AddGameObject(player);
-                        break;
-                    case "Spring":
-                        var spring = gameObjectFactory.CreateSpring(obj.Position, map);
-                        GameObjectsSystem.AddGameObject(spring);
-                        break;
-                    case "Goal":
-                        var goal = gameObjectFactory.CreateGoal(obj.Position, map);
-                        GameObjectsSystem.AddGameObject(goal);
-                        break;
-                    case "Sign":
-                        var messageID = obj.Properties.TryGetValue("MessageID", out TiledMapPropertyValue value) ? value.ToString() : string.Empty;
-                        var sign = gameObjectFactory.CreateSign(obj.Position, map, messageID);
-                        GameObjectsSystem.AddGameObject(sign);
-                        break;
-                    case "Enemy":
-                        var enemy = gameObjectFactory.CreateEnemy(obj.Position, map); 
-                        GameObjectsSystem.AddGameObject(enemy);
-                        break;
-                    case "Coin":
-                        var coin = gameObjectFactory.CreateCoin(obj.Position, map);
-                        GameObjectsSystem.AddGameObject(coin);
-                       break;
-                    case "Door":
-                        var door = gameObjectFactory.CreateDoor(obj.Position, map);
-                        door.TargetMap = obj.Properties.TryGetValue("TargetMap", out TiledMapPropertyValue targetMapValue) ? targetMapValue.ToString() : string.Empty;
-                        door.TargetPoint = obj.Properties.TryGetValue("TargetPoint", out TiledMapPropertyValue targetPointValue) ? targetPointValue.ToString() : string.Empty;
-                        GameObjectsSystem.AddGameObject(door);
-                        break;
-                    default:
-                        break;
-                }
+                    switch (obj.Name)
+                    {
+                        case "Player":
+                            var player = gameObjectFactory.CreateYoshi(obj.Position, map);
+                            GameObjectsSystem.AddGameObject(player);
+                            break;
+                        case "Spring":
+                            var spring = gameObjectFactory.CreateSpring(obj.Position, map);
+                            GameObjectsSystem.AddGameObject(spring);
+                            break;
+                        case "Goal":
+                            var goal = gameObjectFactory.CreateGoal(obj.Position, map);
+                            GameObjectsSystem.AddGameObject(goal);
+                            break;
+                        case "Sign":
+                            var messageID = obj.Properties.TryGetValue("MessageID", out TiledMapPropertyValue value) ? value.ToString() : string.Empty;
+                            var sign = gameObjectFactory.CreateSign(obj.Position, map, messageID);
+                            GameObjectsSystem.AddGameObject(sign);
+                            break;
+                        case "Enemy":
+                            var enemy = gameObjectFactory.CreateEnemy(obj.Position, map);
+                            GameObjectsSystem.AddGameObject(enemy);
+                            break;
+                        case "Coin":
+                            var coin = gameObjectFactory.CreateCoin(obj.Position, map);
+                            GameObjectsSystem.AddGameObject(coin);
+                            break;
+                        case "Door":
+                            var door = gameObjectFactory.CreateDoor(obj.Position, map);
+                            door.TargetMap = obj.Properties.TryGetValue("TargetMap", out TiledMapPropertyValue targetMapValue) ? targetMapValue.ToString() : string.Empty;
+                            door.TargetPoint = obj.Properties.TryGetValue("TargetPoint", out TiledMapPropertyValue targetPointValue) ? targetPointValue.ToString() : string.Empty;
+                            GameObjectsSystem.AddGameObject(door);
+                            break;
+                        default:
+                            break;
+                    }
+               // }
             }
             CurrentMap = mapName;
-            return map;
+            return Tilemaps[mapName];
         }
 
         public TiledMap StartStage()

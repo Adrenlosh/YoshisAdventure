@@ -10,7 +10,7 @@ using YoshisAdventure.Systems;
 
 namespace YoshisAdventure.GameObjects
 {
-    public abstract class GameObject : ICollidable
+    public abstract class GameObject : ICollidable, ICloneable
     {
         protected TiledMap _tilemap;
         public string Name { get; set; } = string.Empty;
@@ -193,5 +193,10 @@ namespace YoshisAdventure.GameObjects
         public abstract void Update(GameTime gameTime);
 
         public abstract void Draw(SpriteBatch spriteBatch);
+
+        public object Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
