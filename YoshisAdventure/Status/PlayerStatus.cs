@@ -4,7 +4,7 @@
     {
         public int LifeLeft { get; set => field = (value < 0) ? 0 : value; } = 3;
 
-        public int Egg { get; set => field = (value < 0) ? 0 : value; } = 90;
+        public int Egg { get; set => field = (value < 0) ? 0 : value; } = 900;
 
         public int Score { get; set => field = (value < 0) ? 0 : value; } = 0;
 

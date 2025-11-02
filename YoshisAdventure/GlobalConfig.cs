@@ -2,7 +2,7 @@
 {
     public static class GlobalConfig
     {
-        public const int VirtualResolution_Width = 304;
-        public const int VirtualResolution_Height = 272;
+        public const int VirtualResolution_Width = 416;
+        public const int VirtualResolution_Height = 384;
     }
 }

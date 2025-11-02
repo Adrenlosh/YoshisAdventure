@@ -3,7 +3,8 @@
 	<Songs>
 		<Song name="title" file="title.mp3" repeat="true" repeatStartSecond="60"/>
 		<Song name="goal" file="goal.mp3" repeat="false"/>
-		<Song name="song1" file="song1.mp3" repeat="true" repeatStartSecond="60"/>
+		<Song name="song1" file="song1.mp3" repeat="true"/>
+		<Song name="song2" file="song2.mp3" repeat="true"/>
 	</Songs>
 	<SoundEffects>
 		<SoundEffect name="tada" file="tada.wav"/>

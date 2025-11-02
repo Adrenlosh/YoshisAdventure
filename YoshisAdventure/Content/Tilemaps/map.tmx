@@ -20,7 +20,7 @@
   <object id="2" name="Player" x="48" y="704">
    <point/>
   </object>
-  <object id="7" name="StagePoint" x="48" y="640" width="16" height="16">
+  <object id="7" name="StagePoint" x="48" y="704" width="16" height="16">
    <properties>
     <property name="StageName" value="grassland1"/>
    </properties>

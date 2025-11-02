@@ -216,35 +216,45 @@ namespace MonoGame.Extended.Tiled.Renderers
                 var textureWidth = texture.Width;
                 var textureHeight = texture.Height;
 
-                // Calculate the viewport bounds in world coordinates
+                // Calculate the viewport bounds in world coordinates with parallax applied
                 var viewport = _graphicsDevice.Viewport;
-                var viewMatrixInverse = Matrix.Invert(viewMatrix);
+
+                // Apply parallax factor to view matrix for correct world space calculation
+                var parallaxViewMatrix = parallaxFactor == Vector2.One ? viewMatrix : IncludeParallax(viewMatrix, parallaxFactor);
+                var viewMatrixInverse = Matrix.Invert(parallaxViewMatrix);
 
                 // Get the corners of the viewport in world space
                 var topLeft = Vector2.Transform(new Vector2(0, 0), viewMatrixInverse);
                 var bottomRight = Vector2.Transform(new Vector2(viewport.Width, viewport.Height), viewMatrixInverse);
 
-                var viewBounds = new Rectangle(
-                    (int)topLeft.X, (int)topLeft.Y,
-                    (int)(bottomRight.X - topLeft.X),
-                    (int)(bottomRight.Y - topLeft.Y)
-                );
+                // Calculate the visible world bounds
+                var worldLeft = topLeft.X;
+                var worldRight = bottomRight.X;
+                var worldTop = topLeft.Y;
+                var worldBottom = bottomRight.Y;
 
                 // Calculate tiling parameters
                 var repeatX = imageLayer.RepeatX;
                 var repeatY = imageLayer.RepeatY;
 
-                // Calculate the starting position for tiling
-                var startX = repeatX ? (int)Math.Floor((viewBounds.Left - offset.X) / textureWidth) * textureWidth : 0;
-                var startY = repeatY ? (int)Math.Floor((viewBounds.Top - offset.Y) / textureHeight) * textureHeight : 0;
+                // Calculate the starting position for tiling based on world coordinates
+                var startX = repeatX ? (int)Math.Floor((worldLeft - offset.X) / textureWidth) * textureWidth : 0;
+                var startY = repeatY ? (int)Math.Floor((worldTop - offset.Y) / textureHeight) * textureHeight : 0;
 
-                // Calculate the number of repetitions needed to cover the viewport
-                var endX = repeatX ? (int)Math.Ceiling((viewBounds.Right - offset.X) / textureWidth) * textureWidth : textureWidth;
-                var endY = repeatY ? (int)Math.Ceiling((viewBounds.Bottom - offset.Y) / textureHeight) * textureHeight : textureHeight;
+                // Calculate the ending position for tiling
+                var endX = repeatX ? (int)Math.Ceiling((worldRight - offset.X) / textureWidth) * textureWidth : textureWidth;
+                var endY = repeatY ? (int)Math.Ceiling((worldBottom - offset.Y) / textureHeight) * textureHeight : textureHeight;
 
-                if(repeatX)
+                if (repeatX)
                 {
                     startX -= textureWidth;
+                    endX += textureWidth;
+                }
+
+                if (repeatY)
+                {
+                    startY -= textureHeight;
+                    endY += textureHeight;
                 }
 
                 // desired alpha
@@ -253,19 +263,23 @@ namespace MonoGame.Extended.Tiled.Renderers
                 // desired texture
                 tiledMapEffect.Texture = texture;
 
-                // bind the vertex and index buffer (we'll use the original for reference)
+                // bind the vertex and index buffer
                 _graphicsDevice.SetVertexBuffer(layerModel.VertexBuffer);
                 _graphicsDevice.Indices = layerModel.IndexBuffer;
 
                 // Draw tiled instances
-                for (var y = startY; y < endY; y += textureHeight)
+                for (var y = startY; y <= endY; y += textureHeight)
                 {
-                    for (var x = startX; x < endX; x += textureWidth)
+                    for (var x = startX; x <= endX; x += textureWidth)
                     {
+                        // Skip if this would draw outside the intended repeat area
+                        if (!repeatX && (x < 0 || x >= textureWidth)) continue;
+                        if (!repeatY && (y < 0 || y >= textureHeight)) continue;
+
                         // Update world matrix for this tile position
                         _worldMatrix.Translation = new Vector3(offset + new Vector2(x, y), depth);
                         tiledMapEffect.World = _worldMatrix;
-                        tiledMapEffect.View = parallaxFactor == Vector2.One ? viewMatrix : IncludeParallax(viewMatrix, parallaxFactor);
+                        tiledMapEffect.View = parallaxViewMatrix;
                         tiledMapEffect.Projection = projectionMatrix;
 
                         // for each pass in our effect

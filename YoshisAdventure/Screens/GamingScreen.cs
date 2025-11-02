@@ -4,6 +4,7 @@ using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Tiled;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using YoshisAdventure.GameObjects;
 using YoshisAdventure.Models;
@@ -15,17 +16,19 @@ namespace YoshisAdventure.Screens
 {
     public class GamingScreen : GameScreen
     {
-        private GameSceneRenderer _sceneRenderer;
+        private GameSceneRenderer _gameSceneRenderer;
         private GameObjectFactory _gameObjectFactory;
         private GamingScreenUI _ui;        
         private TiledMap _tilemap;
-        private TimeSpan _remainingTime = TimeSpan.FromSeconds(400);
+        private TimeSpan _remainingTime = TimeSpan.FromSeconds(350);
         private InteractionSystem _interactionSystem;
         private ParticleSystem _particleSystem;
         private Stage _stage;
         private Vector2 _cameraLockPosition;
         private bool _shouldMovePlayer = false;
         private bool _isPlayerDie = false;
+        private bool _isTransitioning = false;
+        private KeyValuePair<string, string> _spawnPoint;
 
         public new GameMain Game => (GameMain)base.Game;
 
@@ -42,10 +45,11 @@ namespace YoshisAdventure.Screens
             }
 
             _gameObjectFactory = new GameObjectFactory(Content);
-            _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content);
-            _sceneRenderer.LoadContent();
-            _sceneRenderer.LoadMap(_tilemap);
-            _sceneRenderer.OnFadeComplete += _sceneRenderer_OnFadeComplete;
+            _gameSceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content);
+            _gameSceneRenderer.LoadContent();
+            _gameSceneRenderer.LoadMap(_tilemap);
+            _gameSceneRenderer.OnFadeComplete += _sceneRenderer_OnFadeComplete;
+            _gameSceneRenderer.OnFadeKeep += _gameSceneRenderer_OnFadeKeep;
 
             _interactionSystem = new InteractionSystem();
             _interactionSystem.OnDialogue += _interactionSystem_OnDialogue;
@@ -55,18 +59,13 @@ namespace YoshisAdventure.Screens
 
             _particleSystem = new ParticleSystem(GraphicsDevice);
 
-            InitializePlayerEvents();
+            InitializeScreen();
             InitializeUI();
-            
-            if(_tilemap.Properties.TryGetValue("Song", out string songName))
-            {
-                SongSystem.Play(songName);
-            }
         }
 
         public override void UnloadContent()
         {
-            _sceneRenderer.UnloadContent();
+            _gameSceneRenderer.UnloadContent();
             _stage.CloseStage();
             GameObjectsSystem.ClearAll();
         }
@@ -83,21 +82,29 @@ namespace YoshisAdventure.Screens
                 UpdateTimer(gameTime);
                 if (!_isPlayerDie)
                 {
-                    GameObjectsSystem.InactivateObejcts(_sceneRenderer.GetScreenBounds());
-                    GameObjectsSystem.ActivateObjects(_sceneRenderer.GetScreenBounds());
-                    GameObjectsSystem.Update(gameTime);
-                    _interactionSystem.Update(gameTime);
-                    if (GameObjectsSystem.Player != null)
+                    if (!_isTransitioning)
                     {
-                        GameObjectsSystem.Player.ScreenBounds = _sceneRenderer.GetScreenBounds();
-                        _sceneRenderer.Update(gameTime, GameObjectsSystem.Player.Position, true, GameObjectsSystem.Player.FaceDirection, GameObjectsSystem.Player.Velocity);
+                        GameObjectsSystem.InactivateObejcts(_gameSceneRenderer.GetScreenBounds());
+                        GameObjectsSystem.ActivateObjects(_gameSceneRenderer.GetScreenBounds());
+                        GameObjectsSystem.Update(gameTime);
+                        _interactionSystem.Update(gameTime);
+                        if (GameObjectsSystem.Player != null)
+                        {
+                            GameObjectsSystem.Player.ScreenBounds = _gameSceneRenderer.GetScreenBounds();
+                            _gameSceneRenderer.Update(gameTime, GameObjectsSystem.Player.Position, _gameSceneRenderer.FadeStatus == FadeStatus.None, GameObjectsSystem.Player.FaceDirection, GameObjectsSystem.Player.Velocity);
+                        }
+                    }
+                    else
+                    {
+                        _gameSceneRenderer.Update(gameTime, GameObjectsSystem.Player.Position, true, GameObjectsSystem.Player.FaceDirection, GameObjectsSystem.Player.Velocity);
                     }
                 }
                 else
                 {
                     GameObjectsSystem.Player.Update(gameTime);
-                    _sceneRenderer.Update(gameTime, _cameraLockPosition, true, GameObjectsSystem.Player.FaceDirection, Vector2.Zero);
+                    _gameSceneRenderer.Update(gameTime, _cameraLockPosition, true, GameObjectsSystem.Player.FaceDirection, Vector2.Zero);
                 }
+               
                 _particleSystem.ParticleEffect.Trigger(GameObjectsSystem.Player.CenterBottomPosition);
                 _particleSystem.Update(gameTime);
             }
@@ -129,17 +136,17 @@ namespace YoshisAdventure.Screens
         public override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            _sceneRenderer.Draw(GameObjectsSystem.GetAllActiveObjects());
-            _particleSystem.Draw(_sceneRenderer.Camera);
+            _gameSceneRenderer.Draw(GameObjectsSystem.GetAllActiveObjects());
+            _particleSystem.Draw(_gameSceneRenderer.Camera);
             _ui.Draw();
         }        
         
         public void InitializeUI()
         {
-            _ui = new GamingScreenUI(new SpriteBatch(GraphicsDevice), Content, _sceneRenderer.ViewportAdapter);
+            _ui = new GamingScreenUI(new SpriteBatch(GraphicsDevice), Content, _gameSceneRenderer.ViewportAdapter);
         }
 
-        private void InitializePlayerEvents()
+        private void InitializeScreen()
         {
             Yoshi player = GameObjectsSystem.Player;
             player.OnThrowEgg += OnThrowEgg;
@@ -147,14 +154,19 @@ namespace YoshisAdventure.Screens
             player.OnReadyThrowEgg += OnReadyThrowEgg;
             player.OnDie += OnDie;
             player.OnDieComplete += OnDieComplete;
+
+            if (_tilemap.Properties.TryGetValue("Song", out string songName))
+            {
+                SongSystem.Play(songName);
+            }
         }
 
         private void _interactionSystem_OnSwitchMap(string mapName, string pointName)
         {
-            _tilemap = _stage.LoadMap(mapName);
-            _sceneRenderer.LoadMap(_tilemap);
-            GameObjectsSystem.Player.Position = _stage.GetSpawnPointPosition(mapName, pointName);
-            InitializePlayerEvents();
+            _gameSceneRenderer.FadeType = FadeType.SwitchMap;
+            _gameSceneRenderer.StartFade();
+            _isTransitioning = true;
+            _spawnPoint = new KeyValuePair<string, string>(mapName, pointName);
         }
 
         private void _interactionSystem_OnDialogue(string messageID)
@@ -180,14 +192,32 @@ namespace YoshisAdventure.Screens
             GameObjectsSystem.Player.ResetVelocity(true);
             GameObjectsSystem.Player.CanHandleInput = false;
             _shouldMovePlayer = true;
-            _sceneRenderer.StartFade();
+            _gameSceneRenderer.FadeType = FadeType.Goal;
+            _gameSceneRenderer.StartFade();
         }
 
         private void _sceneRenderer_OnFadeComplete()
         {
+            if(_gameSceneRenderer.FadeType == FadeType.SwitchMap)
+            {
+                _isTransitioning = false;
+                return;
+            }
             SFXSystem.Play("exit");
             GameObjectsSystem.Player.CanHandleInput = true;
             Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+        }
+
+        private void _gameSceneRenderer_OnFadeKeep()
+        {
+            if(_gameSceneRenderer.FadeType == FadeType.SwitchMap)
+            {
+                _isTransitioning = false;
+                _tilemap = _stage.LoadMap(_spawnPoint.Key);
+                _gameSceneRenderer.LoadMap(_tilemap);
+                GameObjectsSystem.Player.Position = _stage.GetSpawnPointPosition(_spawnPoint.Key, _spawnPoint.Value);
+                InitializeScreen();
+            }
         }
 
         private void OnDieComplete()
@@ -213,8 +243,8 @@ namespace YoshisAdventure.Screens
 
         private void OnPlummeted(Vector2 position)
         {
-            _sceneRenderer.LoadMap(_tilemap);
-            _sceneRenderer.TriggerCameraShake();
+            _gameSceneRenderer.LoadMap(_tilemap);
+            _gameSceneRenderer.TriggerCameraShake();
         }
 
         private void OnReadyThrowEgg(Vector2 position)
@@ -226,8 +256,7 @@ namespace YoshisAdventure.Screens
                 GameObjectsSystem.RemoveGameObject(egg);
                 GameObjectsSystem.Player.CanThrowEgg = true;
             };
-            egg.ScreenBounds = _sceneRenderer.GetScreenBounds();
-
+            egg.ScreenBounds = _gameSceneRenderer.GetScreenBounds();
             GameObjectsSystem.AddGameObject(egg);
         }
 
@@ -237,7 +266,7 @@ namespace YoshisAdventure.Screens
 
             if (egg != null && !egg.IsHeldAndThrew)
             {
-                egg.ScreenBounds = _sceneRenderer.GetScreenBounds();
+                egg.ScreenBounds = _gameSceneRenderer.GetScreenBounds();
                 egg.Throw(direction);
                 GameObjectsSystem.Player.CanThrowEgg = false;
                 GameMain.PlayerStatus.Egg--;

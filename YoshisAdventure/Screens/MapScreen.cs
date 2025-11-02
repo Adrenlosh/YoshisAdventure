@@ -12,7 +12,6 @@ using YoshisAdventure.GameObjects.OnMapObjects;
 using YoshisAdventure.Models;
 using YoshisAdventure.Rendering;
 using YoshisAdventure.Systems;
-using YoshisAdventure.Transitions;
 
 namespace YoshisAdventure.Screens
 {
@@ -87,7 +86,7 @@ namespace YoshisAdventure.Screens
         {
             if (GameController.AttackPressed() && _stage != null)
             {
-                Game.LoadScreen(new StageEnterScreen(Game, _stage), new MaskTransition(GraphicsDevice, Content, FadeType.Out, 1.8f));
+                Game.LoadScreen(new StageEnterScreen(Game, _stage), new MaskTransition(GraphicsDevice, Content, Transitions.FadeType.Out, 1.8f));
             }
             else if(GameController.BackPressed())
             {

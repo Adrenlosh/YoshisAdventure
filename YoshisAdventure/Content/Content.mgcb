@@ -198,6 +198,9 @@
 #begin Audio/Song/song1.mp3
 /copy:Audio/Song/song1.mp3
 
+#begin Audio/Song/song2.mp3
+/copy:Audio/Song/song2.mp3
+
 #begin Audio/Song/title.mp3
 /copy:Audio/Song/title.mp3
 

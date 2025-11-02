@@ -157,6 +157,21 @@ namespace YoshisAdventure.Systems
             }
         }
 
+        public static float GetSpeed()
+        {
+            return soundPlayer.PlaybackSpeed;
+        }
+
+        public static void SetSpeed(float speed = 3f)
+        {
+            soundPlayer.PlaybackSpeed = speed;
+        }
+
+        public static void NormalSpeed()
+        {
+            soundPlayer.PlaybackSpeed = 1;
+        }
+
         public static void Dispose()
         {
             Stop();

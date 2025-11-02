@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="35" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="5">
+<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="35" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="6">
  <properties>
-  <property name="SideExit" type="bool" value="true"/>
+  <property name="Song" value="song1"/>
  </properties>
  <tileset firstgid="1" source="tileset.tsx"/>
- <imagelayer id="2" name="Background" offsetx="0" offsety="-210" parallaxx="0.8" repeatx="1" repeaty="1">
+ <imagelayer id="2" name="Background" offsetx="0" offsety="-220" parallaxx="0.7" repeatx="1">
   <image source="background3.png" width="1024" height="650"/>
  </imagelayer>
  <layer id="1" name="Ground" width="35" height="27">
@@ -36,5 +36,6 @@
    </properties>
    <point/>
   </object>
+  <object id="5" name="Goal" x="432" y="202" width="28" height="134"/>
  </objectgroup>
 </map>

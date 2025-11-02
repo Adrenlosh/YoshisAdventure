@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="320" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="3184">
+<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="320" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="3185">
  <properties>
-  <property name="SideExit" type="bool" value="false"/>
-  <property name="Song" value=""/>
+  <property name="Song" value="song2"/>
  </properties>
  <tileset firstgid="1" source="tileset.tsx"/>
- <imagelayer id="7" name="Background" parallaxx="0.8" repeatx="1" repeaty="1">
+ <imagelayer id="7" name="Background" parallaxx="0.7" repeatx="1">
   <image source="background2.png" width="512" height="432"/>
  </imagelayer>
  <layer id="11" name="Back" width="320" height="27">
@@ -44,7 +43,7 @@
    </properties>
    <point/>
   </object>
-  <object id="3182" name="SpawnPoint" type="SpawnPoint" x="720" y="304">
+  <object id="3182" name="SpawnPoint" type="SpawnPoint" x="208" y="304">
    <properties>
     <property name="Name" value="Point0"/>
    </properties>
@@ -53,6 +52,13 @@
   <object id="3183" name="SpawnPoint" type="SpawnPoint" x="4384" y="304">
    <properties>
     <property name="Name" value="Point1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="3184" name="Door" type="Portal" x="144" y="304">
+   <properties>
+    <property name="TargetMap" value="map0"/>
+    <property name="TargetPoint" value="Point0"/>
    </properties>
    <point/>
   </object>
