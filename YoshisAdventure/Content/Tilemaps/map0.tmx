@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="320" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="3181">
+<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="320" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="3184">
  <properties>
   <property name="SideExit" type="bool" value="false"/>
   <property name="Song" value=""/>
  </properties>
  <tileset firstgid="1" source="tileset.tsx"/>
- <imagelayer id="7" name="Background" visible="0" parallaxx="0.8" repeatx="1" repeaty="1">
-  <image source="background.png" width="609" height="450"/>
+ <imagelayer id="7" name="Background" parallaxx="0.8" repeatx="1" repeaty="1">
+  <image source="background2.png" width="512" height="432"/>
  </imagelayer>
  <layer id="11" name="Back" width="320" height="27">
   <data encoding="base64" compression="zlib">
-   eJzt1LENgEAIQNHbRK3cf0M3IJp4HMp7LRSE4o8BAAAAAAAAAAAAAAAAAAAAAAAAVHUGsz3rCIBkUfue7AB8zd22aSDwRxoIdKaBQGcaCHSmgXUcwWxLuwJ60cD1ot/6O8ylgetoH6yngfm0D+rQwDzaB/Vo4Hzax1suZWoFaA==
+   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPBohwAAAQ==
   </data>
  </layer>
  <layer id="1" name="Ground" width="320" height="27">
   <data encoding="base64" compression="zlib">
-   eJztlslOJTEMRS3mxxapWXaYh/7//yMtKIGAl3IS3ygU50iWsoivLad8VWYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALBFUo6bSXMU9UpaLXUARpFs7N5tnZTjOsdDjsfJchT1Slo9PQKoSTZ277ZOsvfZLLE2o1E5inolLU+di44A6CHZ2L3bOsm+zmZtRqNyFPXWtFp7BFCTbOzebZ1k+2ezb0ajchT1vFq1PQKoSabZu9/MvZVn891cR+Uo6tVo4YEwE6q9++38s/q5jspR1KvRUnrgbY6/grsKba9eVJ8lncheVHNVva1i7wAPHO2BT28aV7b+7dfcVWh79aL6LOlE9qKaq/Jt/xO9d/AKHjjGA5dvfgnPjnruKrS9elF9lnQie1HNVfm2H4ncg5/OQY7DHEeO8/GKFh6o9cDP33zNjtbuXq+2Vy+qz5JOZC+quSrf9jui9uDA6jxktvvnOc5ynDjOlwPnqshR1Bvlgfu++SXuGu8qtL16UX2WdCJ7Uc1V+bYlIvbg3Oo8ZLb7u7fwnP8MnKsqR1FP7YFr3/xz412Ftlcvqs8e76vpRTVX5dt66N2DndV5yGz3F888cZw9/39Rc1XmKOqpPBDvw/taZlZDzx6cWZ2HzHb/1N7/B9fO3v+/iLmqcxT1oj0Q78P7WmbWQusenFqdh8x2f/HCneNc8//XO9cROYp6UR6I9+F9LTProWUPaj1ktvsvuYQ2kw==
+   eJzt1tkKwjAUBNC4V1/d/v9PjaBYAjZNoUW550AhhCnM05CUpjlP/A/g39k/ICr7B0Rl/4Co7B8Qlf0DorJ/QFT2D4jK/gFR2T8gKvsHRGX/gKjsHxCV/QOisn9AVPYPiMr+AVHZPwAAAAD4fev8bfK3HXEu73YL9FtVOrT0lZWVle1nT/nr8rcfcS7v7ml+10qHlr6ysrKy/ezx9XUjzuXdLc3vUunQ0ldWVla2zD13cD/iXN4t+f771qGlr6ysrGw/e0ifN2HtXN4t9f4b6tDSV1ZWVrbMvt+EtXN5t9T7b6hDS19ZWVnZfvYBZW4zlQ==
   </data>
  </layer>
  <layer id="3" name="Decorations" width="320" height="27">
@@ -24,19 +24,35 @@
   </data>
  </layer>
  <objectgroup id="2" name="Objects">
-  <object id="16" name="Player" x="32" y="304">
+  <object id="16" name="Player" type="SpawnPoint" x="32" y="304">
+   <properties>
+    <property name="Name" value="Entry"/>
+   </properties>
    <point/>
   </object>
   <object id="35" name="Goal" x="4448" y="202" width="28" height="134"/>
-  <object id="3178" name="Spring" x="64" y="320">
-   <point/>
-  </object>
-  <object id="3179" name="Enemy" x="80" y="304">
-   <point/>
-  </object>
   <object id="3180" name="Sign" x="176" y="320">
    <properties>
-    <property name="MessageID" value="Message1"/>
+    <property name="MessageID" value="Message2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="3181" name="Door" type="Portal" x="112" y="304">
+   <properties>
+    <property name="TargetMap" value="map1"/>
+    <property name="TargetPoint" value="Entry"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="3182" name="SpawnPoint" type="SpawnPoint" x="720" y="304">
+   <properties>
+    <property name="Name" value="Point0"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="3183" name="SpawnPoint" type="SpawnPoint" x="4384" y="304">
+   <properties>
+    <property name="Name" value="Point1"/>
    </properties>
    <point/>
   </object>

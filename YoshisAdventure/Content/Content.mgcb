@@ -39,6 +39,18 @@
 /processorParam:TextureFormat=Color
 /build:Atlas/crosshair.png
 
+#begin Atlas/door.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Atlas/door.png
+
 #begin Atlas/egg.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -362,6 +374,42 @@
 #begin Stages/Stages.txt
 /copy:Stages/Stages.txt
 
+#begin Tilemaps/background1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tilemaps/background1.png
+
+#begin Tilemaps/background2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tilemaps/background2.png
+
+#begin Tilemaps/background3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tilemaps/background3.png
+
 #begin Tilemaps/map.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -389,6 +437,11 @@
 /processorParam:TextureFormat=Color
 /build:Tilemaps/maptileset.png
 
+#begin Tilemaps/maptileset.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:Tilemaps/maptileset.tsx
+
 #begin Tilemaps/tileset.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -400,4 +453,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Tilemaps/tileset.png
+
+#begin Tilemaps/tileset.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:Tilemaps/tileset.tsx
 

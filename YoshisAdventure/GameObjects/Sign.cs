@@ -1,17 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
-using System;
-using System.Diagnostics;
 using YoshisAdventure.Interfaces;
 
 namespace YoshisAdventure.GameObjects
 {
     public class Sign : GameObject, IDialogable
     {
-        Sprite _sprite;
+        private readonly Sprite _sprite;
 
         public override Rectangle CollisionBox => GetCollisionBox(Position);
 

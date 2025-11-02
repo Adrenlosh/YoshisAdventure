@@ -10,28 +10,30 @@ namespace YoshisAdventure.Systems
 {
     public static class StageSystem
     {
+        private static ContentManager _contentManager;
+
         public const string StagesDirectory = "Stages";
 
         public static List<Stage> Stages = new List<Stage>();
 
         public static void Initialize(ContentManager contentManager)
         {
-            var stageListPath = Path.Combine(contentManager.RootDirectory, StagesDirectory, "Stages.txt");
+            _contentManager = contentManager;
+            string stageListPath = Path.Combine(_contentManager.RootDirectory, StagesDirectory, "Stages.txt");
             List<string> stageFiles = new List<string>();
-            using (var stream = TitleContainer.OpenStream(stageListPath))
-            using (var reader = new StreamReader(stream))
+            using Stream stream = TitleContainer.OpenStream(stageListPath);
+            using StreamReader reader = new StreamReader(stream);
+            string line;
+            while ((line = reader.ReadLine()) != null)
             {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    if (!string.IsNullOrWhiteSpace(line))
-                        stageFiles.Add(Path.Combine(contentManager.RootDirectory, StagesDirectory, line.Trim()));
-                }
+                if (!string.IsNullOrWhiteSpace(line))
+                    stageFiles.Add(Path.Combine(_contentManager.RootDirectory, StagesDirectory, line.Trim()));
             }
+
 
             foreach (var stageFile in stageFiles)
             {
-                var stage = LoadStageFromFile(stageFile);
+                Stage stage = LoadStageFromFile(stageFile);
                 Stages.Add(stage);
             }
         }
@@ -43,26 +45,25 @@ namespace YoshisAdventure.Systems
 
         public static Stage LoadStageFromFile(string filePath)
         {
-
             using Stream stream = TitleContainer.OpenStream(filePath);
             using XmlReader xmlReader = XmlReader.Create(stream);
             XDocument doc = XDocument.Load(xmlReader);
             XElement root = doc.Root;
-            string name = root.Attribute("name")?.Value ?? "map";
-            string displayName = root.Attribute("displayName")?.Value ?? "Map";
-            string description = root.Attribute("description")?.Value ?? "No description";
-            string entryMap = root.Attribute("entryMap")?.Value ?? "map0";
-            List<string> tmp = new List<string>();
+            string name = root.Attribute("name")?.Value ?? string.Empty;
+            string displayName = root.Attribute("displayName")?.Value ?? string.Empty;
+            string description = root.Attribute("description")?.Value ?? string.Empty;
+            string entryMap = root.Attribute("entryMap")?.Value ?? string.Empty;
+            List<string> tmps = new List<string>();
             var tilemaps = root.Element("Tilemaps")?.Elements("Tilemap");
             if (tilemaps != null)
             {
                 foreach (var tilemap in tilemaps)
                 {
-                    string file = tilemap.Attribute("file")?.Value ?? "map0";
-                    tmp.Add(file);
+                    string file = tilemap.Attribute("file")?.Value ?? string.Empty;
+                    tmps.Add(file);
                 }
             }
-            return new Stage(name, displayName,  description, tmp, entryMap);
+            return new Stage(name, displayName, description, entryMap, tmps, _contentManager);
         }
     }
 }

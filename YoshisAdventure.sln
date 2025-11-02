@@ -15,6 +15,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoshisAdventure.DesktopGL",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoshisAdventure.WindowsDX", "YoshisAdventure.WindowsDX\YoshisAdventure.WindowsDX.csproj", "{5C9C8870-AC45-172A-6733-75251AD58308}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended", "Monogame-Extended\source\MonoGame.Extended\MonoGame.Extended.csproj", "{8640D3CF-A4AA-7055-5D32-CF4B0BA03108}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{1C7BB40F-610D-459D-985A-0FB1702B7357}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Content.Pipeline", "Monogame-Extended\source\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj", "{1C9D223F-B855-ACBF-BC9A-E65E526339C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,14 +97,41 @@ Global
 		{5C9C8870-AC45-172A-6733-75251AD58308}.Release|x64.Build.0 = Release|Any CPU
 		{5C9C8870-AC45-172A-6733-75251AD58308}.Release|x86.ActiveCfg = Release|Any CPU
 		{5C9C8870-AC45-172A-6733-75251AD58308}.Release|x86.Build.0 = Release|Any CPU
+		{8640D3CF-A4AA-7055-5D32-CF4B0BA03108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8640D3CF-A4AA-7055-5D32-CF4B0BA03108}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8640D3CF-A4AA-7055-5D32-CF4B0BA03108}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8640D3CF-A4AA-7055-5D32-CF4B0BA03108}.Debug|x64.Build.0 = Debug|Any CPU
+		{8640D3CF-A4AA-7055-5D32-CF4B0BA03108}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8640D3CF-A4AA-7055-5D32-CF4B0BA03108}.Debug|x86.Build.0 = Debug|Any CPU
+		{8640D3CF-A4AA-7055-5D32-CF4B0BA03108}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8640D3CF-A4AA-7055-5D32-CF4B0BA03108}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8640D3CF-A4AA-7055-5D32-CF4B0BA03108}.Release|x64.ActiveCfg = Release|Any CPU
+		{8640D3CF-A4AA-7055-5D32-CF4B0BA03108}.Release|x64.Build.0 = Release|Any CPU
+		{8640D3CF-A4AA-7055-5D32-CF4B0BA03108}.Release|x86.ActiveCfg = Release|Any CPU
+		{8640D3CF-A4AA-7055-5D32-CF4B0BA03108}.Release|x86.Build.0 = Release|Any CPU
+		{1C9D223F-B855-ACBF-BC9A-E65E526339C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C9D223F-B855-ACBF-BC9A-E65E526339C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C9D223F-B855-ACBF-BC9A-E65E526339C2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1C9D223F-B855-ACBF-BC9A-E65E526339C2}.Debug|x64.Build.0 = Debug|Any CPU
+		{1C9D223F-B855-ACBF-BC9A-E65E526339C2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1C9D223F-B855-ACBF-BC9A-E65E526339C2}.Debug|x86.Build.0 = Debug|Any CPU
+		{1C9D223F-B855-ACBF-BC9A-E65E526339C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C9D223F-B855-ACBF-BC9A-E65E526339C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C9D223F-B855-ACBF-BC9A-E65E526339C2}.Release|x64.ActiveCfg = Release|Any CPU
+		{1C9D223F-B855-ACBF-BC9A-E65E526339C2}.Release|x64.Build.0 = Release|Any CPU
+		{1C9D223F-B855-ACBF-BC9A-E65E526339C2}.Release|x86.ActiveCfg = Release|Any CPU
+		{1C9D223F-B855-ACBF-BC9A-E65E526339C2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{217719BD-4A7D-4ED6-9316-D88146BD6D8F} = {1C7BB40F-610D-459D-985A-0FB1702B7357}
 		{FC304AEF-E890-E959-6059-EBA5D49C4E4B} = {32681F41-1AAC-4656-AF43-D1C015C99498}
 		{BC364DE7-ABFB-A1B7-62B9-0BBF45119269} = {32681F41-1AAC-4656-AF43-D1C015C99498}
 		{5C9C8870-AC45-172A-6733-75251AD58308} = {32681F41-1AAC-4656-AF43-D1C015C99498}
+		{8640D3CF-A4AA-7055-5D32-CF4B0BA03108} = {1C7BB40F-610D-459D-985A-0FB1702B7357}
+		{1C9D223F-B855-ACBF-BC9A-E65E526339C2} = {1C7BB40F-610D-459D-985A-0FB1702B7357}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DED730F7-DDF2-4EAF-ADEF-78211B1F3734}

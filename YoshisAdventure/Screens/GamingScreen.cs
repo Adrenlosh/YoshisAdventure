@@ -16,17 +16,14 @@ namespace YoshisAdventure.Screens
     public class GamingScreen : GameScreen
     {
         private GameSceneRenderer _sceneRenderer;
+        private GameObjectFactory _gameObjectFactory;
+        private GamingScreenUI _ui;        
+        private TiledMap _tilemap;
+        private TimeSpan _remainingTime = TimeSpan.FromSeconds(400);
         private InteractionSystem _interactionSystem;
         private ParticleSystem _particleSystem;
-        private GameObjectFactory _gameObjectFactory;
-
         private Stage _stage;
-        private TiledMap _tilemap;
-        private GamingScreenUI _ui;
         private Vector2 _cameraLockPosition;
-        private TimeSpan _remainingTime = TimeSpan.FromSeconds(400);
-        private bool _isSideExit = false;
-        private bool _isSideExiting = false;
         private bool _shouldMovePlayer = false;
         private bool _isPlayerDie = false;
 
@@ -37,53 +34,132 @@ namespace YoshisAdventure.Screens
             _stage = stage;
         }
 
-        private void _interactionSystem_OnDialogue(string messageID)
-        {
-            _ui.ShowMessageBox(messageID);
-        }
-
-        public void InitializeUI()
-        {
-
-            _ui = new GamingScreenUI(new SpriteBatch(GraphicsDevice), Content, _sceneRenderer.ViewportAdapter);
-        }
-
         public override void LoadContent()
         {
             if(_stage != null)
             {
-                _tilemap = _stage.StartStage(Content);
-                if(_tilemap.Properties.TryGetValue("SideExit", out string sideExitStr))
-                {
-                    _isSideExit = bool.Parse(sideExitStr);
-                }
+                _tilemap = _stage.StartStage();
             }
+
             _gameObjectFactory = new GameObjectFactory(Content);
             _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content);
             _sceneRenderer.LoadContent();
             _sceneRenderer.LoadMap(_tilemap);
             _sceneRenderer.OnFadeComplete += _sceneRenderer_OnFadeComplete;
 
-            Yoshi player = GameObjectsSystem.Player;
-            player.OnThrowEgg += OnThrowEgg;
-            player.OnPlummeted += OnPlummeted;
-            player.OnReadyThrowEgg += OnReadyThrowEgg;
-            player.OnDie += Player_OnDie;
-            player.OnDieComplete += Player_OnDieComplete;
-
             _interactionSystem = new InteractionSystem();
             _interactionSystem.OnDialogue += _interactionSystem_OnDialogue;
             _interactionSystem.OnGoal += _interactionSystem_OnGoal;
             _interactionSystem.OnCollectACoin += _interactionSystem_OnCollectACoin;
+            _interactionSystem.OnSwitchMap += _interactionSystem_OnSwitchMap;
 
             _particleSystem = new ParticleSystem(GraphicsDevice);
 
+            InitializePlayerEvents();
             InitializeUI();
             
             if(_tilemap.Properties.TryGetValue("Song", out string songName))
             {
                 SongSystem.Play(songName);
             }
+        }
+
+        public override void UnloadContent()
+        {
+            _sceneRenderer.UnloadContent();
+            _stage.CloseStage();
+            GameObjectsSystem.ClearAll();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            var elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if(_shouldMovePlayer)
+            {
+                GameObjectsSystem.Player.Velocity = new Vector2(1f, 1);
+            }
+            if (!_ui.IsReadingMessage && !_ui.IsPaused)
+            {
+                UpdateTimer(gameTime);
+                if (!_isPlayerDie)
+                {
+                    GameObjectsSystem.InactivateObejcts(_sceneRenderer.GetScreenBounds());
+                    GameObjectsSystem.ActivateObjects(_sceneRenderer.GetScreenBounds());
+                    GameObjectsSystem.Update(gameTime);
+                    _interactionSystem.Update(gameTime);
+                    if (GameObjectsSystem.Player != null)
+                    {
+                        GameObjectsSystem.Player.ScreenBounds = _sceneRenderer.GetScreenBounds();
+                        _sceneRenderer.Update(gameTime, GameObjectsSystem.Player.Position, true, GameObjectsSystem.Player.FaceDirection, GameObjectsSystem.Player.Velocity);
+                    }
+                }
+                else
+                {
+                    GameObjectsSystem.Player.Update(gameTime);
+                    _sceneRenderer.Update(gameTime, _cameraLockPosition, true, GameObjectsSystem.Player.FaceDirection, Vector2.Zero);
+                }
+                _particleSystem.ParticleEffect.Trigger(GameObjectsSystem.Player.CenterBottomPosition);
+                _particleSystem.Update(gameTime);
+            }
+            _ui.Update(gameTime, _remainingTime);
+
+            if (GameController.BackPressed())
+            {
+                Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+            }
+        }
+
+        private void UpdateTimer(GameTime gameTime)
+        {
+            if (!_ui.IsReadingMessage && !_ui.IsPaused && !_isPlayerDie)
+            {
+                _remainingTime -= gameTime.ElapsedGameTime;
+                if (_remainingTime <= TimeSpan.Zero)
+                {
+                    _remainingTime = TimeSpan.Zero;
+
+                    if (GameObjectsSystem.Player != null)
+                    {
+                        GameObjectsSystem.Player.Die(true);
+                    }
+                }
+            }
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.Black);
+            _sceneRenderer.Draw(GameObjectsSystem.GetAllActiveObjects());
+            _particleSystem.Draw(_sceneRenderer.Camera);
+            _ui.Draw();
+        }        
+        
+        public void InitializeUI()
+        {
+            _ui = new GamingScreenUI(new SpriteBatch(GraphicsDevice), Content, _sceneRenderer.ViewportAdapter);
+        }
+
+        private void InitializePlayerEvents()
+        {
+            Yoshi player = GameObjectsSystem.Player;
+            player.OnThrowEgg += OnThrowEgg;
+            player.OnPlummeted += OnPlummeted;
+            player.OnReadyThrowEgg += OnReadyThrowEgg;
+            player.OnDie += OnDie;
+            player.OnDieComplete += OnDieComplete;
+        }
+
+        private void _interactionSystem_OnSwitchMap(string mapName, string pointName)
+        {
+            _tilemap = _stage.LoadMap(mapName);
+            _sceneRenderer.LoadMap(_tilemap);
+            GameObjectsSystem.Player.Position = _stage.GetSpawnPointPosition(mapName, pointName);
+            InitializePlayerEvents();
+        }
+
+        private void _interactionSystem_OnDialogue(string messageID)
+        {
+            _ui.ShowMessageBox(messageID);
         }
 
         private void _interactionSystem_OnCollectACoin(int value)
@@ -98,14 +174,6 @@ namespace YoshisAdventure.Screens
                 GameMain.PlayerStatus.LifeLeft++;
             }
         }
-
-        private void _sceneRenderer_OnFadeComplete()
-        {
-            SFXSystem.Play("exit");
-            GameObjectsSystem.Player.CanHandleInput = true;
-            Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
-        }
-
         private void _interactionSystem_OnGoal()
         {
             SongSystem.Play("goal");
@@ -115,7 +183,14 @@ namespace YoshisAdventure.Screens
             _sceneRenderer.StartFade();
         }
 
-        private void Player_OnDieComplete()
+        private void _sceneRenderer_OnFadeComplete()
+        {
+            SFXSystem.Play("exit");
+            GameObjectsSystem.Player.CanHandleInput = true;
+            Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+        }
+
+        private void OnDieComplete()
         {
             if (GameMain.PlayerStatus.LifeLeft > 0)
             {
@@ -128,7 +203,7 @@ namespace YoshisAdventure.Screens
             }
         }
 
-        private void Player_OnDie()
+        private void OnDie()
         {
             SongSystem.Stop();
             _ui.HandlePause = false;
@@ -166,88 +241,6 @@ namespace YoshisAdventure.Screens
                 egg.Throw(direction);
                 GameObjectsSystem.Player.CanThrowEgg = false;
                 GameMain.PlayerStatus.Egg--;
-            }
-        }
-
-        public override void UnloadContent()
-        {
-            _sceneRenderer.UnloadContent();
-            GameObjectsSystem.ClearAll();
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            var elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if(_shouldMovePlayer)
-            {
-                GameObjectsSystem.Player.Velocity = new Vector2(1f, 1);
-            }
-            if (!_ui.IsReadingMessage && !_ui.IsPaused && !_isSideExiting)
-            {
-                UpdateTimer(gameTime);
-                UpdateSideExit();
-                if (!_isPlayerDie)
-                {
-                    GameObjectsSystem.InactivateObejcts(_sceneRenderer.GetScreenBounds());
-                    GameObjectsSystem.ActivateObjects(_sceneRenderer.GetScreenBounds());
-                    GameObjectsSystem.Update(gameTime);
-                    _interactionSystem.Update(gameTime);
-                    if (GameObjectsSystem.Player != null)
-                    {
-                        GameObjectsSystem.Player.ScreenBounds = _sceneRenderer.GetScreenBounds();
-                        _sceneRenderer.Update(gameTime, GameObjectsSystem.Player.Position, true, GameObjectsSystem.Player.FaceDirection, GameObjectsSystem.Player.Velocity);
-                    }
-                }
-                else
-                {
-                    GameObjectsSystem.Player.Update(gameTime);
-                    _sceneRenderer.Update(gameTime, _cameraLockPosition, true, GameObjectsSystem.Player.FaceDirection, Vector2.Zero);
-                }
-                if (GameController.BackPressed())
-                {
-                    Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
-                }
-
-                _particleSystem.ParticleEffect.Trigger(GameObjectsSystem.Player.CenterBottomPosition);
-                _particleSystem.Update(gameTime);
-            }
-            _ui.Update(gameTime, _remainingTime);
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.Black);
-            _sceneRenderer.Draw(GameObjectsSystem.GetAllActiveObjects());
-            _particleSystem.Draw(_sceneRenderer.Camera);
-            _ui.Draw();
-        }
-
-        private void UpdateSideExit()
-        {
-            if(_isSideExit)
-            {
-                if(GameObjectsSystem.Player.IsOutOfTilemapSideBox())
-                {
-                    _isSideExiting = true;
-                    Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
-                }
-            }
-        }
-
-        private void UpdateTimer(GameTime gameTime)
-        {
-            if (!_ui.IsReadingMessage && !_ui.IsPaused && !_isSideExiting && !_isPlayerDie)
-            {
-                _remainingTime -= gameTime.ElapsedGameTime;
-                if (_remainingTime <= TimeSpan.Zero)
-                {
-                    _remainingTime = TimeSpan.Zero;
-
-                    if (GameObjectsSystem.Player != null)
-                    {
-                        GameObjectsSystem.Player.Die(true);
-                    }
-                }
             }
         }
     }

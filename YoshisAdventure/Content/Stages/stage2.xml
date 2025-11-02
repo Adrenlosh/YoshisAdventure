@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Stage name="grassland3" displayName="Grassland 3" description="Welcome to the Adventure" entryMap="map2">
 	<Tilemaps>
-		<Tilemap name="map2" file="map2.tmx"/>
+		<Tilemap file="map2"/>
 	</Tilemaps>
 </Stage>

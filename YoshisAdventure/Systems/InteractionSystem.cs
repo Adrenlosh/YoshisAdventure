@@ -3,7 +3,6 @@ using YoshisAdventure.GameObjects;
 using YoshisAdventure.Interfaces;
 using System.Linq;
 using System;
-using System.Diagnostics;
 
 namespace YoshisAdventure.Systems
 {
@@ -11,8 +10,9 @@ namespace YoshisAdventure.Systems
     {
         private bool _isGoal = false;
         public event Action<string> OnDialogue;
-        public event Action OnGoal;
+        public event Action<string, string> OnSwitchMap;
         public event Action<int> OnCollectACoin;
+        public event Action OnGoal;
 
         public void Update(GameTime gameTime)
         {
@@ -133,6 +133,16 @@ namespace YoshisAdventure.Systems
                         coin.OnCollision(player, collisionResult);
                         OnCollectACoin?.Invoke(coin.Value);
                         GameObjectsSystem.RemoveGameObject(coin);
+                    }
+                }
+                else if(collidable is Door door)
+                {
+                    var collisionResult = GameObjectsSystem.CheckObjectCollision(door);
+                    if (GameController.MoveUp() && collisionResult.CollidedObject != null && collisionResult.CollidedObject == player)
+                    {
+                        player.OnCollision(door, collisionResult);
+                        door.OnCollision(player, collisionResult);
+                        OnSwitchMap?.Invoke(door.TargetMap, door.TargetPoint);
                     }
                 }
             }

@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="16" height="14" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="3">
+<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="35" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="5">
  <properties>
   <property name="SideExit" type="bool" value="true"/>
  </properties>
  <tileset firstgid="1" source="tileset.tsx"/>
- <imagelayer id="2" name="Background" repeatx="1" repeaty="1">
-  <image source="background.png" width="609" height="450"/>
+ <imagelayer id="2" name="Background" offsetx="0" offsety="-210" parallaxx="0.8" repeatx="1" repeaty="1">
+  <image source="background3.png" width="1024" height="650"/>
  </imagelayer>
- <layer id="1" name="Ground" width="16" height="14">
+ <layer id="1" name="Ground" width="35" height="27">
   <data encoding="base64" compression="zlib">
-   eJwTZmBgEKYQkwtG9Y/qp1T/QANK8w4AK6ED3Q==
+   eJztkDEKwCAQBMUEE/3/g71Cu4E0XqoZWBjWLeRKERERERGRP7gid6SCU5e5fSMtMsCpy9z25R2cusztWH8i/3o/vd13esCpy9zuOzVw6jK3E/pABeM=
   </data>
  </layer>
  <objectgroup id="3" name="Objects">
-  <object id="1" name="Player" x="64" y="176">
+  <object id="1" name="Player" type="SpawnPoint" x="32" y="304">
+   <properties>
+    <property name="Name" value="Entry"/>
+   </properties>
    <point/>
   </object>
-  <object id="2" name="Coin" x="80" y="176">
+  <object id="2" name="Coin" x="176" y="304">
+   <point/>
+  </object>
+  <object id="3" name="Door" type="Portal" x="288" y="304">
+   <properties>
+    <property name="TargetMap" value="map0"/>
+    <property name="TargetPoint" value="Point0"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="4" name="Door" type="Portal" x="368" y="304">
+   <properties>
+    <property name="TargetMap" value="map0"/>
+    <property name="TargetPoint" value="Point1"/>
+   </properties>
    <point/>
   </object>
  </objectgroup>

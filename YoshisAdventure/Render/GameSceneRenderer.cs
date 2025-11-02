@@ -63,7 +63,6 @@ namespace YoshisAdventure.Rendering
 
         public void LoadContent()
         {
-            
             _bitmapFont = _content.Load<BitmapFont>("Fonts/ZFull-GB");
         }
 
@@ -71,6 +70,7 @@ namespace YoshisAdventure.Rendering
         {
             _tilemap = map;
             _tilemapRenderer = new TiledMapRenderer(_graphicsDevice, _tilemap);
+            _camera.EnableWorldBounds(new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels));
         }
 
         public void Update(GameTime gameTime, Vector2 cameraFocus, bool useFluentCamera = false, int cameraDirection = 1, Vector2 velocity = new Vector2())
@@ -104,7 +104,8 @@ namespace YoshisAdventure.Rendering
 
         private void UpdateCamera(GameTime gameTime, Vector2 cameraFocus, bool useFluentCamera = false, int cameraDirection = 1, Vector2 velocity = new Vector2())
         {
-            _targetCameraPosition = GetCameraPosition(cameraFocus);
+
+            _targetCameraPosition = cameraFocus;
             if (IsFirstCameraUpdate)
             {
                 _currentCameraPosition = _targetCameraPosition;
@@ -125,11 +126,11 @@ namespace YoshisAdventure.Rendering
                         lerpResult.X -= lookAheadDistance;
                     }
                 }
-                _currentCameraPosition = GetCameraPosition(lerpResult);
+                _currentCameraPosition = lerpResult;
             }
             else
             {
-                _currentCameraPosition = GetCameraPosition(cameraFocus);
+                _currentCameraPosition = cameraFocus;
             }
 
             _camera.LookAt(_currentCameraPosition);
@@ -159,10 +160,6 @@ namespace YoshisAdventure.Rendering
             _graphicsDevice.RasterizerState = RasterizerState.CullNone;
             Matrix viewMatrix = _camera.GetViewMatrix();
             Matrix projectionMatrix = Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, 0f, -1f);
-
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: viewMatrix); //太糙的处理方式
-            DrawRepeatImageLayer(_tilemap.GetLayer<TiledMapImageLayer>("Background"));
-            _spriteBatch.End();
             
             _tilemapRenderer.Draw(ref viewMatrix, ref projectionMatrix);
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: viewMatrix);
@@ -186,46 +183,6 @@ namespace YoshisAdventure.Rendering
                 _spriteBatch.DrawString(_bitmapFont, Language.Strings.Goal, new Vector2(_viewportAdapter.VirtualWidth / 2 - line1Size.Width / 2, _viewportAdapter.VirtualHeight / 2 - line1Size.Height / 2), Color.Yellow, _viewportAdapter.BoundingRectangle);
             }
             _spriteBatch.End();
-        }
-
-        private void DrawRepeatImageLayer(TiledMapImageLayer imageLayer)
-        {
-            if (imageLayer == null || imageLayer.Image == null )//|| !imageLayer.IsVisible)
-                return;
-            Texture2D texture = imageLayer.Image;
-            Vector2 textureSize = new Vector2(texture.Width, texture.Height);
-            Vector2 layerPosition = imageLayer.Position + imageLayer.Offset;
-            Rectangle cameraBounds = GetScreenBounds();
-            Matrix viewMatrix = _camera.GetViewMatrix();
-            Vector2 screenPosition = Vector2.Transform(layerPosition, viewMatrix);
-            Vector2 parallaxOffset = Vector2.Zero;
-            if (imageLayer.ParallaxFactor != Vector2.One)
-            {
-                Vector2 cameraCenter = new Vector2(cameraBounds.Center.X, cameraBounds.Center.Y);
-                parallaxOffset = (cameraCenter - layerPosition) * (Vector2.One - imageLayer.ParallaxFactor);
-            }
-            Vector2 drawPosition = layerPosition + parallaxOffset;
-            Vector2 relativeCameraMin = new Vector2(cameraBounds.Left, cameraBounds.Top) - drawPosition;
-            Vector2 relativeCameraMax = new Vector2(cameraBounds.Right, cameraBounds.Bottom) - drawPosition;
-            int startX = (int)Math.Floor(relativeCameraMin.X / textureSize.X);
-            int endX = (int)Math.Ceiling(relativeCameraMax.X / textureSize.X);
-            int startY = (int)Math.Floor(relativeCameraMin.Y / textureSize.Y);
-            int endY = (int)Math.Ceiling(relativeCameraMax.Y / textureSize.Y);
-            Color drawColor = Color.White * imageLayer.Opacity;
-            for (int x = startX; x <= endX; x++)
-            {
-                for (int y = startY; y <= endY; y++)
-                {
-                    Vector2 tilePosition = drawPosition + new Vector2(x * textureSize.X, y * textureSize.Y);
-                    Rectangle tileRect = new Rectangle((int)tilePosition.X, (int)tilePosition.Y,
-                                                     (int)textureSize.X, (int)textureSize.Y);
-
-                    if (cameraBounds.Intersects(tileRect))
-                    {
-                        _spriteBatch.Draw(texture, tilePosition, drawColor);
-                    }
-                }
-            }
         }
 
         private void DrawFade()
@@ -274,18 +231,6 @@ namespace YoshisAdventure.Rendering
             {
                 _fadeTimer = 0f;
             }
-        }
-
-        private Vector2 GetCameraPosition(Vector2 position)
-        {
-            Vector2 cameraPos = new Vector2();
-            Rectangle worldBounds = new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels);
-            Rectangle screenBounds = GetScreenBounds();
-            cameraPos.X = Math.Max(position.X, worldBounds.Left + screenBounds.Width / 2);
-            cameraPos.X = Math.Min(cameraPos.X, worldBounds.Right - screenBounds.Width / 2);
-            cameraPos.Y = Math.Max(position.Y, worldBounds.Top + screenBounds.Height / 2);
-            cameraPos.Y = Math.Min(cameraPos.Y, worldBounds.Bottom - screenBounds.Height / 2);
-            return cameraPos;
         }
     }
 }

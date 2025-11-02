@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <RollForward>Major</RollForward>
-    <MonoGameExtendedPipelineReferencePath>$(MSBuildThisFileDirectory)pipeline-references</MonoGameExtendedPipelineReferencePath>
+    <!--<MonoGameExtendedPipelineReferencePath>$(MSBuildThisFileDirectory)pipeline-references</MonoGameExtendedPipelineReferencePath>-->
     <OutputType>Library</OutputType>
   </PropertyGroup>
   <ItemGroup>
@@ -24,8 +24,8 @@
   <ItemGroup>
     <PackageReference Include="MLEM.Extended" Version="8.0.0" />
     <PackageReference Include="MLEM.Ui" Version="8.0.0" />
-    <PackageReference Include="MonoGame.Extended" Version="5.2.0" />
-    <PackageReference Include="MonoGame.Extended.Content.Pipeline" Version="5.2.0" />
+    <!--<PackageReference Include="MonoGame.Extended" Version="5.2.0" />
+    <PackageReference Include="MonoGame.Extended.Content.Pipeline" Version="5.2.0" />-->
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameLibrary\GameLibrary.csproj" />
+    <ProjectReference Include="..\Monogame-Extended\source\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj" />
+    <ProjectReference Include="..\Monogame-Extended\source\MonoGame.Extended\MonoGame.Extended.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />

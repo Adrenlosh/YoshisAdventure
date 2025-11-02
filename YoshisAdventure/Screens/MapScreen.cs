@@ -7,6 +7,7 @@ using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Tiled;
 using System.Linq;
+using YoshisAdventure.GameObjects;
 using YoshisAdventure.GameObjects.OnMapObjects;
 using YoshisAdventure.Models;
 using YoshisAdventure.Rendering;

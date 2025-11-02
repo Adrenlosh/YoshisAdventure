@@ -13,6 +13,7 @@ namespace YoshisAdventure.Screens
     {
         private SpriteBatch _spriteBatch;
         private TitleScreenUI _ui;
+        private Stage _stage;
 
         private GameSceneRenderer _sceneRenderer;
         private InteractionSystem _interactionSystem;
@@ -28,14 +29,28 @@ namespace YoshisAdventure.Screens
             GameMain.UiSystem.Remove("Root");
             base.Initialize();
         }
+
+        public override void UnloadContent()
+        {
+            _stage.CloseStage();
+            base.UnloadContent();
+        }
+
+        private void InitializeUI()
+        {
+            _ui = new TitleScreenUI();
+            _ui.StartButtonClicked += (s, e) => Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+            GameMain.UiSystem.Add("Root", _ui);
+        }
+
         public override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             SongSystem.Play("title");
-            Stage stage = StageSystem.GetStageByName("grassland1");
+            _stage = StageSystem.GetStageByName("grassland1");
             _sceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content);
             _sceneRenderer.LoadContent();
-            _sceneRenderer.LoadMap(stage.StartStage(Content));
+            _sceneRenderer.LoadMap(_stage.StartStage());
             _interactionSystem = new InteractionSystem();
             InitializeUI();
             base.LoadContent();
@@ -55,13 +70,6 @@ namespace YoshisAdventure.Screens
             GraphicsDevice.Clear(Color.Black);
             _sceneRenderer.Draw(GameObjectsSystem.GetAllActiveObjects());
             GameMain.UiSystem.Draw(gameTime, _spriteBatch);
-        }
-
-        private void InitializeUI()
-        {
-            _ui = new TitleScreenUI();
-            _ui.StartButtonClicked += (s, e) => Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
-            GameMain.UiSystem.Add("Root", _ui);
         }
     }
 }
