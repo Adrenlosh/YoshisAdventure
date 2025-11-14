@@ -33,7 +33,7 @@ namespace YoshisAdventure.Systems
                 if (obj is Sign sign)
                 {
                     var collisionResult = GameObjectsSystem.CheckObjectCollision(sign);
-                    if (GameController.MoveUp() && collisionResult.CollidedObject == player)
+                    if (GameControllerSystem.MoveUp() && collisionResult.CollidedObject == player)
                     {
                         sign.ScreenBounds = GameObjectsSystem.Player.ScreenBounds;
                         OnDialogue?.Invoke(sign.MessageID);
@@ -138,7 +138,7 @@ namespace YoshisAdventure.Systems
                 else if(collidable is Door door)
                 {
                     var collisionResult = GameObjectsSystem.CheckObjectCollision(door);
-                    if (GameController.MoveUp() && collisionResult.CollidedObject != null && collisionResult.CollidedObject == player)
+                    if (GameControllerSystem.MoveUp() && collisionResult.CollidedObject != null && collisionResult.CollidedObject == player)
                     {
                         player.OnCollision(door, collisionResult);
                         door.OnCollision(player, collisionResult);

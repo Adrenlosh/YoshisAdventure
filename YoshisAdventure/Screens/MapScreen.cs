@@ -84,11 +84,11 @@ namespace YoshisAdventure.Screens
 
         public override void Update(GameTime gameTime)
         {
-            if (GameController.AttackPressed() && _stage != null)
+            if (GameControllerSystem.AttackPressed() && _stage != null)
             {
                 Game.LoadScreen(new StageEnterScreen(Game, _stage), new MaskTransition(GraphicsDevice, Content, Transitions.FadeType.Out, 1.8f));
             }
-            else if(GameController.BackPressed())
+            else if(GameControllerSystem.BackPressed())
             {
                 Game.LoadScreen(new TitleScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
             }

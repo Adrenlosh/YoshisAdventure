@@ -217,7 +217,7 @@ namespace YoshisAdventure.GameObjects
         {
             int currentInputDirection = 0;
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (GameController.ActionPressed() && !_isFloating && _isOnGround && CanThrowEgg)
+            if (GameControllerSystem.ActionPressed() && !_isFloating && _isOnGround && CanThrowEgg)
             {
                 if (GameMain.PlayerStatus.Egg > 0)
                 {
@@ -237,7 +237,7 @@ namespace YoshisAdventure.GameObjects
                 }
             }
 
-            if (GameController.AttackPressed() && _tongueState == 0 && !_isHoldingEgg && !_isSquatting && !_isFloating && !_hasThrownEgg && !_isTurning)
+            if (GameControllerSystem.AttackPressed() && _tongueState == 0 && !_isHoldingEgg && !_isSquatting && !_isFloating && !_hasThrownEgg && !_isTurning)
             {
                 if (!_isMouthing)
                 {
@@ -278,7 +278,7 @@ namespace YoshisAdventure.GameObjects
                 }
             }
 
-            if (GameController.MoveDown() && !_isLookingUp && _tongueState == 0)
+            if (GameControllerSystem.MoveDown() && !_isLookingUp && _tongueState == 0)
             {
                 if (!_isOnSlope)
                 {
@@ -300,12 +300,12 @@ namespace YoshisAdventure.GameObjects
                 Size = _normalCollisionBox;
             }
 
-            if (GameController.MoveDown() && !_isOnGround && !_isHoldingEgg && !_hasThrownEgg)
+            if (GameControllerSystem.MoveDown() && !_isOnGround && !_isHoldingEgg && !_hasThrownEgg)
             {
                 _isPlummeting = true;
             }
 
-            if (GameController.MoveUp() && !_isSquatting)
+            if (GameControllerSystem.MoveUp() && !_isSquatting)
             {
                 _isLookingUp = true;
             }
@@ -320,12 +320,12 @@ namespace YoshisAdventure.GameObjects
                 _isLookingUp = false;
             }
 
-            if (GameController.MoveLeft() && !_isSquatting && !_isLookingUp)
+            if (GameControllerSystem.MoveLeft() && !_isSquatting && !_isLookingUp)
             {
                 _acceleration.X = -AccelerationRate * (_isOnGround ? 1f : AirControlFactor);
                 currentInputDirection = -1;
             }
-            else if (GameController.MoveRight() && !_isSquatting && !_isLookingUp)
+            else if (GameControllerSystem.MoveRight() && !_isSquatting && !_isLookingUp)
             {
                 _acceleration.X = AccelerationRate * (_isOnGround ? 1f : AirControlFactor);
                 currentInputDirection = 1;
@@ -346,8 +346,8 @@ namespace YoshisAdventure.GameObjects
                 _lastInputDirection = currentInputDirection;
             }
 
-            bool isJumpButtonPressed = GameController.JumpPressed();
-            bool isJumpButtonHeld = GameController.JumpHeld();
+            bool isJumpButtonPressed = GameControllerSystem.JumpPressed();
+            bool isJumpButtonHeld = GameControllerSystem.JumpHeld();
             if (isJumpButtonPressed && (_isOnGround || _isOnSlope) && _canJump)
             {
                 _isJumping = true;
@@ -859,7 +859,7 @@ namespace YoshisAdventure.GameObjects
             if(_isOnSlope)
             {
                 IsCollidingWithTile(CollisionBox, out TileCollisionResult result);
-                if (!(GameController.MoveLeft() || GameController.MoveRight()))
+                if (!(GameControllerSystem.MoveLeft() || GameControllerSystem.MoveRight()))
                 {
                     if (result.TileType.HasFlag(TileType.SteepSlopeLeft))
                     {

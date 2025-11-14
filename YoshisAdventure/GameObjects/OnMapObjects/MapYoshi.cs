@@ -4,7 +4,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
 using System.Diagnostics;
-using YoshisAdventure;
 using YoshisAdventure.Enums;
 using YoshisAdventure.GameObjects;
 using YoshisAdventure.Models;
@@ -47,33 +46,33 @@ namespace YoshisAdventure.GameObjects.OnMapObjects
         private void HandleInput(GameTime gameTime)
         {
             _velocity = Vector2.Zero;
-            if (GameController.MoveUp())
+            if (GameControllerSystem.MoveUp())
             {
                 _velocity.Y = -MoveSpeed;
                 if (_sprite.CurrentAnimation != "walk-back")
                     _sprite.SetAnimation("walk-back");
             }
-            else if (GameController.MoveDown())
+            else if (GameControllerSystem.MoveDown())
             {
                 _velocity.Y = MoveSpeed;
                 if (_sprite.CurrentAnimation != "walk")
                     _sprite.SetAnimation("walk");
             }
-            if (GameController.MoveLeft())
+            if (GameControllerSystem.MoveLeft())
             {
                 _velocity.X = -MoveSpeed;
                 if (_sprite.CurrentAnimation != "walk-side")
                     _sprite.SetAnimation("walk-side");
                 _sprite.Effect = SpriteEffects.FlipHorizontally;
             }
-            else if (GameController.MoveRight())
+            else if (GameControllerSystem.MoveRight())
             {
                 _velocity.X = MoveSpeed;
                 if (_sprite.CurrentAnimation != "walk-side")
                     _sprite.SetAnimation("walk-side");
                 _sprite.Effect = SpriteEffects.None;
             }
-            else if (GameController.AttackPressed() && _stageName != string.Empty)
+            else if (GameControllerSystem.AttackPressed() && _stageName != string.Empty)
             {
                 if (_sprite.CurrentAnimation != "start")
                     _sprite.SetAnimation("start");

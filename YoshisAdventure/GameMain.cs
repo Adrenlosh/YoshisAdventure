@@ -1,5 +1,4 @@
-﻿using GameLibrary.Input;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MLEM.Extended.Font;
 using MLEM.Ui;
@@ -31,7 +30,7 @@ namespace YoshisAdventure
 
         public static PlayerStatus PlayerStatus { get; set; } = new PlayerStatus();
 
-        public static InputManager Input { get; private set; } = new InputManager();
+        //public static InputManager Input { get; private set; } = new InputManager();
 
         public GameMain()
         {
@@ -74,7 +73,7 @@ namespace YoshisAdventure
         protected override void Update(GameTime gameTime)
         {
             UiSystem.GlobalScale = GetUIScale(ViewportAdapter);
-            Input.Update(gameTime);
+            GameControllerSystem.Update();
             SFXSystem.Update(gameTime);
             UiSystem.Update(gameTime);
             base.Update(gameTime);

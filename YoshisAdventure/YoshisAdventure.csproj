@@ -42,7 +42,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GameLibrary\GameLibrary.csproj" />
     <ProjectReference Include="..\Monogame-Extended\source\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj" />
     <ProjectReference Include="..\Monogame-Extended\source\MonoGame.Extended\MonoGame.Extended.csproj" />
   </ItemGroup>
