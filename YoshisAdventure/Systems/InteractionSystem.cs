@@ -11,8 +11,8 @@ namespace YoshisAdventure.Systems
         private bool _isGoal = false;
         public event Action<string> OnDialogue;
         public event Action<string, string> OnSwitchMap;
-        public event Action<int> OnCollectACoin;
-        public event Action OnGoal;
+        public event Action<int> OnCollectCoin;
+        public event Action OnReachGoal;
 
         public void Update(GameTime gameTime)
         {
@@ -119,7 +119,7 @@ namespace YoshisAdventure.Systems
                         goal.OnCollision(player, collisionResult);
                         if (!_isGoal)
                         {
-                            OnGoal?.Invoke();
+                            OnReachGoal?.Invoke();
                         }
                         _isGoal = true;
                     }
@@ -131,7 +131,7 @@ namespace YoshisAdventure.Systems
                     {
                         player.OnCollision(coin, collisionResult);
                         coin.OnCollision(player, collisionResult);
-                        OnCollectACoin?.Invoke(coin.Value);
+                        OnCollectCoin?.Invoke(coin.Value);
                         GameObjectsSystem.RemoveGameObject(coin);
                     }
                 }
@@ -168,7 +168,7 @@ namespace YoshisAdventure.Systems
                         {
                             player.OnCollision(coin, collisionResult);
                             coin.OnCollision(player, collisionResult);
-                            OnCollectACoin?.Invoke(coin.Value);
+                            OnCollectCoin?.Invoke(coin.Value);
                             GameObjectsSystem.RemoveGameObject(coin);
                         }
                         else if(collisionResult.CollidedObject is Enemy enemy)

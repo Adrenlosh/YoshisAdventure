@@ -1,15 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
-using System.Diagnostics;
-using YoshisAdventure.Enums;
-using YoshisAdventure.GameObjects;
 using YoshisAdventure.Models;
 using YoshisAdventure.Systems;
 
-namespace YoshisAdventure.GameObjects.OnMapObjects
+namespace YoshisAdventure.GameObjects.MapObjects
 {
     public class MapYoshi : GameObject
     {

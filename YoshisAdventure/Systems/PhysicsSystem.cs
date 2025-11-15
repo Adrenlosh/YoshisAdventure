@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace YoshisAdventure.GameObjects.Triggers
+namespace YoshisAdventure.Systems
 {
-    internal class Trigger
+    public class PhysicsSystem
     {
     }
 }

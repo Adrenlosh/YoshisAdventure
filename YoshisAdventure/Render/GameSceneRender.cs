@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Tiled;
@@ -9,6 +8,7 @@ using MonoGame.Extended.Tiled.Renderers;
 using MonoGame.Extended.ViewportAdapters;
 using System;
 using System.Collections.Generic;
+using YoshisAdventure.Enums;
 using YoshisAdventure.GameObjects;
 using YoshisAdventure.Systems;
 
@@ -20,29 +20,22 @@ namespace YoshisAdventure.Rendering
         SwitchMap
     }
 
-    public enum FadeStatus
-    {
-        None, 
-        Out, 
-        Keep, 
-        In
-    }
-
-    public class GameSceneRenderer
-    {
+    public class GameSceneRender
+    {        
+        private readonly ContentManager _content;
+        private readonly OrthographicCamera _camera;
+        private readonly BoxingViewportAdapter _viewportAdapter;
+        private readonly SpriteBatch _spriteBatch;
         private readonly GraphicsDevice _graphicsDevice;
+
         private TiledMap _tilemap;
         private TiledMapRenderer _tilemapRenderer;
-        private OrthographicCamera _camera;
-        private BoxingViewportAdapter _viewportAdapter;
-        private SpriteBatch _spriteBatch;
         private BitmapFont _bitmapFont;
-        private ContentManager _content;
 
         private float _fadeTimer = -1;
         private float _fadeInDuration = 2f;
         private float _fadeKeepDuration = 4f;
-        private float _FadeOutDuration = 2f;
+        private float _fadeOutDuration = 2f;
         private bool _isFadeKeepTriggered = false;
 
         private Vector2 _currentCameraPosition;
@@ -54,6 +47,7 @@ namespace YoshisAdventure.Rendering
         public bool IsFirstCameraUpdate { get; set; } = true;
 
         public FadeStatus FadeStatus { get; set; } = FadeStatus.None;
+
         public FadeType FadeType { get; set; }
 
         public BoxingViewportAdapter ViewportAdapter => _viewportAdapter;
@@ -63,10 +57,10 @@ namespace YoshisAdventure.Rendering
         public event Action OnFadeComplete;
         public event Action OnFadeKeep;
 
-        public GameSceneRenderer(GraphicsDevice graphicsDevice, GameWindow window, ContentManager content)
+        public GameSceneRender(GraphicsDevice graphicsDevice, GameWindow window, ContentManager content, int renderWidth = GlobalConfig.VirtualResolution_Width, int renderHeight = GlobalConfig.VirtualResolution_Height)
         {
             _graphicsDevice = graphicsDevice;
-            _viewportAdapter = new BoxingViewportAdapter(window, graphicsDevice, GlobalConfig.VirtualResolution_Width, GlobalConfig.VirtualResolution_Height);
+            _viewportAdapter = new BoxingViewportAdapter(window, graphicsDevice, renderWidth, renderHeight, 0, 0, true);
             _camera = new OrthographicCamera(_viewportAdapter);
             _spriteBatch = new SpriteBatch(graphicsDevice);
             _content = content;
@@ -87,7 +81,6 @@ namespace YoshisAdventure.Rendering
             _tilemap = map;
             _tilemapRenderer = new TiledMapRenderer(_graphicsDevice, _tilemap);
             _camera.EnableWorldBounds(new Rectangle(0, 0, _tilemap.WidthInPixels, _tilemap.HeightInPixels));
-
         }
 
         public void Update(GameTime gameTime, Vector2 cameraFocus, bool useFluentCamera = false, int cameraDirection = 1, Vector2 velocity = new Vector2())
@@ -95,12 +88,12 @@ namespace YoshisAdventure.Rendering
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             UpdateCamera(gameTime, cameraFocus, useFluentCamera, cameraDirection, velocity);
             _tilemapRenderer.Update(gameTime);
-            var fadeDuration = _fadeInDuration + _fadeKeepDuration + _FadeOutDuration;
+            var fadeDuration = _fadeInDuration + _fadeKeepDuration + _fadeOutDuration;
             if (_fadeTimer >= 0f && _fadeTimer <= fadeDuration)
             {
                 _fadeTimer += elapsedTime;
             }
-            else if(_fadeTimer > fadeDuration)
+            else if (_fadeTimer > fadeDuration)
             {
                 _fadeTimer = -1f;
                 FadeStatus = FadeStatus.None;
@@ -160,8 +153,10 @@ namespace YoshisAdventure.Rendering
             }
         }
 
-        public void Draw(IEnumerable<GameObject> gameObjects)
+        public void Draw(IEnumerable<GameObject> gameObjects, RenderTarget2D renderTarget = null)
         {
+            Viewport originalViewport = _graphicsDevice.Viewport;
+            _graphicsDevice.SetRenderTarget(renderTarget);
             Matrix viewMatrix = _camera.GetViewMatrix();
             Matrix projectionMatrix = Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, 0f, -1f);
             _tilemapRenderer.Draw(ref viewMatrix, ref projectionMatrix);
@@ -175,7 +170,7 @@ namespace YoshisAdventure.Rendering
                         gameObject.Draw(_spriteBatch);
                     }
                 }
-                if(FadeType == FadeType.Goal) DrawFade();
+                if (FadeType == FadeType.Goal) DrawFade();
                 GameObjectsSystem.Player?.Draw(_spriteBatch);
                 if (FadeType == FadeType.SwitchMap) DrawFade();
             }
@@ -187,28 +182,30 @@ namespace YoshisAdventure.Rendering
                 _spriteBatch.DrawString(_bitmapFont, Language.Strings.Goal, new Vector2(_viewportAdapter.VirtualWidth / 2 - line1Size.Width / 2, _viewportAdapter.VirtualHeight / 2 - line1Size.Height / 2), Color.Yellow, _viewportAdapter.BoundingRectangle);
             }
             _spriteBatch.End();
+            _graphicsDevice.SetRenderTarget(null);
+            _graphicsDevice.Viewport = originalViewport;
         }
 
         private void DrawFade()
         {
             Rectangle screenBounds = GetScreenBounds();
             screenBounds.Inflate(10f, 10f);
-            if(_fadeTimer>= 0f && _fadeTimer <= _fadeInDuration)
+            if (_fadeTimer >= 0f && _fadeTimer <= _fadeInDuration)
             {
                 _spriteBatch.FillRectangle(screenBounds, new Color(Color.Black, (_fadeTimer / _fadeInDuration)));
                 FadeStatus = FadeStatus.Out;
             }
-            else if(_fadeTimer > _fadeInDuration && _fadeTimer <= _fadeInDuration + _fadeKeepDuration)
+            else if (_fadeTimer > _fadeInDuration && _fadeTimer <= _fadeInDuration + _fadeKeepDuration)
             {
                 _spriteBatch.FillRectangle(screenBounds, Color.Black);
                 FadeStatus = FadeStatus.Keep;
-                if(!_isFadeKeepTriggered)
+                if (!_isFadeKeepTriggered)
                 {
                     _isFadeKeepTriggered = true;
                     OnFadeKeep?.Invoke();
                 }
             }
-            else if(_fadeTimer > _fadeInDuration + _fadeKeepDuration && _fadeTimer <= _fadeInDuration + _fadeKeepDuration + _FadeOutDuration)
+            else if (_fadeTimer > _fadeInDuration + _fadeKeepDuration && _fadeTimer <= _fadeInDuration + _fadeKeepDuration + _fadeOutDuration)
             {
                 _spriteBatch.FillRectangle(screenBounds, new Color(Color.Black, 1 - (_fadeTimer - (_fadeInDuration + _fadeKeepDuration)) / _fadeInDuration));
                 FadeStatus = FadeStatus.In;
@@ -227,17 +224,17 @@ namespace YoshisAdventure.Rendering
 
         public void StartFade()
         {
-            if(FadeType == FadeType.Goal)
+            if (FadeType == FadeType.Goal)
             {
                 _fadeInDuration = 2f;
                 _fadeKeepDuration = 4f;
-                _FadeOutDuration = 2f;
+                _fadeOutDuration = 2f;
             }
-            else if(FadeType == FadeType.SwitchMap)
+            else if (FadeType == FadeType.SwitchMap)
             {
                 _fadeInDuration = 0.5f;
                 _fadeKeepDuration = 0.2f;
-                _FadeOutDuration = 0.5f;
+                _fadeOutDuration = 0.5f;
             }
             if (_fadeTimer < 0f)
             {

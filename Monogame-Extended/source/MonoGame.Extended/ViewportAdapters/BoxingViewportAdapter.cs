@@ -17,23 +17,27 @@ namespace MonoGame.Extended.ViewportAdapters
     {
         private readonly GameWindow _window;
         private readonly GraphicsDevice _graphicsDevice;
+        private readonly bool _ignoreWindowResize;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BoxingViewportAdapter" />.
         /// </summary>
-        public BoxingViewportAdapter(GameWindow window, GraphicsDevice graphicsDevice, int virtualWidth, int virtualHeight, int horizontalBleed = 0, int verticalBleed = 0)
+        public BoxingViewportAdapter(GameWindow window, GraphicsDevice graphicsDevice, int virtualWidth, int virtualHeight, int horizontalBleed = 0, int verticalBleed = 0, bool ignoreWindowResize = false)
             : base(graphicsDevice, virtualWidth, virtualHeight)
         {
             _window = window;
             _graphicsDevice = graphicsDevice;
-            window.ClientSizeChanged += OnClientSizeChanged;
+            _ignoreWindowResize = ignoreWindowResize;
+            if(!_ignoreWindowResize)
+                window.ClientSizeChanged += OnClientSizeChanged;
             HorizontalBleed = horizontalBleed;
             VerticalBleed = verticalBleed;
         }
 
         public override void Dispose()
         {
-            _window.ClientSizeChanged -= OnClientSizeChanged;
+            if(!_ignoreWindowResize)
+                _window.ClientSizeChanged -= OnClientSizeChanged;
             base.Dispose();
         }
 

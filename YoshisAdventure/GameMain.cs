@@ -61,7 +61,6 @@ namespace YoshisAdventure
                 Font = new GenericBitmapFont(Content.Load<BitmapFont>("Fonts/ZFull-GB")),
             };
             UiSystem = new UiSystem(this, uiStyle, null, false);
-            UiSystem.Viewport = ViewportAdapter.BoundingRectangle;
         }
 
         protected override void Draw(GameTime gameTime)

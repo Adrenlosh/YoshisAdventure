@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
 using System;
-using YoshisAdventure.GameObjects.OnMapObjects;
+using YoshisAdventure.GameObjects.MapObjects;
 
 namespace YoshisAdventure.GameObjects
 {
@@ -22,7 +22,7 @@ namespace YoshisAdventure.GameObjects
             Texture2D yoshiTexture = _contentManager.Load<Texture2D>("Atlas/yoshi");
             Texture2DAtlas yoshiAtlas = Texture2DAtlas.Create("TextureAtlas/yoshi", yoshiTexture, 21, 31);
             SpriteSheet yoshiSpriteSheet = new SpriteSheet("SpriteSheet/yoshi", yoshiAtlas);
-            AddAnimationCycle(yoshiSpriteSheet, "stand", [0, 0, 0, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 15, 15, 15, 14, 13, 0, 0, 0, 0, 0, 0, 0, 17, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            AddAnimationCycle(yoshiSpriteSheet, "stand", [0, 0, 0, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 1, 2, 1, 0, 3, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 15, 15, 15, 14, 13, 0, 0, 0, 0, 0, 0, 0, 17, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 18, 19, 18, 0, 0, 0, 0, 0, 0, 0, 0]);
             AddAnimationCycle(yoshiSpriteSheet, "walk", [7, 0, 8]);
             AddAnimationCycle(yoshiSpriteSheet, "run", [10, 11, 12, 11], true, 0.05f);
             AddAnimationCycle(yoshiSpriteSheet, "jump", [5], false);
@@ -43,7 +43,7 @@ namespace YoshisAdventure.GameObjects
             AddAnimationCycle(yoshiSpriteSheet, "tongue-out-run", [33, 34, 35, 34], true, 0.05f);
             AddAnimationCycle(yoshiSpriteSheet, "tongue-out-jump", [35], false);
 
-            AddAnimationCycle(yoshiSpriteSheet, "stand-mouthing", [43, 43, 43, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 51, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 48, 49, 50, 50, 50, 49, 48, 43, 43, 43, 43, 43, 43, 43, 52, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 43, 43, 43, 43, 43, 43, 43, 43, 43]);
+            AddAnimationCycle(yoshiSpriteSheet, "stand-mouthing", [43, 43, 43, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 44, 45, 44, 43, 46, 47, 46, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 51, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 48, 49, 50, 50, 50, 49, 48, 43, 43, 43, 43, 43, 43, 43, 52, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 54, 53, 43, 43, 43, 43, 43, 43, 43, 43]);
             AddAnimationCycle(yoshiSpriteSheet, "walk-mouthing", [36, 43, 37]);
             AddAnimationCycle(yoshiSpriteSheet, "run-mouthing", [40, 41, 42, 41], true, 0.05f);
             AddAnimationCycle(yoshiSpriteSheet, "jump-mouthing", [38], false);
@@ -138,9 +138,11 @@ namespace YoshisAdventure.GameObjects
         public Enemy CreateEnemy(Vector2 position, TiledMap tilemap)
         {
             Texture2D texture = _contentManager.Load<Texture2D>("Atlas/enemy");
-            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas/enemy", texture, 16, 32);
+            Texture2DAtlas atlas = Texture2DAtlas.Create("TextureAtlas/enemy", texture, 16, 16);
             SpriteSheet spriteSheet = new SpriteSheet("SpriteSheet/enemy", atlas);
-            AddAnimationCycle(spriteSheet, "normal", [0, 1, 0], true, 0.3f);
+            AddAnimationCycle(spriteSheet, "idle", [0, 1, 2, 3, 2, 1]);
+            AddAnimationCycle(spriteSheet, "walk", [6, 7, 8, 9, 10, 11]);
+            AddAnimationCycle(spriteSheet, "jump", [10, 12], false, 1.0f);
             Enemy enemy = new Enemy(spriteSheet, tilemap);
             enemy.Position = position;
             return enemy;

@@ -22,8 +22,8 @@ namespace YoshisAdventure.GameObjects
         public Enemy(SpriteSheet spriteSheet, TiledMap tilemap) : base(tilemap)
         {
             _sprite = new AnimatedSprite(spriteSheet);
-            _sprite.SetAnimation("normal");
-            Size = new Point(16, 32);
+            _sprite.SetAnimation("idle");
+            Size = new Point(16, 16);
         }
 
         public void Die(bool ClearHealth)

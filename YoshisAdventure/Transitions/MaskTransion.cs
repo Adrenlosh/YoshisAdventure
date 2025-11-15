@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using YoshisAdventure.Enums;
 using YoshisAdventure.Transitions;
 
 namespace MonoGame.Extended.Screens.Transitions;
@@ -9,24 +10,23 @@ public class MaskTransition : Transition
 {
     private readonly GraphicsDevice _graphicsDevice;
     private readonly SpriteBatch _spriteBatch;
-    private readonly Texture2D _mask;
+    private readonly Effect _mask;
 
-    public FadeType Type { get; }
+    public TransitionType Type { get; }
 
     public Vector2 Center { get; set; }
 
-    public MaskTransition(GraphicsDevice graphicsDevice, ContentManager content, FadeType type, float duration = 1f)
+    public MaskTransition(GraphicsDevice graphicsDevice, ContentManager content, TransitionType type, float duration = 1f)
         : base(duration)
     {
         Type = type;
-        _mask = content.Load<Texture2D>("Images/mask");
+        _mask = content.Load<Effect>("Effects/circleMask");
         _graphicsDevice = graphicsDevice;
         _spriteBatch = new SpriteBatch(graphicsDevice);
-
-        Center = new Vector2(_graphicsDevice.Viewport.Width / 2f, _graphicsDevice.Viewport.Height / 2f);
+        //Center = new Vector2(_graphicsDevice.Viewport.Width / 2f, _graphicsDevice.Viewport.Height / 2f);
     }
 
-    public MaskTransition(GraphicsDevice graphicsDevice, ContentManager content, FadeType type, Vector2 center, float duration = 1f)
+    public MaskTransition(GraphicsDevice graphicsDevice, ContentManager content, TransitionType type, Vector2 center, float duration = 1f)
         : this(graphicsDevice, content, type, duration)
     {
         Center = center;
@@ -39,31 +39,14 @@ public class MaskTransition : Transition
 
     public override void Draw(GameTime gameTime)
     {
-        _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
+        _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, effect:_mask);
 
-        if ((Type == FadeType.Out && base.State == TransitionState.Out) ||
-            (Type == FadeType.In && base.State == TransitionState.In))
+        if ((Type.HasFlag(TransitionType.Out) && State == TransitionState.Out) ||
+            (Type.HasFlag(TransitionType.In) && State == TransitionState.In))
         {
-            if (Value < 0.98)
-            {
-                float screenDiagonal = new Vector2(_graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height).Length();
-                float maskDiagonal = new Vector2(_mask.Width, _mask.Height).Length();
-                float maxScale = screenDiagonal / maskDiagonal * 60f;
-
-                _spriteBatch.Draw(_mask,
-                    Center,
-                    null,
-                    Color.White,
-                    0f,
-                    new Vector2(_mask.Width, _mask.Height) / 2,
-                    (1 - base.Value) * maxScale,
-                    SpriteEffects.None,
-                    0);
-            }
-            else
-            {
-                _spriteBatch.FillRectangle(0f, 0f, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, Color.Black);
-            }
+            _mask.Parameters["Radius"].SetValue(1 - Value);
+            _mask.Parameters["AspectRatio"].SetValue((float)_graphicsDevice.Viewport.AspectRatio);
+            _spriteBatch.FillRectangle(0f, 0f, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, Color.Black);
         }
         _spriteBatch.End();
     }

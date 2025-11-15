@@ -2,14 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Screens.Transitions;
+using YoshisAdventure.Enums;
 
 namespace YoshisAdventure.Transitions
 {
-    public enum FadeType
-    {
-        In,
-        Out
-    }
 
     public class FadeInOutTransition : Transition
     {
@@ -18,9 +14,9 @@ namespace YoshisAdventure.Transitions
 
         public Color Color { get; }
 
-        public FadeType Type { get; }
+        public TransitionType Type { get; }
 
-        public FadeInOutTransition(GraphicsDevice graphicsDevice, Color color, FadeType type, float duration = 1f)
+        public FadeInOutTransition(GraphicsDevice graphicsDevice, Color color, TransitionType type, float duration = 1f)
             : base(duration)
         {
             Color = color;
@@ -38,10 +34,10 @@ namespace YoshisAdventure.Transitions
         {
             _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
 
-            if ((Type == FadeType.Out && base.State == TransitionState.Out) ||
-                (Type == FadeType.In && base.State == TransitionState.In))
+            if ((Type == TransitionType.Out && State == TransitionState.Out) ||
+                (Type == TransitionType.In && State == TransitionState.In))
             {
-                _spriteBatch.FillRectangle(0f, 0f, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, Color * base.Value);
+                _spriteBatch.FillRectangle(0f, 0f, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, Color * Value);
             }
 
             _spriteBatch.End();

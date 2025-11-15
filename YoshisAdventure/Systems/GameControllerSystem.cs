@@ -52,32 +52,38 @@ public static class GameControllerSystem
 
     public static bool JumpPressed()
     {
-        return GetStateKeyboard().WasKeyPressed(Keys.L) ||
+        return GetStateKeyboard().WasKeyPressed(Keys.K) ||
                GetStatePad().WasKeyPressed(Buttons.A);
     }
 
     public static bool JumpHeld()
     {
-        return GetStateKeyboard().IsKeyDown(Keys.L) ||
+        return GetStateKeyboard().IsKeyDown(Keys.K) ||
                GetStatePad().IsKeyDown(Buttons.A);
     }
 
     public static bool ActionPressed()
     {
-        return GetStateKeyboard().WasKeyPressed(Keys.K) ||
-               GetStatePad().WasKeyPressed(Buttons.B);
+        return GetStateKeyboard().WasKeyPressed(Keys.J) ||
+               GetStatePad().WasKeyPressed(Buttons.X);
     }
 
     public static bool ActionHeld()
     {
-        return GetStateKeyboard().IsKeyDown(Keys.K) ||
-               GetStatePad().IsKeyDown(Buttons.B);
+        return GetStateKeyboard().IsKeyDown(Keys.J) ||
+               GetStatePad().IsKeyDown(Buttons.X);
     }
 
     public static bool AttackPressed()
     {
-        return GetStateKeyboard().WasKeyPressed(Keys.O) ||
-            GetStatePad().WasKeyPressed(Buttons.X);
+        return GetStateKeyboard().WasKeyPressed(Keys.L) ||
+            GetStatePad().WasKeyPressed(Buttons.B);
+    }
+
+    public static bool AttackHeld()
+    {
+        return GetStateKeyboard().IsKeyDown(Keys.L) ||
+            GetStatePad().IsKeyDown(Buttons.B);
     }
 
     public static bool StartPressed()

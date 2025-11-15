@@ -65,8 +65,8 @@ namespace YoshisAdventure.UI.CustomControls
 
 //    public class MessageBox
 //    {
-//        private const float AnimationDuration = 0.3f;
-//        private float _animationTimer = -1f;
+//        private const float FadeDuration = 0.3f;
+//        private float _fadeTimer = -1f;
 //        private int _alpha = 0;
 //        private int _currentPageIndex = 0;
 //        private int _padding = 2;
@@ -108,13 +108,13 @@ namespace YoshisAdventure.UI.CustomControls
 //            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 //            HandleInput(gameTime);
 
-//            if (_animationTimer >= 0f)
+//            if (_fadeTimer >= 0f)
 //            {
-//                _animationTimer += elapsedTime;
+//                _fadeTimer += elapsedTime;
 
-//                if (_animationTimer >= AnimationDuration)
+//                if (_fadeTimer >= FadeDuration)
 //                {
-//                    _animationTimer = -1f;
+//                    _fadeTimer = -1f;
 
 //                    if (_status == MessageBoxStatus.Opening)
 //                    {
@@ -130,7 +130,7 @@ namespace YoshisAdventure.UI.CustomControls
 //                }
 //                else
 //                {
-//                    float progress = _animationTimer / AnimationDuration;
+//                    float progress = _fadeTimer / FadeDuration;
 
 //                    switch (_status)
 //                    {
@@ -173,7 +173,7 @@ namespace YoshisAdventure.UI.CustomControls
 //        public void Show(string messageText)
 //        {
 //            _status = MessageBoxStatus.Opening;
-//            _animationTimer = 0f;
+//            _fadeTimer = 0f;
 //            _alpha = 0;
 //            ProcessTextPages(messageText);
 //            _currentPageIndex = 0;
@@ -184,7 +184,7 @@ namespace YoshisAdventure.UI.CustomControls
 //            if (_status == MessageBoxStatus.Opened || _status == MessageBoxStatus.Opening)
 //            {
 //                _status = MessageBoxStatus.Closing;
-//                _animationTimer = 0f;
+//                _fadeTimer = 0f;
 //            }
 //        }
 

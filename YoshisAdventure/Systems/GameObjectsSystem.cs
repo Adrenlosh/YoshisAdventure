@@ -5,7 +5,7 @@ using YoshisAdventure.GameObjects;
 using YoshisAdventure.Models;
 using System.Collections.Generic;
 using System.Linq;
-using YoshisAdventure.GameObjects.OnMapObjects;
+using YoshisAdventure.GameObjects.MapObjects;
 
 namespace YoshisAdventure.Systems
 {

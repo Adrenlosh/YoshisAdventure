@@ -6,6 +6,7 @@ using MonoGame.Extended.Tiled;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using YoshisAdventure.Enums;
 using YoshisAdventure.GameObjects;
 using YoshisAdventure.Models;
 using YoshisAdventure.Rendering;
@@ -16,7 +17,7 @@ namespace YoshisAdventure.Screens
 {
     public class GamingScreen : GameScreen
     {
-        private GameSceneRenderer _gameSceneRenderer;
+        private GameSceneRender _gameSceneRenderer;
         private GameObjectFactory _gameObjectFactory;
         private GamingScreenUI _ui;        
         private TiledMap _tilemap;
@@ -46,17 +47,17 @@ namespace YoshisAdventure.Screens
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _gameObjectFactory = new GameObjectFactory(Content);
-            _gameSceneRenderer = new GameSceneRenderer(GraphicsDevice, Game.Window, Content);
+            _gameSceneRenderer = new GameSceneRender(GraphicsDevice, Game.Window, Content);
             _gameSceneRenderer.LoadContent();
             _gameSceneRenderer.LoadMap(_tilemap);
-            _gameSceneRenderer.OnFadeComplete += _sceneRenderer_OnFadeComplete;
-            _gameSceneRenderer.OnFadeKeep += _gameSceneRenderer_OnFadeKeep;
+            _gameSceneRenderer.OnFadeComplete += OnFadeComplete;
+            _gameSceneRenderer.OnFadeKeep += OnFadeKeep;
 
             _interactionSystem = new InteractionSystem();
-            _interactionSystem.OnDialogue += _interactionSystem_OnDialogue;
-            _interactionSystem.OnGoal += _interactionSystem_OnGoal;
-            _interactionSystem.OnCollectACoin += _interactionSystem_OnCollectACoin;
-            _interactionSystem.OnSwitchMap += _interactionSystem_OnSwitchMap;
+            _interactionSystem.OnDialogue += OnDialogue;
+            _interactionSystem.OnReachGoal += OnGoal;
+            _interactionSystem.OnCollectCoin += OnCollectACoin;
+            _interactionSystem.OnSwitchMap += OnSwitchMap;
 
             InitializeScreen();
             InitializeUI();
@@ -186,7 +187,7 @@ namespace YoshisAdventure.Screens
             }
         }
 
-        private void _interactionSystem_OnSwitchMap(string mapName, string pointName)
+        private void OnSwitchMap(string mapName, string pointName)
         {
             _gameSceneRenderer.FadeType = FadeType.SwitchMap;
             _gameSceneRenderer.StartFade();
@@ -194,12 +195,12 @@ namespace YoshisAdventure.Screens
             _spawnPoint = new KeyValuePair<string, string>(mapName, pointName);
         }
 
-        private void _interactionSystem_OnDialogue(string messageID)
+        private void OnDialogue(string messageID)
         {
             _ui.ShowMessageBox(messageID);
         }
 
-        private void _interactionSystem_OnCollectACoin(int value)
+        private void OnCollectACoin(int value)
         {
             GameMain.PlayerStatus.Coin++;
             GameMain.PlayerStatus.Score += value;
@@ -211,7 +212,7 @@ namespace YoshisAdventure.Screens
                 GameMain.PlayerStatus.LifeLeft++;
             }
         }
-        private void _interactionSystem_OnGoal()
+        private void OnGoal()
         {
             SongSystem.Play("goal");
             GameObjectsSystem.Player.ResetVelocity(true);
@@ -221,7 +222,7 @@ namespace YoshisAdventure.Screens
             _gameSceneRenderer.StartFade();
         }
 
-        private void _sceneRenderer_OnFadeComplete()
+        private void OnFadeComplete()
         {
             if(_gameSceneRenderer.FadeType == FadeType.SwitchMap)
             {
@@ -233,7 +234,7 @@ namespace YoshisAdventure.Screens
             Game.LoadScreen(new MapScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
         }
 
-        private void _gameSceneRenderer_OnFadeKeep()
+        private void OnFadeKeep()
         {
             if(_gameSceneRenderer.FadeType == FadeType.SwitchMap)
             {
