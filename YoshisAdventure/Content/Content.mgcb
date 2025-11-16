@@ -380,18 +380,6 @@
 /processorParam:TextureFormat=Color
 /build:Images/background-pattern.png
 
-#begin Images/mask.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Images/mask.png
-
 #begin Stages/stage0.xml
 /copy:Stages/stage0.xml
 
