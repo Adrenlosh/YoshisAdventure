@@ -130,6 +130,11 @@ namespace YoshisAdventure.Screens
 
             _ui.Update(gameTime, _remainingTime);
             CheckBackButton();
+
+            if(GameControllerSystem.AttackPressed())
+            {
+                GameObjectsSystem.AddGameObject(_gameObjectFactory.CreateEnemy(GameObjectsSystem.Player.Position + new Vector2(-60, -100), _tilemap));
+            }
         }
 
         void CheckBackButton()

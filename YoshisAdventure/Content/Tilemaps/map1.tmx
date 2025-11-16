@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="35" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="6">
+<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="60" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="6">
  <properties>
   <property name="Song" value="song1"/>
  </properties>
  <tileset firstgid="1" source="tileset.tsx"/>
- <imagelayer id="2" name="Background" offsetx="0" offsety="-260" parallaxx="0.7" parallaxy="0.7" repeatx="1">
+ <imagelayer id="2" name="Background" offsetx="0" offsety="-211" parallaxx="0.1" repeatx="1">
   <image source="background3.png" width="1024" height="650"/>
  </imagelayer>
- <layer id="1" name="Ground" width="35" height="27">
+ <layer id="1" name="Ground" width="60" height="27">
   <data encoding="base64" compression="zlib">
-   eJztkDEKwCAQBMUEE/3/g71Cu4E0XqoZWBjWLeRKERERERGRP7gid6SCU5e5fSMtMsCpy9z25R2cusztWH8i/3o/vd13esCpy9zuOzVw6jK3E/pABeM=
+   eJztkdEKgCAUQ6WkzP//YG9QEDLo5TZ6OAeGY46BWAoAAAAAAAAAAAD8hTVUQ4vwKnN3szdaaAt14VXm7mZvHI9z9ipzd7M3+vX+JrzK3N0vNs5zF15l7m72xv3Xyr/dO7rZGwNCmgoW
   </data>
  </layer>
  <objectgroup id="3" name="Objects">
@@ -36,6 +36,6 @@
    </properties>
    <point/>
   </object>
-  <object id="5" name="Goal" x="432" y="202" width="28" height="134"/>
+  <object id="5" name="Goal" x="722" y="201" width="28" height="134"/>
  </objectgroup>
 </map>

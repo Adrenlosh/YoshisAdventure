@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
 using System;
+using System.Diagnostics;
 
 namespace YoshisAdventure.GameObjects
 {
@@ -42,6 +43,24 @@ namespace YoshisAdventure.GameObjects
 
         public override void Update(GameTime gameTime)
         {
+            ApplyPhysics(gameTime);
+            Position += Velocity;
+            if(Velocity.X < 0)
+            {
+                _sprite.Effect = SpriteEffects.FlipHorizontally;
+            }
+            else
+            {
+                _sprite.Effect = SpriteEffects.None;
+            }
+            if ((int)gameTime.TotalGameTime.TotalSeconds % 2 == 0)
+            {
+                Velocity = new Vector2(0.5f, Velocity.Y);
+            }
+            else
+            {
+                Velocity = new Vector2(-0.5f, Velocity.Y);
+            }
             _sprite.Update(gameTime);
         }
     }

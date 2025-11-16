@@ -168,6 +168,8 @@ namespace YoshisAdventure.Rendering
                     if (gameObject != GameObjectsSystem.Player)
                     {
                         gameObject.Draw(_spriteBatch);
+                        //_spriteBatch.DrawRectangle(gameObject.CollisionBox, Color.Red);
+                        _spriteBatch.DrawString(_bitmapFont, $"{gameObject.Velocity}\n{gameObject.Position}", new Vector2(gameObject.Position.X, gameObject.Position.Y - 32), Color.Red);
                     }
                 }
                 if (FadeType == FadeType.Goal) DrawFade();

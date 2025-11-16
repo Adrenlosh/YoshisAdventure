@@ -41,6 +41,7 @@ namespace YoshisAdventure
             _graphicsDeviceManager.ApplyChanges();
             _screenManager = new ScreenManager();
             Components.Add(_screenManager);
+            IsFixedTimeStep = false;
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
             Window.AllowUserResizing = true;

@@ -1209,7 +1209,7 @@ namespace YoshisAdventure.GameObjects
         #endregion
 
         #region Misc
-        protected override Rectangle GetCollisionBox(Vector2 position)
+        public override Rectangle GetCollisionBox(Vector2 position)
         {
             int X = (int)(position.X + _yoshiSprite.Size.X / 2 - Size.X / 2);
             int Y = (int)(position.Y + _yoshiSprite.Size.Y - Size.Y);

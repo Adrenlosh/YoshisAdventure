@@ -88,7 +88,7 @@ namespace YoshisAdventure.GameObjects
 
         public override void Update(GameTime gameTime)
         {
-            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Vector2 newPosition = Position;
             switch (Status)
             {
@@ -97,7 +97,7 @@ namespace YoshisAdventure.GameObjects
                     break;
 
                 case SpringStatus.CompressedToMax:
-                    UpdateCompressedToMax(deltaTime);
+                    UpdateCompressedToMax(elapsedTime);
                     break;
 
                 case SpringStatus.Expanding:
@@ -107,88 +107,90 @@ namespace YoshisAdventure.GameObjects
                 case SpringStatus.Normal:
                     break;
             }
+            ApplyPhysics(gameTime);
+            //if (_velocity.X > 0)
+            //{
+            //    _velocity.X -= MathHelper.Lerp(0, Friction, 0.3f);
+            //    if (_velocity.X < 0)
+            //        _velocity.X = 0;
+            //}
+            //else if (_velocity.X < 0)
+            //{
+            //    _velocity.X += MathHelper.Lerp(0, Friction, 0.3f);
+            //    if (_velocity.X > 0)
+            //        _velocity.X = 0;
+            //}
 
-            if (_velocity.X > 0)
-            {
-                _velocity.X -= MathHelper.Lerp(0, Friction, 0.3f);
-                if (_velocity.X < 0)
-                    _velocity.X = 0;
-            }
-            else if (_velocity.X < 0)
-            {
-                _velocity.X += MathHelper.Lerp(0, Friction, 0.3f);
-                if (_velocity.X > 0)
-                    _velocity.X = 0;
-            }
+            //if (_velocity.X != 0) //水平碰撞检测
+            //{
+            //    Vector2 horizontalMove = new Vector2(Velocity.X, 0);
+            //    Vector2 testPosition = newPosition + horizontalMove;
+            //    Rectangle testRect = GetCollisionBox(testPosition);
 
-            if (_velocity.X != 0) //水平碰撞检测
-            {
-                Vector2 horizontalMove = new Vector2(Velocity.X, 0);
-                Vector2 testPosition = newPosition + horizontalMove;
-                Rectangle testRect = GetCollisionBox(testPosition);
+            //    if (!IsCollidingWithTile(testRect, out _))
+            //    {
+            //        newPosition += horizontalMove;
+            //    }
+            //    else
+            //    {
+            //        _velocity.X = 0;
+            //    }
+            //}
 
-                if (!IsCollidingWithTile(testRect, out _))
-                {
-                    newPosition += horizontalMove;
-                }
-                else
-                {
-                    _velocity.X = 0;
-                }
-            }
+            //if (!_isOnGround)
+            //{
+            //    _velocity.Y += Gravity;
+            //    if (_velocity.Y > MaxGravity)
+            //        _velocity.Y = MaxGravity;
+            //}
 
-            if (!_isOnGround)
-            {
-                _velocity.Y += Gravity;
-                if (_velocity.Y > MaxGravity)
-                    _velocity.Y = MaxGravity;
-            }
-            if (_velocity.Y != 0) //垂直碰撞检测
-            {
-                Vector2 verticalMove = new Vector2(0, _velocity.Y);
-                Vector2 testPosition = newPosition + verticalMove;
-                if (testPosition.Y < 0)
-                {
-                    newPosition.Y = 0;
-                    _velocity.Y = 0;
-                }
-                else
-                {
-                    Rectangle testRect = GetCollisionBox(testPosition);
-                    if (IsCollidingWithTile(testRect, out TileCollisionResult result))
-                    {
-                        if (_velocity.Y > 0.5)
-                        {
-                            float tileTop = result.TileRectangle.Top;
-                            newPosition.Y = tileTop - _sprite.Size.Y;
-                            _velocity.Y = 0;
-                            _isOnGround = true;
-                        }
-                        else if (_velocity.Y < 0)
-                        {
-                            newPosition.Y = result.TileRectangle.Bottom;
-                            _velocity.Y = 0;
-                        }
-                    }
-                    else
-                    {
-                        newPosition += verticalMove;
-                        _isOnGround = false;
-                    }
-                }
-            }
-            else
-            {
-                Rectangle collisionBox = GetCollisionBox(newPosition);
-                if (!IsCollidingWithTile(new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 3), out _))
-                {
-                    _isOnGround = false;
-                }
-                else
-                {
-                    _isOnGround = true;
-                }
-            }
+            newPosition += Velocity;
+            //if (_velocity.Y != 0) //垂直碰撞检测
+            //{
+            //    Vector2 verticalMove = new Vector2(0, _velocity.Y);
+            //    Vector2 testPosition = newPosition + verticalMove;
+            //    if (testPosition.Y < 0)
+            //    {
+            //        newPosition.Y = 0;
+            //        _velocity.Y = 0;
+            //    }
+            //    else
+            //    {
+            //        Rectangle testRect = GetCollisionBox(testPosition);
+            //        if (IsCollidingWithTile(testRect, out TileCollisionResult result))
+            //        {
+            //            if (_velocity.Y > 0.5)
+            //            {
+            //                float tileTop = result.TileRectangle.Top;
+            //                newPosition.Y = tileTop - _sprite.Size.Y;
+            //                _velocity.Y = 0;
+            //                _isOnGround = true;
+            //            }
+            //            else if (_velocity.Y < 0)
+            //            {
+            //                newPosition.Y = result.TileRectangle.Bottom;
+            //                _velocity.Y = 0;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            newPosition += verticalMove;
+            //            _isOnGround = false;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    Rectangle collisionBox = GetCollisionBox(newPosition);
+            //    if (!IsCollidingWithTile(new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 3), out _))
+            //    {
+            //        _isOnGround = false;
+            //    }
+            //    else
+            //    {
+            //        _isOnGround = true;
+            //    }
+            //}
 
             Position = newPosition;
 

@@ -36,7 +36,7 @@ namespace YoshisAdventure.GameObjects
             IsCapturable = false;
         }
 
-        protected override Rectangle GetCollisionBox(Vector2 position)
+        public override Rectangle GetCollisionBox(Vector2 position)
         {
             int centerX = (int)(position.X + _sprite.Size.X / 2 - Size.X / 2);
             int centerY = (int)(position.Y + _sprite.Size.Y / 2 - Size.Y / 2);
