@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <SpriteSheet name="spring" texture="Atlas/spring" frameWidth="16" frameHeight="16">
+    <Animation name="compress" looping="false" frameDuration="0.5">
+      <Frames>0,1,2</Frames>
+    </Animation>
+    <Animation name="expand" looping="false" frameDuration="0.5">
+      <Frames>2,3,0</Frames>
+    </Animation>
+    <Animation name="normal" looping="false" frameDuration="0.15">
+      <Frames>0</Frames>
+    </Animation>
+  </SpriteSheet>
+</Animations>

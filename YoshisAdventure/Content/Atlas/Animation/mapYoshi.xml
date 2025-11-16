@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <SpriteSheet name="map-yoshi" texture="Atlas/map-yoshi" frameWidth="16" frameHeight="16">
+    <Animation name="walk" looping="true" frameDuration="0.2">
+      <Frames>6,7,6,8</Frames>
+    </Animation>
+    <Animation name="walk-side" looping="true" frameDuration="0.2">
+      <Frames>1,0,1,2</Frames>
+    </Animation>
+    <Animation name="walk-back" looping="true" frameDuration="0.2">
+      <Frames>3,4,3,5</Frames>
+    </Animation>
+    <Animation name="start" looping="false" frameDuration="0.2">
+      <Frames>9,6</Frames>
+    </Animation>
+  </SpriteSheet>
+</Animations>

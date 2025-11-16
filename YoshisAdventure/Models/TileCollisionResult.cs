@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.Tiled;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using YoshisAdventure.Enums;
 using YoshisAdventure.Systems;
@@ -28,10 +27,9 @@ namespace YoshisAdventure.Models
         {
             CollidedTile = tile;
             Intersection = intersection;
-            Direction = CalculateCollisionDirection(originalRect, otherRect, intersection);
             TileRectangle = otherRect;
             PositionInMap = new Point(tile.Value.X, tile.Value.Y);
-            
+            Direction = GetCollisionDirection(originalRect, otherRect, intersection);
             TiledMapTileset tileset = tileMap.GetTilesetByTileGlobalIdentifier(tile.Value.GlobalIdentifier);
             if (tileset != null)
             {
@@ -52,7 +50,7 @@ namespace YoshisAdventure.Models
             }
         }
 
-        private CollisionDirection CalculateCollisionDirection(Rectangle rectA, Rectangle rectB, Rectangle intersection)
+        private CollisionDirection GetCollisionDirection(Rectangle rectA, Rectangle rectB, Rectangle intersection)
         {
             float overlapLeft = Math.Abs(rectA.Right - rectB.Left);
             float overlapRight = Math.Abs(rectB.Right - rectA.Left);
@@ -63,6 +61,7 @@ namespace YoshisAdventure.Models
             if (minOverlap == overlapBottom) return CollisionDirection.Bottom;
             if (minOverlap == overlapLeft) return CollisionDirection.Left;
             return CollisionDirection.Right;
+
         }
     }
 }

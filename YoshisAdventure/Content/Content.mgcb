@@ -15,6 +15,27 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Atlas/Animation/coin.xml
+/copy:Atlas/Animation/coin.xml
+
+#begin Atlas/Animation/door.xml
+/copy:Atlas/Animation/door.xml
+
+#begin Atlas/Animation/enemy.xml
+/copy:Atlas/Animation/enemy.xml
+
+#begin Atlas/Animation/goal.xml
+/copy:Atlas/Animation/goal.xml
+
+#begin Atlas/Animation/mapYoshi.xml
+/copy:Atlas/Animation/mapYoshi.xml
+
+#begin Atlas/Animation/spring.xml
+/copy:Atlas/Animation/spring.xml
+
+#begin Atlas/Animation/yoshi.xml
+/copy:Atlas/Animation/yoshi.xml
+
 #begin Atlas/coin.png
 /importer:TextureImporter
 /processor:TextureProcessor

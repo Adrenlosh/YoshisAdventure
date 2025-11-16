@@ -140,7 +140,7 @@ namespace YoshisAdventure.GameObjects
             slopeWidth = 16;
             topY = 16;
             bottomY = 0;
-            if ((result.TileType.HasFlag(TileType.SteepSlopeLeft) || result.TileType.HasFlag(TileType.SteepSlopeRight) || result.TileType.HasFlag(TileType.GentleSlopeLeft) || result.TileType.HasFlag(TileType.GentleSlopeRight)))
+            if ((result.TileType.HasFlag(TileType.SteepSlopeLeft) || result.TileType.HasFlag(TileType.SteepSlopeRight) || result.TileType.HasFlag(TileType.GentleSlopeLeft) || result.TileType.HasFlag(TileType.GentleSlopeRight)) || result.Direction == CollisionDirection.Top)
             {
                 if (result.Properties.TryGetValue("Width", out string slopeWidthStr))
                 {

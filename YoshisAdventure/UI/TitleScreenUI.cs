@@ -6,6 +6,8 @@ namespace YoshisAdventure.UI
 {
     public class TitleScreenUI : Panel
     {
+        
+
         public event EventHandler StartButtonClicked;
 
         public TitleScreenUI() : base(MLEM.Ui.Anchor.TopLeft, new Vector2(GlobalConfig.VirtualResolution_Width, GlobalConfig.VirtualResolution_Height))

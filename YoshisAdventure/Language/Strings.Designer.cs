@@ -61,6 +61,15 @@ namespace YoshisAdventure.Language {
         }
         
         /// <summary>
+        ///   查找类似 Back to title menu 的本地化字符串。
+        /// </summary>
+        internal static string BackToTitleMenu {
+            get {
+                return ResourceManager.GetString("BackToTitleMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Close 的本地化字符串。
         /// </summary>
         internal static string Close {
@@ -76,6 +85,15 @@ namespace YoshisAdventure.Language {
         internal static string CoinOnHud {
             get {
                 return ResourceManager.GetString("CoinOnHud", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Continue 的本地化字符串。
+        /// </summary>
+        internal static string Continue {
+            get {
+                return ResourceManager.GetString("Continue", resourceCulture);
             }
         }
         
@@ -99,7 +117,16 @@ namespace YoshisAdventure.Language {
         }
         
         /// <summary>
-        ///   查找类似 YOSHI Goal! 的本地化字符串。
+        ///   查找类似 Game Over 的本地化字符串。
+        /// </summary>
+        internal static string GameOver {
+            get {
+                return ResourceManager.GetString("GameOver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Goal! 的本地化字符串。
         /// </summary>
         internal static string Goal {
             get {
@@ -164,7 +191,7 @@ namespace YoshisAdventure.Language {
         }
         
         /// <summary>
-        ///   查找类似 YOSHI START 的本地化字符串。
+        ///   查找类似 Start! 的本地化字符串。
         /// </summary>
         internal static string StageStart {
             get {

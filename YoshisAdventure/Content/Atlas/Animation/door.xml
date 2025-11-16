@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <SpriteSheet name="door" texture="Atlas/door" frameWidth="16" frameHeight="32">
+    <Animation name="open" looping="false" frameDuration="0.15">
+      <Frames>1</Frames>
+    </Animation>
+    <Animation name="closed" looping="false" frameDuration="0.15">
+      <Frames>0</Frames>
+    </Animation>
+  </SpriteSheet>
+</Animations>

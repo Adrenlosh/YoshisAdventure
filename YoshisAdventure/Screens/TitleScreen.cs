@@ -16,11 +16,11 @@ namespace YoshisAdventure.Screens
         private SpriteBatch _spriteBatch;
         private TitleScreenUI _ui;
         private Stage _stage;
-        private RenderTarget2D _renderTarget;
         private MaskTransition _maskTransition;
 
         private GameSceneRender _gameSceneRenderer;
         private InteractionSystem _interactionSystem;
+
         public new GameMain Game => (GameMain)base.Game;
 
         public TitleScreen(Game game) : base(game)
@@ -55,6 +55,7 @@ namespace YoshisAdventure.Screens
             _gameSceneRenderer.LoadContent();
             _gameSceneRenderer.LoadMap(_stage.StartStage());
             _interactionSystem = new InteractionSystem();
+            GameObjectsSystem.Player.CanHandleInput = false;
             SongSystem.Play("title");
             InitializeUI();
             base.LoadContent();

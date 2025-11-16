@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <SpriteSheet name="coin" texture="Atlas/coin" frameWidth="16" frameHeight="16">
+    <Animation name="normal" looping="true" frameDuration="0.15">
+      <Frames>0,1,2,3</Frames>
+    </Animation>
+  </SpriteSheet>
+</Animations>

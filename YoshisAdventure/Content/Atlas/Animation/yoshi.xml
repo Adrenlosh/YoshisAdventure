@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+    <SpriteSheet name="yoshi" texture="Atlas/yoshi" frameWidth="21" frameHeight="31">
+        <Animation name="stand" looping="true" frameDuration="0.15">
+            <Frames>
+                0,0,0,0,1,2,1,0,3,4,3,0,1,2,1,0,3,4,3,0,1,2,1,0,3,4,3,0,1,2,1,0,3,4,3,0,1,2,1,0,3,4,3,0,1,2,1,0,3,4,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,0,0,0,0,0,0,0,0,0,13,14,15,15,15,14,13,0,0,0,0,0,0,0,17,18,19,18,19,18,19,18,19,18,19,18,19,18,19,18,19,18,0,0,0,0,0,0,0,0
+            </Frames>
+        </Animation>
+        <Animation name="walk" looping="true" frameDuration="0.15">
+            <Frames>7,0,8</Frames>
+        </Animation>
+        <Animation name="run" looping="true" frameDuration="0.05">
+            <Frames>10,11,12,11</Frames>
+        </Animation>
+        <Animation name="jump" looping="false" frameDuration="0.15">
+            <Frames>5</Frames>
+        </Animation>
+        <Animation name="fall" looping="false" frameDuration="0.15">
+            <Frames>6</Frames>
+        </Animation>
+        <Animation name="float" looping="true" frameDuration="0.03">
+            <Frames>20,21,22,21</Frames>
+        </Animation>
+        <Animation name="throw" looping="false" frameDuration="0.15">
+            <Frames>25</Frames>
+        </Animation>
+        <Animation name="plummet1" looping="false" frameDuration="0.08">
+            <Frames>0,26,27,30</Frames>
+        </Animation>
+        <Animation name="plummet2" looping="false" frameDuration="0.15">
+            <Frames>31</Frames>
+        </Animation>
+        <Animation name="hold-egg" looping="true" frameDuration="0.15">
+            <Frames>29</Frames>
+        </Animation>
+        <Animation name="hold-egg-walk" looping="true" frameDuration="0.09">
+            <Frames>24,29</Frames>
+        </Animation>
+        <Animation name="look-up" looping="false" frameDuration="0.15">
+            <Frames>28</Frames>
+        </Animation>
+        <Animation name="squat" looping="false" frameDuration="0.15">
+            <Frames>23</Frames>
+        </Animation>
+        <Animation name="turn" looping="false" frameDuration="0.15">
+            <Frames>9</Frames>
+        </Animation>
+        <Animation name="die" looping="false" frameDuration="0.15">
+            <Frames>65</Frames>
+        </Animation>
+        <Animation name="tongue-out" looping="false" frameDuration="0.15">
+            <Frames>33</Frames>
+        </Animation>
+        <Animation name="tongue-out-up" looping="false" frameDuration="0.15">
+            <Frames>32</Frames>
+        </Animation>
+        <Animation name="tongue-out-walk" looping="true" frameDuration="0.15">
+            <Frames>33,34,35,34</Frames>
+        </Animation>
+        <Animation name="tongue-out-run" looping="true" frameDuration="0.05">
+            <Frames>33,34,35,34</Frames>
+        </Animation>
+        <Animation name="tongue-out-jump" looping="false" frameDuration="0.15">
+            <Frames>35</Frames>
+        </Animation>
+        <Animation name="stand-mouthing" looping="true" frameDuration="0.15">
+            <Frames>
+                43,43,43,43,44,45,44,43,46,47,46,43,44,45,44,43,46,47,46,43,44,45,44,43,46,47,46,43,44,45,44,43,46,47,46,43,44,45,44,43,46,47,46,43,44,45,44,43,46,47,46,43,43,43,43,43,43,43,43,43,43,43,43,43,43,43,51,43,43,43,43,43,43,43,43,43,43,48,49,50,50,50,49,48,43,43,43,43,43,43,43,52,53,54,53,54,53,54,53,54,53,54,53,54,53,54,53,54,53,43,43,43,43,43,43,43,43
+            </Frames>
+        </Animation>
+        <Animation name="walk-mouthing" looping="true" frameDuration="0.15">
+            <Frames>36,43,37</Frames>
+        </Animation>
+        <Animation name="run-mouthing" looping="true" frameDuration="0.05">
+            <Frames>40,41,42,41</Frames>
+        </Animation>
+        <Animation name="jump-mouthing" looping="false" frameDuration="0.15">
+            <Frames>38</Frames>
+        </Animation>
+        <Animation name="fall-mouthing" looping="false" frameDuration="0.15">
+            <Frames>39</Frames>
+        </Animation>
+        <Animation name="float-mouthing" looping="true" frameDuration="0.03">
+            <Frames>55,56,57,56</Frames>
+        </Animation>
+        <Animation name="throw-mouthing" looping="false" frameDuration="0.15">
+            <Frames>60</Frames>
+        </Animation>
+        <Animation name="plummet1-mouthing" looping="false" frameDuration="0.08">
+            <Frames>43,61,27,62</Frames>
+        </Animation>
+        <Animation name="plummet2-mouthing" looping="false" frameDuration="0.15">
+            <Frames>63</Frames>
+        </Animation>
+        <Animation name="hold-egg-mouthing" looping="true" frameDuration="0.15">
+            <Frames>58</Frames>
+        </Animation>
+        <Animation name="hold-egg-walk-mouthing" looping="true" frameDuration="0.09">
+            <Frames>58,59</Frames>
+        </Animation>
+        <Animation name="look-up-mouthing" looping="false" frameDuration="0.15">
+            <Frames>64</Frames>
+        </Animation>
+        <Animation name="squat-mouthing" looping="false" frameDuration="0.15">
+            <Frames>23</Frames>
+        </Animation>
+        <Animation name="turn-mouthing" looping="false" frameDuration="0.15">
+            <Frames>9</Frames>
+        </Animation>
+    </SpriteSheet>
+    <SpriteSheet name="crosshair" texture="Atlas/crosshair" frameWidth="16" frameHeight="16">
+        <Animation name="shine" looping="true" frameDuration="0.005">
+            <Frames>0,1</Frames>
+        </Animation>
+    </SpriteSheet>
+</Animations>

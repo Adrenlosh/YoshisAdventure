@@ -17,8 +17,6 @@ public class AnimatedSprite : Sprite
     private readonly SpriteSheet _spriteSheet;
     private IAnimation _animation;
 
-    private readonly Texture2DRegion[] _regions;
-
     /// <summary>
     /// Gets the animation controller used to control the current animation of this animated sprite.
     /// </summary>

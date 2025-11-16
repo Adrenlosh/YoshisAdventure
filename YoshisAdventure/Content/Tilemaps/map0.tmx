@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="320" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="3194">
+<map version="1.10" tiledversion="1.11.2" class="GameMap" orientation="orthogonal" renderorder="right-down" width="320" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="3198">
  <properties>
   <property name="Song" value="song2"/>
  </properties>
@@ -17,7 +17,7 @@
  </layer>
  <layer id="1" name="Ground" width="320" height="27">
   <data encoding="base64" compression="zlib">
-   eJzt1ssKwjAQBdCgUqtbX///p1ZQLAGbpNCqzDkwEMINzOqSlOY5zXwH8O/0HxCV/gOi0n9AVPoPiEr/AVHpPyAq/QdEpf+AqPQfEJX+A6LSf0BU+g+ISv8BUek/ICr9B0Sl/4Co9B8AAAAA/L7NMNthdhXn/O5bM3dfWVlZ2XH2OEw/TFdxzu9uaXmXwg4t+8rKysqOs4fn9BXn/O6alncu7NCyr6ysrGyee/RgV3HO79b8/33aoWVfWVlZ2XF2n95/wtI5v1vr/ze1Q8u+srKysnn29ScsnfO7tf5/Uzu07CsrKys7zt4BXSEzwA==
+   eJzt1stKxEAQBdBCZRzd+toWrvX/f88IiqFx8pokTZJzoKFpbkKtLhUxzdPE7wC2Tv8BR6X/gKNaov8+mvO5wH8B5jRn/+k9YEvm6D+9B2zRtf2XcwwBUME1/ZfNeZ9pDoC1Te2/DN0HbNuU/su5hwCoYGz/Zdj7gH0Y038Zug/Yj6H9l0sOAVDBkP7LsPcB+9PXfxm6D9inrv7LtYYAqOBS/2XY+4B9+6//MnQfcDxZewCACjLsfcDxZOg+YJtumnPbnLsB9/Kt1pk6r6ysrGw7+9icc3NOA+7l21ss76VnhjHzysrKyrazDz/nPOBevr3G8p57Zhgzr6ysrGyZ++7B04B7+bbm/ndphjHzysrKyraz9/G3E/bdy7e19r+uGcbMKysrK1tmf3fCvnv5ttb+1zXDmHllZWVl29kvkt43/w==
   </data>
  </layer>
  <layer id="3" name="Decorations" width="320" height="27">
@@ -65,28 +65,19 @@
    </properties>
    <point/>
   </object>
-  <object id="3185" name="Coin" x="352" y="320">
+  <object id="3193" name="Enemy" x="400" y="304">
    <point/>
   </object>
-  <object id="3186" name="Coin" x="368" y="320">
+  <object id="3194" name="Enemy" x="432" y="320">
    <point/>
   </object>
-  <object id="3187" name="Coin" x="384" y="320">
+  <object id="3195" name="Enemy" x="464" y="320">
    <point/>
   </object>
-  <object id="3188" name="Coin" x="304" y="320">
+  <object id="3196" name="Enemy" x="496" y="320">
    <point/>
   </object>
-  <object id="3189" name="Coin" x="400" y="320">
-   <point/>
-  </object>
-  <object id="3190" name="Coin" x="336" y="320">
-   <point/>
-  </object>
-  <object id="3191" name="Coin" x="320" y="320">
-   <point/>
-  </object>
-  <object id="3193" name="Enemy" x="272" y="304">
+  <object id="3197" name="Spring" x="528" y="320">
    <point/>
   </object>
  </objectgroup>

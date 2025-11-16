@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
-using System.Diagnostics;
 using YoshisAdventure.Models;
 using YoshisAdventure.Systems;
 

@@ -162,12 +162,10 @@ namespace YoshisAdventure.Screens
             GraphicsDevice.Clear(Color.Black);
             _gameSceneRenderer.Draw(GameObjectsSystem.GetAllActiveObjects());
             GameMain.UiSystem.Draw(gameTime, _spriteBatch);
-            //_ui.Draw();
         }        
         
         public void InitializeUI()
         {
-            //_ui = new GamingScreenUI(new SpriteBatch(GraphicsDevice), Content, _gameSceneRenderer.ViewportAdapter);
             _ui = new GamingScreenUI();
             GameMain.UiSystem.Add("Root", _ui);
         }
@@ -254,8 +252,7 @@ namespace YoshisAdventure.Screens
             }
             else
             {
-                GameMain.PlayerStatus.Reset();
-                Game.LoadScreen(new TitleScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
+                Game.LoadScreen(new GameOverScreen(Game), new FadeTransition(GraphicsDevice, Color.Black, 1.5f));
             }
         }
 

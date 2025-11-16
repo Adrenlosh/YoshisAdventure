@@ -145,10 +145,10 @@ x {0}</value>
     <value>Close</value>
   </data>
   <data name="StageStart" xml:space="preserve">
-    <value>YOSHI START</value>
+    <value>Start!</value>
   </data>
   <data name="Goal" xml:space="preserve">
-    <value>YOSHI Goal!</value>
+    <value>Goal!</value>
   </data>
   <data name="CoinOnHud" xml:space="preserve">
     <value>Coin
@@ -163,5 +163,14 @@ x {0}</value>
   <data name="TimeOnHud" xml:space="preserve">
     <value>Time 
 {0}</value>
+  </data>
+  <data name="GameOver" xml:space="preserve">
+    <value>Game Over</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="BackToTitleMenu" xml:space="preserve">
+    <value>Back to title menu</value>
   </data>
 </root>

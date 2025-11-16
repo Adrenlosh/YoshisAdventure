@@ -30,23 +30,21 @@ namespace YoshisAdventure
 
         public static PlayerStatus PlayerStatus { get; set; } = new PlayerStatus();
 
-        //public static InputManager Input { get; private set; } = new InputManager();
-
         public GameMain()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferWidth = GlobalConfig.VirtualResolution_Width,
                 PreferredBackBufferHeight = GlobalConfig.VirtualResolution_Height,
-                PreferHalfPixelOffset = false
+                PreferHalfPixelOffset = false,
             };
             _graphicsDeviceManager.ApplyChanges();
+            _screenManager = new ScreenManager();
+            Components.Add(_screenManager);
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
             Window.AllowUserResizing = true;
             Window.Title = Language.Strings.GameName;
-            _screenManager = new ScreenManager();
-            Components.Add(_screenManager);
         }
 
         protected override void Initialize()

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <SpriteSheet name="enemy" texture="Atlas/enemy" frameWidth="16" frameHeight="16">
+    <Animation name="idle" looping="true" frameDuration="0.15">
+      <Frames>0,1,2,3,2,1</Frames>
+    </Animation>
+    <Animation name="walk" looping="true" frameDuration="0.15">
+      <Frames>6,7,8,9,10,11</Frames>
+    </Animation>
+    <Animation name="jump" looping="false" frameDuration="1.0">
+      <Frames>10,12</Frames>
+    </Animation>
+  </SpriteSheet>
+</Animations>
